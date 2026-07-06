@@ -22,14 +22,20 @@
 
 ## Current focus
 
-The project now has its auth and tenant foundation in place, and Phase 04 is the first real business-data slice.
+The project now has its auth, tenant, student/admission, and academic-structure foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 05 snapshot
+
+- Academic structure foundation is implemented for years, terms, grade levels, classes, subjects, grade-level subject assignments, and class enrollments.
+- Academic management uses server-side membership context and fixed role checks.
+- Attendance, grades, timetable logic, finance, and reports remain future slices.
 
 ## Phase 04 snapshot
 
-- Students and admissions foundation is now the active business-data slice.
+- Students and admissions foundation is complete enough for the academic enrollment foundation.
 - This phase covers admissions, student records, guardian links, document metadata, and status history.
-- Academic structure, attendance, grades, and finance remain future slices.
+- Attendance, grades, and finance remain future slices.
 
 ## Phase 02 snapshot
 

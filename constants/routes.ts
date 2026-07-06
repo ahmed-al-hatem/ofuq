@@ -7,4 +7,10 @@ export const appRoutes = {
   admissionDetails: (admissionId: string) => `/dashboard/admissions/${admissionId}`,
   students: "/dashboard/students",
   studentDetails: (studentId: string) => `/dashboard/students/${studentId}`,
+  academic: "/dashboard/academic",
+  academicYears: "/dashboard/academic/years",
+  academicGradeLevels: "/dashboard/academic/grade-levels",
+  academicClasses: "/dashboard/academic/classes",
+  academicSubjects: "/dashboard/academic/subjects",
+  academicEnrollments: "/dashboard/academic/enrollments",
 } as const

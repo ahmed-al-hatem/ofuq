@@ -10,9 +10,11 @@ Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumpin
 - `user_memberships`
 - `audit_logs`
 
-Students, academics, attendance, finance, communication, library, health, and reporting tables remain for later phases.
+Attendance, grades, timetable, finance, communication, library, health, and reporting tables remain for later phases.
 
 Phase 04 extends this foundation with the first business-data slice for admissions and students.
+
+Phase 05 adds the academic structure foundation required before attendance, grading, timetabling, and reporting.
 
 ## Core tables
 
@@ -77,6 +79,46 @@ Phase 04 extends this foundation with the first business-data slice for admissio
 
 - Captures status transitions such as the initial move into `active`.
 - Preserves who changed the status and when.
+
+## Phase 05 tables
+
+### `academic_years`
+
+- Stores school-specific academic years with dates, status, and a single current-year marker per school.
+- Uses `tenant_id` and `school_id` on every record.
+
+### `terms`
+
+- Stores terms, semesters, or quarters inside an academic year.
+- Keeps term order and dates without adding grading periods yet.
+
+### `grade_levels`
+
+- Stores grade levels such as Grade 1 or Grade 2 with stage and display order.
+- Does not implement promotion or transfer flows in this phase.
+
+### `classes`
+
+- Stores class sections inside an academic year and grade level.
+- Supports optional capacity, room name, and homeroom teacher reference only.
+
+### `subjects`
+
+- Stores school subjects such as Arabic, Math, and Science.
+- Keeps subject type and status without exam configuration or weighting.
+
+### `grade_level_subjects`
+
+- Assigns subjects to grade levels for an academic year.
+- Supports required/elective marking and optional weekly periods, but does not generate timetables.
+
+### `class_enrollments`
+
+- Enrolls students in classes for an academic year.
+- Enforces one active enrollment per student per academic year through a partial unique index.
+- Application code verifies that the student, class, academic year, and derived grade level all belong to the authenticated user's tenant and school before insert.
+
+Attendance, exams, grades, report cards, timetable logic, finance, and reports remain later phases.
 
 ## Role model
 

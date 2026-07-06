@@ -28,6 +28,8 @@
 - School-scoped actions should validate both `tenant_id` and `school_id`.
 - Future modules must keep these columns on every tenant-owned table.
 - Student and admission mutations should derive their tenant and school scope only from the active membership context.
+- Academic structure mutations derive tenant and school scope from the active membership context.
+- Student class enrollment verifies the selected student, class, academic year, and class-derived grade level server-side before insert.
 
 ## Session handling
 

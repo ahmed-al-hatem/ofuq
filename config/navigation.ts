@@ -54,7 +54,7 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "الأكاديمي",
         icon: GraduationCap,
-        placeholder: true,
+        href: appRoutes.academic,
       },
       {
         label: "الحضور",

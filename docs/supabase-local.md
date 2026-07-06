@@ -35,4 +35,6 @@ supabase gen types typescript --local > types/database.ts
 - `supabase/config.toml`
 - `supabase/migrations/20260706120000_initial_foundations.sql`
 - `supabase/migrations/20260706143000_core_schema_refinement.sql`
+- `supabase/migrations/20260706183000_students_admissions_foundation.sql`
+- `supabase/migrations/20260706200000_academic_structure_foundation.sql`
 - `supabase/seed.sql`
