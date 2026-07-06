@@ -5,7 +5,7 @@
 - Project name: Ofuq | أُفُق
 - Current phase: Ready for 08 Manual Timetable with Conflict Prevention Foundation
 - Last completed implementation phase: 07 Grades and Report Cards Foundation
-- Last completed quality phase: 06.5 Attendance Smoke Test + Verification Snapshot
+- Last completed quality phase: 07.5 Local Smoke Seed + Grades/Attendance Workflow Verification
 - Next implementation phase: 08 Manual Timetable with Conflict Prevention Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -35,6 +35,7 @@
 | Phase 05.5 Quality Gate + Documentation Snapshot | Done | Documentation snapshot and verification report were created. The Supabase local reset/type-generation blocker was resolved and the project is ready for Phase 06. |
 | Phase 06 Attendance Manual + QR Foundation | Done | Attendance sessions, attendance records, absence excuses, manual attendance, QR-token attendance entry, and Arabic dashboard pages. |
 | Phase 07 Grades and Report Cards Foundation | Done | Exams, exam results, grade entries, basic report card snapshots, and Arabic dashboard pages. |
+| Phase 07.5 Local Smoke Seed + Grades/Attendance Workflow Verification | Done | Deterministic local smoke seed, SQL spot checks, technical verification, and honest browser workflow status. |
 
 ## Current Implemented Modules
 
@@ -115,11 +116,11 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - `docs/project-status.md`
 - `docs/verification-report.md`
 - `docs/verification-phase-06.md`
+- `docs/verification-phase-07.md`
 - `docs/requirements-roadmap.md`
 
 ## Current Known Limitations
 
-- No grades, exams, or report cards yet.
 - No timetable logic yet.
 - No finance module yet.
 - No parent notifications or communication module yet.
@@ -131,6 +132,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No automated test suite beyond lint/build verification.
 - Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
+- Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, but authenticated browser workflow smoke remained blocked by unavailable browser automation in that session.
 - On Windows, Supabase local development may require Docker Desktop TCP daemon exposure for analytics/vector health.
 
 ## Recommended Next Phase
@@ -141,6 +143,6 @@ Recommended next phase:
 08 - Manual Timetable with Conflict Prevention Foundation
 ```
 
-Rationale: students, class enrollments, attendance, and grade/report-card foundations now exist, so manual timetabling can be added as the next academic operations slice.
+Rationale: students, class enrollments, attendance, and grade/report-card foundations now exist, and reset now creates a repeatable local smoke dataset, so manual timetabling can be added as the next academic operations slice.
 
-Go/no-go status: Go with caution for Phase 08 after Phase 07 technical verification. Authenticated grades workflow smoke remains blocked until a repeatable local smoke dataset exists.
+Go/no-go status: Go with caution for Phase 08 after Phase 07.5 verification. The local smoke-data blocker is resolved, but authenticated attendance and grades browser smoke should still be run manually or in a session with an available browser backend.

@@ -122,7 +122,7 @@ Phase 07 adds the grades and report cards foundation for exams, exam results, gr
 - Enforces one active enrollment per student per academic year through a partial unique index.
 - Application code verifies that the student, class, academic year, and derived grade level all belong to the authenticated user's tenant and school before insert.
 
-Exams, grades, report cards, timetable logic, finance, and reports remain later phases.
+Timetable logic, finance, and reports remain later phases.
 
 ## Phase 06 tables
 

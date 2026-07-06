@@ -23,6 +23,37 @@ supabase migration new <name>
 supabase gen types typescript --local > types/database.ts
 ```
 
+## Local smoke seed
+
+`supabase db reset` applies `supabase/seed.sql`, which creates a deterministic
+local-only smoke dataset for authenticated workflow checks.
+
+Local-only users:
+
+| Email | Password | Role |
+| --- | --- | --- |
+| `admin@ofuq.local` | `OfuqLocal123!` | `school_admin` |
+| `teacher@ofuq.local` | `OfuqLocal123!` | `teacher` |
+
+These credentials are demo data for local smoke testing only. Do not use them in
+production, screenshots, shared environments, or hosted Supabase projects.
+
+The reset seed also creates:
+
+- Tenant: `Ofuq Demo Tenant`
+- School: `مدرسة أفق التجريبية`
+- Academic year: `2026-2027`
+- Term: `الفصل الأول`
+- Grade level: `الصف الأول`
+- Class: `الصف الأول / أ`
+- Subject: `الرياضيات`
+- Student: `طالب تجريبي`
+- Active class enrollment for the smoke student
+
+The smoke seed intentionally does not create attendance sessions, attendance
+records, exams, grade entries, or report cards. Those records should be created
+through the UI or Server Actions during workflow smoke testing.
+
 ## Local workflow
 
 1. Start Supabase locally with `supabase start`.

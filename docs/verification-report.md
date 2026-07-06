@@ -1,6 +1,7 @@
 # Verification Report
 
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
+> Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
 ## Scope
 
