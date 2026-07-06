@@ -3,9 +3,13 @@ export type TenantId = string
 export type SchoolId = string
 
 export type TenantScoped = {
-  tenantId: TenantId
+  tenant_id: TenantId
 }
 
 export type SchoolScoped = TenantScoped & {
-  schoolId: SchoolId | null
+  school_id: SchoolId
+}
+
+export type MaybeSchoolScoped = TenantScoped & {
+  school_id: SchoolId | null
 }

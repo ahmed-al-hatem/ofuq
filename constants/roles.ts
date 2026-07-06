@@ -10,15 +10,17 @@ export const USER_ROLES = {
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES]
 
-export const ROLE_LABELS_AR = {
+export const USER_ROLE_LABELS_AR = {
   [USER_ROLES.SYSTEM_ADMIN]: "مدير النظام",
   [USER_ROLES.SCHOOL_ADMIN]: "مدير المدرسة",
   [USER_ROLES.TEACHER]: "معلم",
   [USER_ROLES.PARENT]: "ولي أمر",
   [USER_ROLES.STUDENT]: "طالب",
   [USER_ROLES.ACCOUNTANT]: "محاسب",
-  [USER_ROLES.LIBRARIAN]: "أمين مكتبة",
+  [USER_ROLES.LIBRARIAN]: "موظف مكتبة",
 } as const satisfies Record<UserRole, string>
+
+export const ROLE_LABELS_AR = USER_ROLE_LABELS_AR
 
 export const ROLE_GROUPS = {
   administration: [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.SCHOOL_ADMIN],

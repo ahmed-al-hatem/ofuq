@@ -22,6 +22,30 @@ Do not build business modules yet.
 
 ---
 
+## Context From Phase 01
+
+Phase 01 already prepared the general project architecture and documentation. Assume the project may already contain:
+
+- `docs/architecture.md`
+- `docs/project-phases.md`
+- `docs/codex-workflow.md`
+- Supabase client/server/admin helper files
+- app config, role constants, tenant types, navigation, and layout shell
+- Arabic RTL defaults
+- Tailwind/shadcn/ui brand theme
+- framer-motion readiness
+
+Do not recreate or rewrite these files just because this prompt mentions them.
+
+For this phase:
+
+- Prefer **database schema and Supabase local setup** work.
+- Treat existing helper files as already valid unless they are missing, broken, or unsafe.
+- Update existing docs with concise Supabase/schema details instead of creating duplicate documentation.
+- Keep changes narrower than Phase 01.
+
+---
+
 ## Main Objective
 
 Set up Supabase local development and create the minimal core schema needed for future modules.
@@ -55,7 +79,7 @@ Follow these decisions exactly:
 9. Do not implement Sandbox.
 10. Do not implement external integrations.
 11. Do not build students, attendance, grades, finance, library, health, or reports tables in this phase.
-12. RLS may be prepared with comments or minimal safe policies, but full RLS enforcement is a later phase unless the existing project already requires it.
+12. Do not enable full RLS in this phase. Document the future RLS plan, and only add RLS policies if the project already has a working RLS/auth pattern that will not break local development.
 
 ---
 
@@ -67,13 +91,13 @@ You may create or update:
 - `supabase/config.toml`
 - `supabase/migrations/`
 - `supabase/seed.sql`
-- Supabase helper files in the Next.js project
-- TypeScript database placeholder/types
+- Supabase helper files only if missing, incomplete, or unsafe
+- TypeScript database placeholder/types only if missing or inconsistent with the schema
 - core schema migration
 - environment example
 - schema documentation
 - local setup documentation
-- Server Action database conventions documentation
+- Server Action database conventions documentation only if not already covered
 
 ---
 
@@ -115,10 +139,10 @@ Follow this exact workflow:
 6. Check whether migrations already exist.
 7. Do not overwrite existing migrations.
 8. Create a new migration for the core schema if needed.
-9. Create or update Supabase client/server helper files only if missing or incomplete.
+9. Review Supabase client/server/admin helper files; update only if missing, incomplete, or unsafe.
 10. Create or update `.env.example`.
-11. Create or update database types placeholder.
-12. Create documentation for the schema and local commands.
+11. Create or update database types placeholder only if needed.
+12. Update documentation for the schema and local commands without duplicating Phase 01 docs.
 13. Run relevant validation commands.
 14. Summarize exactly what changed.
 
@@ -156,6 +180,8 @@ supabase status
 ```
 
 If Supabase CLI is not installed, do not stop the whole task. Prepare the files and explain what command the user should run later.
+
+If `supabase/` already exists from Phase 01, do not run `supabase init` again. Inspect it and add only missing migration/seed/config pieces.
 
 ---
 
@@ -203,6 +229,8 @@ The migration should create only these foundation objects:
 - optional seed-safe comments
 
 Do not create business module tables yet.
+
+If any of these core objects already exist in a prior migration, do not duplicate them. Create only the missing pieces in a new migration, or report that the schema foundation already exists.
 
 ---
 
@@ -401,6 +429,13 @@ Recommended constraints:
 
 - unique `(user_id, tenant_id, school_id, role)`
 - optional check to allow `school_id` null for `system_admin`
+- enforce at most one primary membership per user with a partial unique index:
+
+```sql
+create unique index if not exists user_memberships_one_primary_per_user_idx
+on public.user_memberships (user_id)
+where is_primary = true;
+```
 
 Indexes:
 
@@ -481,7 +516,8 @@ Attach it to tables with `updated_at`:
 For this phase:
 
 - Do not build full production RLS unless the project already has an RLS pattern.
-- You may enable RLS with safe placeholder comments only if it does not break local development.
+- Prefer not enabling RLS in this phase unless Phase 01 already established working auth/session policies.
+- You may add SQL comments explaining future RLS intent.
 - Prefer documenting the future RLS plan in `docs/database.md`.
 
 Future RLS should enforce:
@@ -491,7 +527,7 @@ Future RLS should enforce:
 - membership-based access
 - service-role-only administrative operations
 
-If you enable RLS now, make sure the app is not broken by missing policies.
+If you enable RLS now, make sure the app is not broken by missing policies and explain exactly why it is safe.
 
 If unsure, leave RLS disabled for core tables and document it as Phase Later.
 
@@ -530,13 +566,21 @@ Do not insert rows into `user_profiles` unless matching `auth.users` rows exist.
 
 ## Supabase Helper Files
 
-Create or update these files according to the existing project structure:
+Review these files according to the existing project structure:
 
 ```txt
 src/lib/supabase/client.ts
 src/lib/supabase/server.ts
 src/lib/supabase/admin.ts
 ```
+
+If Phase 01 already created them and they are safe, do not rewrite them. Only update them if:
+
+- service role usage is exposed to the client
+- env variables are unsafe or inconsistent
+- the file is missing
+- imports are broken
+- the implementation does not match the installed Supabase packages
 
 ### `client.ts`
 
@@ -582,13 +626,15 @@ If the file already exists, do not rewrite it unnecessarily.
 
 ## TypeScript Types
 
-Create or update:
+Review or create only if needed:
 
 ```txt
 src/types/database.ts
 src/types/roles.ts
 src/types/tenant.ts
 ```
+
+If Phase 01 already created role and tenant types, keep them and only align names/imports if the new schema requires it.
 
 ### `src/types/roles.ts`
 
@@ -656,7 +702,7 @@ Do not fake complete generated types.
 
 ## Server Action Database Conventions
 
-Create or update:
+Review or create only if needed:
 
 ```txt
 src/lib/actions/action-result.ts
@@ -666,6 +712,8 @@ src/lib/actions/require-tenant.ts
 ```
 
 These are foundation helpers only.
+
+If Phase 01 already created these helpers, do not rewrite them. Only update them to align with the core schema and membership model.
 
 ### `action-result.ts`
 
@@ -713,13 +761,23 @@ It may be basic or placeholder if auth is not fully implemented yet.
 
 ## Documentation
 
-Create or update:
+Create or update without duplicating existing Phase 01 docs:
 
 ```txt
 docs/database.md
 docs/supabase-local.md
 docs/security-model.md
 ```
+
+Also update these existing docs with short cross-links if they already exist:
+
+```txt
+docs/architecture.md
+docs/project-phases.md
+docs/codex-workflow.md
+```
+
+Do not replace the content of the Phase 01 docs. Add concise references only when useful.
 
 ### `docs/database.md`
 
@@ -865,4 +923,3 @@ This phase is successful when:
 - `.env.example` exists and contains required variables.
 - Documentation explains the schema and security model.
 - Validation was attempted and results are reported.
-

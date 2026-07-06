@@ -3,19 +3,24 @@ import { failure, success } from "@/lib/actions/action-result"
 import type { SchoolId, TenantId } from "@/types/tenant"
 
 export type TenantContext = {
-  tenantId: TenantId | null
+  tenant_id?: TenantId | null
+  school_id?: SchoolId | null
+  tenantId?: TenantId | null
   schoolId?: SchoolId | null
 }
 
 export function requireTenant(
   context: TenantContext | null | undefined
-): ActionResult<{ tenantId: TenantId; schoolId: SchoolId | null }> {
-  if (!context?.tenantId) {
+): ActionResult<{ tenant_id: TenantId; school_id: SchoolId | null }> {
+  const tenantId = context?.tenant_id ?? context?.tenantId
+  const schoolId = context?.school_id ?? context?.schoolId ?? null
+
+  if (!tenantId) {
     return failure("سياق المستأجر غير متوفر")
   }
 
   return success({
-    tenantId: context.tenantId,
-    schoolId: context.schoolId ?? null,
+    tenant_id: tenantId,
+    school_id: schoolId,
   })
 }

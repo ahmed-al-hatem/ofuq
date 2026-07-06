@@ -1,8 +1,11 @@
+import "server-only"
+
 import { createClient } from "@supabase/supabase-js"
 
 import { getServerSupabaseEnv } from "@/lib/env"
+import type { Database } from "@/types/database"
 
-let adminClient: ReturnType<typeof createClient> | null = null
+let adminClient: ReturnType<typeof createClient<Database>> | null = null
 
 export function createSupabaseAdminClient() {
   if (typeof window !== "undefined") {
@@ -13,12 +16,16 @@ export function createSupabaseAdminClient() {
     const { NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } =
       getServerSupabaseEnv()
 
-    adminClient = createClient(NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-      auth: {
-        autoRefreshToken: false,
-        persistSession: false,
-      },
-    })
+    adminClient = createClient<Database>(
+      NEXT_PUBLIC_SUPABASE_URL,
+      SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false,
+        },
+      }
+    )
   }
 
   return adminClient

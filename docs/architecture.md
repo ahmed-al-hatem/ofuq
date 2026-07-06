@@ -24,6 +24,12 @@ Ofuq is a full-stack Next.js application. The project keeps rendering, data acce
 - `lib/supabase/admin.ts` is for server-only service-role operations.
 - `middleware.ts` prepares session refresh behavior without blocking development.
 
+## Core schema docs
+
+- Phase 02 schema details live in [database.md](./database.md).
+- Local Supabase setup commands live in [supabase-local.md](./supabase-local.md).
+- The current security boundaries are summarized in [security-model.md](./security-model.md).
+
 ## UI system
 
 - Tailwind CSS handles layout and design tokens.

@@ -23,3 +23,10 @@
 ## Current focus
 
 The current foundation phase only prepares structure, helpers, placeholders, and local development readiness. Business modules should be added one slice at a time after auth and tenant foundations are in place.
+
+## Phase 02 snapshot
+
+- Supabase local setup and schema workflow: [supabase-local.md](./supabase-local.md)
+- Core schema foundation: [database.md](./database.md)
+- Security boundaries for auth and service-role usage: [security-model.md](./security-model.md)
+- This phase stops at tenants, schools, user profiles, memberships, and audit logs.

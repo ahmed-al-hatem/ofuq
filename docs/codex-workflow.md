@@ -20,3 +20,9 @@
 - Preserve working configuration.
 - Commit only after a slice is complete and verified when requested.
 - Report any blocked dependencies or missing environment values directly.
+
+## Schema slices
+
+- Add new migrations under `supabase/migrations/`; do not rewrite old migrations.
+- Keep `.env.example`, `supabase/seed.sql`, and the database docs aligned with schema changes.
+- Prefer `supabase db reset` for local verification when Docker is available, and report clearly when it is not.

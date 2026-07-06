@@ -1,3 +1,6 @@
+// Placeholder until generated with:
+// supabase gen types typescript --local > types/database.ts
+
 export type Json =
   | string
   | number
