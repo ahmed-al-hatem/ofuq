@@ -1,5 +1,7 @@
 # Verification Report
 
+> Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
+
 ## Scope
 
 This report covers the project state after Phase 05 Academic Structure Foundation and before Phase 06 Attendance Manual + QR Foundation.

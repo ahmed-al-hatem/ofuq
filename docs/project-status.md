@@ -5,7 +5,7 @@
 - Project name: Ofuq | أُفُق
 - Current phase: Ready for 07 Grades and Report Cards Foundation
 - Last completed implementation phase: 06 Attendance Manual + QR Foundation
-- Last completed quality phase: 05.5 Quality Gate + Documentation Snapshot
+- Last completed quality phase: 06.5 Attendance Smoke Test + Verification Snapshot
 - Next implementation phase: 07 Grades and Report Cards Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -104,6 +104,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - `docs/codex-workflow.md`
 - `docs/project-status.md`
 - `docs/verification-report.md`
+- `docs/verification-phase-06.md`
 - `docs/requirements-roadmap.md`
 
 ## Current Known Limitations
@@ -118,6 +119,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No external integrations yet.
 - No automated test suite beyond lint/build verification.
 - Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
+- Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - On Windows, Supabase local development may require Docker Desktop TCP daemon exposure for analytics/vector health.
 
 ## Recommended Next Phase
@@ -130,4 +132,4 @@ Recommended next phase:
 
 Rationale: students, class enrollments, and attendance records now exist, so grades/report cards can be added as the next academic vertical slice.
 
-Go/no-go status: Go for Phase 07 after Phase 06 lint/build and type generation succeeded. Supabase reset replayed the new migration but the local CLI returned an upstream 502 while restarting containers; rerun reset before the next schema slice if Docker health is uncertain.
+Go/no-go status: Go with caution for Phase 07 after Phase 06.5 technical verification passed. Authenticated attendance workflow smoke remains blocked until a repeatable local smoke dataset exists.
