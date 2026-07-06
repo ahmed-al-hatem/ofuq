@@ -22,8 +22,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, and attendance foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, and grades/report-card foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 07 snapshot
+
+- Grades and report cards foundation is implemented with exams, exam results, grade entries, and report card snapshots.
+- Grades management uses server-side membership context and fixed role checks for `system_admin`, `school_admin`, and `teacher`.
+- Publishing exam results and report cards is limited to `system_admin` and `school_admin`.
+- Advanced grading policies, GPA/ranking, PDF generation, certificate/report templates, parent/student grade portals, notifications, advanced analytics, full RLS, and full RBAC remain deferred.
 
 ## Phase 06 snapshot
 

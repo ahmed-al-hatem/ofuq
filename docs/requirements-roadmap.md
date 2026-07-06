@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 06. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 07. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -61,9 +61,9 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Academic | Subjects | 05 | Done | Implemented. |
 | Academic | Grade-level subject assignments | 05 | Done | Implemented. |
 | Academic | Class enrollments | 05 | Done | Implemented. |
-| Academic | Grades later | 07 | Planned | Not implemented. |
-| Academic | Exams later | 07 | Planned | Not implemented. |
-| Academic | Report cards later | 07 | Planned | Not implemented. |
+| Academic | Grades foundation | 07 | Done | Grade entries and exam result entry foundation are implemented. |
+| Academic | Exams foundation | 07 | Done | Exams can be created for class/subject/year with server-side relationship checks. |
+| Academic | Report cards foundation | 07 | Done | Basic report card snapshots and views are implemented; PDF/ranking remain deferred. |
 | Academic | Evaluation systems later | Later | Later | Not implemented. |
 | Attendance | Manual attendance | 06 | Done | Attendance sessions and manual per-student records are implemented. |
 | Attendance | Teacher scans student QR foundation | 06 | Done | Token-entry QR foundation validates the student and active class enrollment server-side. |
@@ -116,11 +116,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Students/admissions foundation
 - Academic structure foundation
 - Attendance manual + QR foundation
+- Grades and report cards foundation
 
 ## Planned Next
 
 ```txt
-07 - Grades and Report Cards Foundation
+08 - Manual Timetable with Conflict Prevention Foundation
 ```
 
 ## Later / Placeholder Only
@@ -129,7 +130,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Mobile OTP.
 - Expanded permissions/capability layer.
 - Student promotions, transfers, withdrawals, achievements, discipline, import/export, and risk indicators.
-- Grades, exams, report cards, and evaluation systems.
+- Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Manual timetable and conflict prevention, then automatic generation later.
 - Finance module and finance reports.

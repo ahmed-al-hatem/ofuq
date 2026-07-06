@@ -639,6 +639,390 @@ export type Database = {
           },
         ]
       }
+      exam_results: {
+        Row: {
+          academic_year_id: string
+          class_enrollment_id: string
+          class_id: string
+          created_at: string
+          entered_at: string
+          entered_by_user_id: string | null
+          exam_id: string
+          id: string
+          notes: string | null
+          published_at: string | null
+          school_id: string
+          score: number | null
+          status: Database["public"]["Enums"]["exam_result_status"]
+          student_id: string
+          subject_id: string
+          tenant_id: string
+          term_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          class_enrollment_id: string
+          class_id: string
+          created_at?: string
+          entered_at?: string
+          entered_by_user_id?: string | null
+          exam_id: string
+          id?: string
+          notes?: string | null
+          published_at?: string | null
+          school_id: string
+          score?: number | null
+          status?: Database["public"]["Enums"]["exam_result_status"]
+          student_id: string
+          subject_id: string
+          tenant_id: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          class_enrollment_id?: string
+          class_id?: string
+          created_at?: string
+          entered_at?: string
+          entered_by_user_id?: string | null
+          exam_id?: string
+          id?: string
+          notes?: string | null
+          published_at?: string | null
+          school_id?: string
+          score?: number | null
+          status?: Database["public"]["Enums"]["exam_result_status"]
+          student_id?: string
+          subject_id?: string
+          tenant_id?: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_results_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_class_enrollment_id_fkey"
+            columns: ["class_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "class_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_entered_by_user_id_fkey"
+            columns: ["entered_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_exam_id_fkey"
+            columns: ["exam_id"]
+            isOneToOne: false
+            referencedRelation: "exams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exam_results_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exams: {
+        Row: {
+          academic_year_id: string
+          class_id: string
+          created_at: string
+          created_by_user_id: string | null
+          exam_date: string | null
+          grade_level_id: string
+          id: string
+          max_score: number
+          notes: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["exam_status"]
+          subject_id: string
+          tenant_id: string
+          term_id: string | null
+          title: string
+          updated_at: string
+          weight: number | null
+        }
+        Insert: {
+          academic_year_id: string
+          class_id: string
+          created_at?: string
+          created_by_user_id?: string | null
+          exam_date?: string | null
+          grade_level_id: string
+          id?: string
+          max_score?: number
+          notes?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["exam_status"]
+          subject_id: string
+          tenant_id: string
+          term_id?: string | null
+          title: string
+          updated_at?: string
+          weight?: number | null
+        }
+        Update: {
+          academic_year_id?: string
+          class_id?: string
+          created_at?: string
+          created_by_user_id?: string | null
+          exam_date?: string | null
+          grade_level_id?: string
+          id?: string
+          max_score?: number
+          notes?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["exam_status"]
+          subject_id?: string
+          tenant_id?: string
+          term_id?: string | null
+          title?: string
+          updated_at?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exams_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_grade_level_id_fkey"
+            columns: ["grade_level_id"]
+            isOneToOne: false
+            referencedRelation: "grade_levels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "exams_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grade_entries: {
+        Row: {
+          academic_year_id: string
+          category: Database["public"]["Enums"]["grade_entry_category"]
+          class_enrollment_id: string
+          class_id: string
+          created_at: string
+          entered_by_user_id: string | null
+          id: string
+          max_score: number
+          notes: string | null
+          recorded_on: string
+          school_id: string
+          score: number
+          status: Database["public"]["Enums"]["grade_entry_status"]
+          student_id: string
+          subject_id: string
+          tenant_id: string
+          term_id: string | null
+          title: string
+          updated_at: string
+          weight: number | null
+        }
+        Insert: {
+          academic_year_id: string
+          category?: Database["public"]["Enums"]["grade_entry_category"]
+          class_enrollment_id: string
+          class_id: string
+          created_at?: string
+          entered_by_user_id?: string | null
+          id?: string
+          max_score?: number
+          notes?: string | null
+          recorded_on?: string
+          school_id: string
+          score: number
+          status?: Database["public"]["Enums"]["grade_entry_status"]
+          student_id: string
+          subject_id: string
+          tenant_id: string
+          term_id?: string | null
+          title: string
+          updated_at?: string
+          weight?: number | null
+        }
+        Update: {
+          academic_year_id?: string
+          category?: Database["public"]["Enums"]["grade_entry_category"]
+          class_enrollment_id?: string
+          class_id?: string
+          created_at?: string
+          entered_by_user_id?: string | null
+          id?: string
+          max_score?: number
+          notes?: string | null
+          recorded_on?: string
+          school_id?: string
+          score?: number
+          status?: Database["public"]["Enums"]["grade_entry_status"]
+          student_id?: string
+          subject_id?: string
+          tenant_id?: string
+          term_id?: string | null
+          title?: string
+          updated_at?: string
+          weight?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grade_entries_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_class_enrollment_id_fkey"
+            columns: ["class_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "class_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_entered_by_user_id_fkey"
+            columns: ["entered_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "grade_entries_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "terms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       grade_level_subjects: {
         Row: {
           academic_year_id: string
@@ -767,6 +1151,123 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      report_cards: {
+        Row: {
+          academic_year_id: string
+          admin_notes: string | null
+          class_enrollment_id: string
+          class_id: string
+          created_at: string
+          generated_at: string
+          generated_by_user_id: string | null
+          id: string
+          published_at: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["report_card_status"]
+          student_id: string
+          summary: Json
+          teacher_remarks: string | null
+          tenant_id: string
+          term_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          admin_notes?: string | null
+          class_enrollment_id: string
+          class_id: string
+          created_at?: string
+          generated_at?: string
+          generated_by_user_id?: string | null
+          id?: string
+          published_at?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["report_card_status"]
+          student_id: string
+          summary?: Json
+          teacher_remarks?: string | null
+          tenant_id: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          admin_notes?: string | null
+          class_enrollment_id?: string
+          class_id?: string
+          created_at?: string
+          generated_at?: string
+          generated_by_user_id?: string | null
+          id?: string
+          published_at?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["report_card_status"]
+          student_id?: string
+          summary?: Json
+          teacher_remarks?: string | null
+          tenant_id?: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_cards_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_class_enrollment_id_fkey"
+            columns: ["class_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "class_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_generated_by_user_id_fkey"
+            columns: ["generated_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_cards_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "terms"
             referencedColumns: ["id"]
           },
         ]
@@ -1523,6 +2024,27 @@ export type Database = {
         | "completed"
         | "archived"
       class_status: "active" | "inactive" | "archived"
+      exam_result_status:
+        | "draft"
+        | "entered"
+        | "published"
+        | "absent"
+        | "excused"
+      exam_status:
+        | "draft"
+        | "scheduled"
+        | "completed"
+        | "published"
+        | "cancelled"
+      grade_entry_category:
+        | "quiz"
+        | "assignment"
+        | "homework"
+        | "project"
+        | "participation"
+        | "behavior"
+        | "other"
+      grade_entry_status: "draft" | "entered" | "published"
       grade_level_stage:
         | "kindergarten"
         | "primary"
@@ -1532,6 +2054,7 @@ export type Database = {
       grade_level_status: "active" | "inactive" | "archived"
       guardian_relation: "father" | "mother" | "guardian" | "other"
       membership_status: "active" | "invited" | "suspended" | "archived"
+      report_card_status: "draft" | "published" | "archived"
       school_status: "active" | "inactive" | "archived"
       student_document_type:
         | "birth_certificate"
@@ -1706,6 +2229,30 @@ export const Constants = {
         "archived",
       ],
       class_status: ["active", "inactive", "archived"],
+      exam_result_status: [
+        "draft",
+        "entered",
+        "published",
+        "absent",
+        "excused",
+      ],
+      exam_status: [
+        "draft",
+        "scheduled",
+        "completed",
+        "published",
+        "cancelled",
+      ],
+      grade_entry_category: [
+        "quiz",
+        "assignment",
+        "homework",
+        "project",
+        "participation",
+        "behavior",
+        "other",
+      ],
+      grade_entry_status: ["draft", "entered", "published"],
       grade_level_stage: [
         "kindergarten",
         "primary",
@@ -1716,6 +2263,7 @@ export const Constants = {
       grade_level_status: ["active", "inactive", "archived"],
       guardian_relation: ["father", "mother", "guardian", "other"],
       membership_status: ["active", "invited", "suspended", "archived"],
+      report_card_status: ["draft", "published", "archived"],
       school_status: ["active", "inactive", "archived"],
       student_document_type: [
         "birth_certificate",

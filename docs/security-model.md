@@ -33,6 +33,10 @@
 - Attendance session and record mutations derive tenant and school scope from the active membership context.
 - Attendance recording verifies that the session is open, the student belongs to the same tenant/school, and the student has an active class enrollment for the session class and academic year.
 - QR-token attendance resolves the student server-side and does not write the raw QR token to audit metadata.
+- Grades and report-card mutations derive tenant and school scope from the active membership context.
+- Exam creation validates year, class, term, subject, and class-derived grade level server-side.
+- Exam result, grade-entry, and report-card generation validates the student and active class enrollment server-side before writing.
+- Publishing exam results and report cards is limited to fixed admin roles in server-side code.
 
 ## Session handling
 
@@ -52,6 +56,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Important server-side actions should write to `public.audit_logs`.
 - `metadata` should contain operational context only, never secrets or raw credentials.
 - Attendance audit metadata should use IDs such as session, class, year, and student IDs, not raw QR token values.
+- Grades audit metadata should use operational IDs such as exam, class, subject, student, and report-card IDs, not large grade payloads.
 
 ## Student document handling
 

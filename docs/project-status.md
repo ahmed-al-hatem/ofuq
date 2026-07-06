@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Ready for 07 Grades and Report Cards Foundation
-- Last completed implementation phase: 06 Attendance Manual + QR Foundation
+- Current phase: Ready for 08 Manual Timetable with Conflict Prevention Foundation
+- Last completed implementation phase: 07 Grades and Report Cards Foundation
 - Last completed quality phase: 06.5 Attendance Smoke Test + Verification Snapshot
-- Next implementation phase: 07 Grades and Report Cards Foundation
+- Next implementation phase: 08 Manual Timetable with Conflict Prevention Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -34,6 +34,7 @@
 | Phase 05 Academic Structure Foundation | Done | Academic years, terms, grade levels, classes, subjects, grade-level subject assignments, class enrollments, and academic dashboard pages. |
 | Phase 05.5 Quality Gate + Documentation Snapshot | Done | Documentation snapshot and verification report were created. The Supabase local reset/type-generation blocker was resolved and the project is ready for Phase 06. |
 | Phase 06 Attendance Manual + QR Foundation | Done | Attendance sessions, attendance records, absence excuses, manual attendance, QR-token attendance entry, and Arabic dashboard pages. |
+| Phase 07 Grades and Report Cards Foundation | Done | Exams, exam results, grade entries, basic report card snapshots, and Arabic dashboard pages. |
 
 ## Current Implemented Modules
 
@@ -43,9 +44,10 @@
 - Students and admissions foundation, including admission creation/approval and student records.
 - Academic structure foundation, including years, terms, grades, classes, subjects, subject assignments, and class enrollments.
 - Attendance foundation, including manual attendance, QR-token entry, session close flow, and absence excuse review.
+- Grades foundation, including exams, exam result entry, grade entries, and basic report-card snapshots/views.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-Grades, finance, communication, library, and health are not implemented yet.
+Finance, communication, library, and health are not implemented yet.
 
 ## Current Routes
 
@@ -68,6 +70,13 @@ Grades, finance, communication, library, and health are not implemented yet.
 | `/dashboard/attendance/sessions/new` | Active | Create an attendance session. |
 | `/dashboard/attendance/sessions/[sessionId]` | Active | Manual and QR-token attendance-taking page. |
 | `/dashboard/attendance/excuses` | Active | Absence excuse review foundation. |
+| `/dashboard/grades` | Active | Grades and report cards overview. |
+| `/dashboard/grades/exams` | Active | Exams list. |
+| `/dashboard/grades/exams/new` | Active | Exam creation form. |
+| `/dashboard/grades/exams/[examId]` | Active | Exam details and per-student result entry. |
+| `/dashboard/grades/entries` | Active | Non-exam grade entry form and list. |
+| `/dashboard/grades/report-cards` | Active | Report card generation and list. |
+| `/dashboard/grades/report-cards/[reportCardId]` | Active | Basic report card snapshot view. |
 
 Configured dynamic helpers also exist for admission and student detail URLs, but matching route files are not currently present.
 
@@ -77,6 +86,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Students/admissions tables: `student_admissions`, `students`, `student_guardians`, `student_documents`, `student_status_history`.
 - Academic structure tables: `academic_years`, `terms`, `grade_levels`, `classes`, `subjects`, `grade_level_subjects`, `class_enrollments`.
 - Attendance tables: `attendance_sessions`, `attendance_records`, `absence_excuses`.
+- Grades tables: `exams`, `exam_results`, `grade_entries`, `report_cards`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -114,6 +124,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No finance module yet.
 - No parent notifications or communication module yet.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
+- Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics are deferred.
 - No full RLS yet.
 - No full RBAC yet.
 - No external integrations yet.
@@ -127,9 +138,9 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 Recommended next phase:
 
 ```txt
-07 - Grades and Report Cards Foundation
+08 - Manual Timetable with Conflict Prevention Foundation
 ```
 
-Rationale: students, class enrollments, and attendance records now exist, so grades/report cards can be added as the next academic vertical slice.
+Rationale: students, class enrollments, attendance, and grade/report-card foundations now exist, so manual timetabling can be added as the next academic operations slice.
 
-Go/no-go status: Go with caution for Phase 07 after Phase 06.5 technical verification passed. Authenticated attendance workflow smoke remains blocked until a repeatable local smoke dataset exists.
+Go/no-go status: Go with caution for Phase 08 after Phase 07 technical verification. Authenticated grades workflow smoke remains blocked until a repeatable local smoke dataset exists.

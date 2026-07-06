@@ -64,7 +64,7 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "الدرجات",
         icon: BookOpen,
-        placeholder: true,
+        href: appRoutes.grades,
       },
       {
         label: "الجدول",

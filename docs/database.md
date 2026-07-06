@@ -18,6 +18,8 @@ Phase 05 adds the academic structure foundation required before attendance, grad
 
 Phase 06 adds the attendance foundation for manual attendance, QR-token attendance entry, attendance sessions, attendance records, and absence excuse review.
 
+Phase 07 adds the grades and report cards foundation for exams, exam results, grade entries, and basic report card snapshots.
+
 ## Core tables
 
 ### `tenants`
@@ -146,6 +148,32 @@ Exams, grades, report cards, timetable logic, finance, and reports remain later 
 
 Beacon attendance, parent notifications, timetable integration, camera-based scanning, advanced attendance reports, and full RLS remain deferred.
 
+## Phase 07 tables
+
+### `exams`
+
+- Stores assessment definitions for a class, subject, academic year, and optional term.
+- Uses `tenant_id`, `school_id`, `academic_year_id`, `class_id`, derived `grade_level_id`, and `subject_id`.
+- Keeps status simple with `draft`, `scheduled`, `completed`, `published`, and `cancelled`.
+
+### `exam_results`
+
+- Stores one student's result for one exam.
+- Enforces one result per `(exam_id, student_id)`.
+- Application code validates the active class enrollment and checks score upper bounds against the related exam.
+
+### `grade_entries`
+
+- Stores non-exam marks such as quizzes, assignments, homework, projects, participation, behavior, and other entries.
+- Carries `class_enrollment_id` resolved server-side after validating that the student is active and enrolled in the selected class/year.
+- Enforces local score constraints such as `score <= max_score`.
+
+### `report_cards`
+
+- Stores a basic report card snapshot for one student, class, academic year, and optional term.
+- Uses a JSON `summary` for stable display of subject totals and overall percentage.
+- This phase does not generate PDFs, rankings, GPA scales, certificate designs, parent notifications, or advanced analytics.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -158,12 +186,14 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - School-owned records should also include `school_id`.
 - Tenant and school context must be derived server-side from authenticated membership, never trusted from raw client input.
 - Attendance mutations verify session, class, academic year, term, student, and active enrollment ownership server-side before writes.
+- Grades mutations verify exam, class, academic year, term, subject, student, and active enrollment ownership server-side before writes.
 
 ## Storage note
 
 - Student files belong in the private `student-documents` bucket.
 - Application code should store only file metadata and storage paths in `student_documents`.
 - Attendance absence excuses store text reasons only; document uploads can be added later if needed.
+- Report card snapshots store summary JSON only; generated PDF files and template assets remain deferred.
 
 ## RLS later
 
