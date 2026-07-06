@@ -1,0 +1,126 @@
+import {
+  BarChart3,
+  BookOpen,
+  CalendarCheck2,
+  CalendarDays,
+  CircleDollarSign,
+  FileText,
+  GraduationCap,
+  LayoutDashboard,
+  LibraryBig,
+  MessageSquareMore,
+  Settings2,
+  ShieldCheck,
+  HeartPulse,
+  Users2,
+  PlugZap,
+  BookMarked,
+} from "lucide-react"
+import type { LucideIcon } from "lucide-react"
+
+import { appRoutes } from "@/constants/routes"
+
+export type NavigationItem = {
+  label: string
+  href?: string
+  icon: LucideIcon
+  placeholder?: boolean
+}
+
+export type NavigationGroup = {
+  label: string
+  items: NavigationItem[]
+}
+
+export const dashboardNavigation: NavigationGroup[] = [
+  {
+    label: "التشغيل اليومي",
+    items: [
+      {
+        label: "لوحة التحكم",
+        href: appRoutes.dashboard,
+        icon: LayoutDashboard,
+      },
+      {
+        label: "الطلاب",
+        icon: Users2,
+        placeholder: true,
+      },
+      {
+        label: "القبول",
+        icon: FileText,
+        placeholder: true,
+      },
+      {
+        label: "الأكاديمي",
+        icon: GraduationCap,
+        placeholder: true,
+      },
+      {
+        label: "الحضور",
+        icon: CalendarCheck2,
+        placeholder: true,
+      },
+      {
+        label: "الدرجات",
+        icon: BookOpen,
+        placeholder: true,
+      },
+      {
+        label: "الجدول",
+        icon: CalendarDays,
+        placeholder: true,
+      },
+      {
+        label: "المالية",
+        icon: CircleDollarSign,
+        placeholder: true,
+      },
+      {
+        label: "التواصل",
+        icon: MessageSquareMore,
+        placeholder: true,
+      },
+      {
+        label: "التقارير",
+        icon: BarChart3,
+        placeholder: true,
+      },
+    ],
+  },
+  {
+    label: "إعدادات ومراحل لاحقة",
+    items: [
+      {
+        label: "المكتبة",
+        icon: LibraryBig,
+        placeholder: true,
+      },
+      {
+        label: "الصحة",
+        icon: HeartPulse,
+        placeholder: true,
+      },
+      {
+        label: "الإعدادات",
+        icon: Settings2,
+        placeholder: true,
+      },
+      {
+        label: "التكاملات",
+        icon: PlugZap,
+        placeholder: true,
+      },
+      {
+        label: "التقويم المدرسي",
+        icon: BookMarked,
+        placeholder: true,
+      },
+      {
+        label: "الأمان",
+        icon: ShieldCheck,
+        placeholder: true,
+      },
+    ],
+  },
+] as const

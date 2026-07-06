@@ -16,6 +16,8 @@ This project is a full-stack school management system built with:
 
 The project must be built as a real full-stack Next.js application, not as UI-only. Use Server Actions and server-side code for data mutations, authorization checks, tenant validation, and sensitive operations.
 
+The product is Arabic-first and RTL-first. User-facing application UI should default to Arabic language and right-to-left direction.
+
 ## Product Scope
 
 The system targets a multi-tenant school management platform. The MVP should be realistic, complete, and extensible without attempting to implement every advanced feature at once.
@@ -125,6 +127,51 @@ Rules:
 - Avoid decorative complexity that does not improve usability.
 - Use reusable components where they genuinely reduce duplication.
 
+## Theme, Branding, and Localization
+
+The application brand palette is fixed for the MVP:
+
+- `ofuq-navy`: `#0D1B3D`
+- `ofuq-teal`: `#0D7A7B`
+- `ofuq-gold`: `#C9A24B`
+- `ofuq-white`: `#FFFFFF`
+
+Rules:
+
+- Define these colors as first-class design tokens in Tailwind CSS.
+- Tailwind token names should be available as:
+  - `ofuq.navy` / `ofuq-navy`: `#0D1B3D`
+  - `ofuq.teal` / `ofuq-teal`: `#0D7A7B`
+  - `ofuq.gold` / `ofuq-gold`: `#C9A24B`
+  - `ofuq.white` / `ofuq-white`: `#FFFFFF`
+- Define matching shadcn/ui CSS variables in the global stylesheet, following the existing shadcn variable format used by the project.
+- If the project uses the common shadcn HSL variable format, use these values:
+  - `--background`: `0 0% 100%`
+  - `--foreground`: `223 65% 15%`
+  - `--primary`: `223 65% 15%`
+  - `--primary-foreground`: `0 0% 100%`
+  - `--secondary`: `181 81% 27%`
+  - `--secondary-foreground`: `0 0% 100%`
+  - `--accent`: `41 55% 54%`
+  - `--accent-foreground`: `223 65% 15%`
+  - `--brand-navy`: `223 65% 15%`
+  - `--brand-teal`: `181 81% 27%`
+  - `--brand-gold`: `41 55% 54%`
+  - `--brand-white`: `0 0% 100%`
+- Do not hardcode these hex values repeatedly in components. Use Tailwind utilities, CSS variables, or theme tokens.
+- Map the brand colors into shadcn semantic tokens:
+  - `primary`: `ofuq-navy`
+  - `secondary`: `ofuq-teal`
+  - `accent`: `ofuq-gold`
+  - `background`: `ofuq-white`
+  - `foreground`: `ofuq-navy`
+- Use accessible contrast for text, buttons, badges, charts, and dashboard cards.
+- Keep the UI Arabic-first: use Arabic labels, Arabic navigation, Arabic empty states, and Arabic validation messages for user-facing text.
+- Set the root document to `lang="ar"` and `dir="rtl"`.
+- Build all layouts with RTL support from the beginning. Prefer logical alignment such as `start` and `end` over hardcoded `left` and `right` where practical.
+- shadcn/ui components must be configured and styled to behave correctly in RTL, including dialogs, dropdowns, tables, tabs, forms, sidebars, and navigation.
+- Internal code identifiers, database fields, enum values, file names, and API contracts may remain in English for maintainability.
+
 ## State, Forms, and Validation
 
 - Prefer the simplest state management option that works.
@@ -153,11 +200,14 @@ Build in this order unless the user explicitly changes the plan:
    - Next.js setup
    - TypeScript
    - Tailwind CSS
+   - Tailwind design tokens for the Ofuq palette
    - shadcn/ui
+   - shadcn/ui CSS variables mapped to the Ofuq palette
    - Lucide React
    - framer-motion
    - Supabase CLI
    - environment variables
+   - Arabic `lang="ar"` and RTL `dir="rtl"` root layout
    - base layout and navigation
 
 2. Core and authentication
@@ -338,4 +388,3 @@ Do not ask Codex to build the whole system at once. Build module by module and k
   - keep solutions simple
   - make scoped changes
   - verify results
-
