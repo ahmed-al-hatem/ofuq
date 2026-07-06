@@ -13,4 +13,10 @@ export const appRoutes = {
   academicClasses: "/dashboard/academic/classes",
   academicSubjects: "/dashboard/academic/subjects",
   academicEnrollments: "/dashboard/academic/enrollments",
+  attendance: "/dashboard/attendance",
+  attendanceSessions: "/dashboard/attendance/sessions",
+  newAttendanceSession: "/dashboard/attendance/sessions/new",
+  attendanceSessionDetails: (sessionId: string) =>
+    `/dashboard/attendance/sessions/${sessionId}`,
+  attendanceExcuses: "/dashboard/attendance/excuses",
 } as const

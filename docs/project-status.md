@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Ready for 06 Attendance Manual + QR Foundation
-- Last completed implementation phase: 05 Academic Structure Foundation
+- Current phase: Ready for 07 Grades and Report Cards Foundation
+- Last completed implementation phase: 06 Attendance Manual + QR Foundation
 - Last completed quality phase: 05.5 Quality Gate + Documentation Snapshot
-- Next implementation phase: 06 Attendance Manual + QR Foundation
+- Next implementation phase: 07 Grades and Report Cards Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -33,6 +33,7 @@
 | Phase 04 Students and Admissions Foundation | Done | Admissions workflow, student records, guardian links, document metadata, status history, and student QR token foundation. |
 | Phase 05 Academic Structure Foundation | Done | Academic years, terms, grade levels, classes, subjects, grade-level subject assignments, class enrollments, and academic dashboard pages. |
 | Phase 05.5 Quality Gate + Documentation Snapshot | Done | Documentation snapshot and verification report were created. The Supabase local reset/type-generation blocker was resolved and the project is ready for Phase 06. |
+| Phase 06 Attendance Manual + QR Foundation | Done | Attendance sessions, attendance records, absence excuses, manual attendance, QR-token attendance entry, and Arabic dashboard pages. |
 
 ## Current Implemented Modules
 
@@ -41,9 +42,10 @@
 - Fixed role checks for MVP roles without full RBAC.
 - Students and admissions foundation, including admission creation/approval and student records.
 - Academic structure foundation, including years, terms, grades, classes, subjects, subject assignments, and class enrollments.
+- Attendance foundation, including manual attendance, QR-token entry, session close flow, and absence excuse review.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-Attendance, grades, finance, communication, library, and health are not implemented yet.
+Grades, finance, communication, library, and health are not implemented yet.
 
 ## Current Routes
 
@@ -61,6 +63,11 @@ Attendance, grades, finance, communication, library, and health are not implemen
 | `/dashboard/academic/classes` | Active | Classes/sections. |
 | `/dashboard/academic/subjects` | Active | Subjects and grade-level subject assignments. |
 | `/dashboard/academic/enrollments` | Active | Student class enrollments. |
+| `/dashboard/attendance` | Active | Attendance overview. |
+| `/dashboard/attendance/sessions` | Active | Attendance session list. |
+| `/dashboard/attendance/sessions/new` | Active | Create an attendance session. |
+| `/dashboard/attendance/sessions/[sessionId]` | Active | Manual and QR-token attendance-taking page. |
+| `/dashboard/attendance/excuses` | Active | Absence excuse review foundation. |
 
 Configured dynamic helpers also exist for admission and student detail URLs, but matching route files are not currently present.
 
@@ -69,6 +76,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Core tenant/auth tables: `tenants`, `schools`, `user_profiles`, `user_memberships`, `audit_logs`.
 - Students/admissions tables: `student_admissions`, `students`, `student_guardians`, `student_documents`, `student_status_history`.
 - Academic structure tables: `academic_years`, `terms`, `grade_levels`, `classes`, `subjects`, `grade_level_subjects`, `class_enrollments`.
+- Attendance tables: `attendance_sessions`, `attendance_records`, `absence_excuses`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -100,11 +108,11 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Current Known Limitations
 
-- No attendance module yet.
 - No grades, exams, or report cards yet.
 - No timetable logic yet.
 - No finance module yet.
 - No parent notifications or communication module yet.
+- Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - No full RLS yet.
 - No full RBAC yet.
 - No external integrations yet.
@@ -117,9 +125,9 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 Recommended next phase:
 
 ```txt
-06 - Attendance Manual + QR Foundation
+07 - Grades and Report Cards Foundation
 ```
 
-Rationale: students now exist, academic years/classes/enrollments now exist, and attendance can build on `class_enrollments` without inventing its own student/class context.
+Rationale: students, class enrollments, and attendance records now exist, so grades/report cards can be added as the next academic vertical slice.
 
-Go/no-go status: Go for Phase 06 schema work after the successful Supabase local reset/type-generation recovery documented in `docs/verification-report.md`.
+Go/no-go status: Go for Phase 07 after Phase 06 lint/build and type generation succeeded. Supabase reset replayed the new migration but the local CLI returned an upstream 502 while restarting containers; rerun reset before the next schema slice if Docker health is uncertain.

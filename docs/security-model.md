@@ -30,6 +30,9 @@
 - Student and admission mutations should derive their tenant and school scope only from the active membership context.
 - Academic structure mutations derive tenant and school scope from the active membership context.
 - Student class enrollment verifies the selected student, class, academic year, and class-derived grade level server-side before insert.
+- Attendance session and record mutations derive tenant and school scope from the active membership context.
+- Attendance recording verifies that the session is open, the student belongs to the same tenant/school, and the student has an active class enrollment for the session class and academic year.
+- QR-token attendance resolves the student server-side and does not write the raw QR token to audit metadata.
 
 ## Session handling
 
@@ -48,6 +51,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 
 - Important server-side actions should write to `public.audit_logs`.
 - `metadata` should contain operational context only, never secrets or raw credentials.
+- Attendance audit metadata should use IDs such as session, class, year, and student IDs, not raw QR token values.
 
 ## Student document handling
 

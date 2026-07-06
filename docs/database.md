@@ -16,6 +16,8 @@ Phase 04 extends this foundation with the first business-data slice for admissio
 
 Phase 05 adds the academic structure foundation required before attendance, grading, timetabling, and reporting.
 
+Phase 06 adds the attendance foundation for manual attendance, QR-token attendance entry, attendance sessions, attendance records, and absence excuse review.
+
 ## Core tables
 
 ### `tenants`
@@ -118,7 +120,31 @@ Phase 05 adds the academic structure foundation required before attendance, grad
 - Enforces one active enrollment per student per academic year through a partial unique index.
 - Application code verifies that the student, class, academic year, and derived grade level all belong to the authenticated user's tenant and school before insert.
 
-Attendance, exams, grades, report cards, timetable logic, finance, and reports remain later phases.
+Exams, grades, report cards, timetable logic, finance, and reports remain later phases.
+
+## Phase 06 tables
+
+### `attendance_sessions`
+
+- Represents one attendance-taking session for a class on a date.
+- Uses `tenant_id`, `school_id`, `academic_year_id`, optional `term_id`, and `class_id`.
+- Supports `manual` and `qr` methods and the `open`, `closed`, and `cancelled` session states.
+- Does not enforce one session per class per day so later timetable or period-based attendance can add multiple daily sessions.
+
+### `attendance_records`
+
+- Stores one student's status inside one attendance session.
+- Enforces one record per `(attendance_session_id, student_id)`.
+- Carries the active `class_enrollment_id` used to validate that the student belongs to the session class and year.
+- Supports `present`, `absent`, `late`, and `excused` statuses and `manual`, `qr`, or `system` record methods.
+
+### `absence_excuses`
+
+- Stores one current excuse request for an attendance record.
+- Supports `pending`, `approved`, `rejected`, and `cancelled` statuses.
+- Review actions can approve or reject the excuse; approving an absent or late record may update the attendance record to `excused`.
+
+Beacon attendance, parent notifications, timetable integration, camera-based scanning, advanced attendance reports, and full RLS remain deferred.
 
 ## Role model
 
@@ -131,12 +157,13 @@ Attendance, exams, grades, report cards, timetable logic, finance, and reports r
 - All tenant-owned records must include `tenant_id`.
 - School-owned records should also include `school_id`.
 - Tenant and school context must be derived server-side from authenticated membership, never trusted from raw client input.
+- Attendance mutations verify session, class, academic year, term, student, and active enrollment ownership server-side before writes.
 
 ## Storage note
 
 - Student files belong in the private `student-documents` bucket.
 - Application code should store only file metadata and storage paths in `student_documents`.
-- Attendance, academic structure, and finance remain later-phase modules and are intentionally absent from this slice.
+- Attendance absence excuses store text reasons only; document uploads can be added later if needed.
 
 ## RLS later
 

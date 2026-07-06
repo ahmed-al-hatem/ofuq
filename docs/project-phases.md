@@ -22,14 +22,20 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, and academic-structure foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, and attendance foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 06 snapshot
+
+- Attendance manual + QR foundation is implemented with sessions, records, and absence excuses.
+- Attendance management uses server-side membership context and fixed role checks for `system_admin`, `school_admin`, and `teacher`.
+- QR attendance is token-entry foundation only; camera scanning, Beacon, timetable integration, parent notifications, advanced attendance reports, and full RLS remain deferred.
 
 ## Phase 05 snapshot
 
 - Academic structure foundation is implemented for years, terms, grade levels, classes, subjects, grade-level subject assignments, and class enrollments.
 - Academic management uses server-side membership context and fixed role checks.
-- Attendance, grades, timetable logic, finance, and reports remain future slices.
+- Grades, timetable logic, finance, and reports remain future slices.
 
 ## Phase 04 snapshot
 

@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 05. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 06. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -47,7 +47,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Students | Guardian links | 04 | Done | Guardian table exists. |
 | Students | Student documents metadata | 04 | Done | Metadata and private bucket foundation exist. |
 | Students | Student status history | 04 | Done | Status history table exists. |
-| Students | Student QR token foundation | 04 | Done | `students.qr_token` exists; attendance QR is not implemented. |
+| Students | Student QR token foundation | 04 | Done | `students.qr_token` now feeds the Phase 06 QR-token attendance foundation. |
 | Students | Promotions/transfers later | Later | Later | Not implemented. |
 | Students | Withdrawal workflow later | Later | Later | Not implemented. |
 | Students | Achievements later | Later | Later | Not implemented. |
@@ -65,9 +65,9 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Academic | Exams later | 07 | Planned | Not implemented. |
 | Academic | Report cards later | 07 | Planned | Not implemented. |
 | Academic | Evaluation systems later | Later | Later | Not implemented. |
-| Attendance | Manual attendance planned | 06 | Planned | Recommended next implementation phase. |
-| Attendance | Teacher scans student QR planned | 06 | Planned | Builds on student QR token and class enrollments. |
-| Attendance | Absence excuses planned | 06 | Planned | Expected in attendance foundation. |
+| Attendance | Manual attendance | 06 | Done | Attendance sessions and manual per-student records are implemented. |
+| Attendance | Teacher scans student QR foundation | 06 | Done | Token-entry QR foundation validates the student and active class enrollment server-side. |
+| Attendance | Absence excuses foundation | 06 | Done | Excuse table, submit action foundation, and admin/school admin review page are implemented. |
 | Attendance | Parent notifications later | Later | Later | Requires communication/notification foundation. |
 | Attendance | Beacon later | Later | Later | Explicitly deferred. |
 | Attendance | Advanced attendance reports later | Later | Later | Ready-made basic reports should come first. |
@@ -115,11 +115,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Auth + fixed roles
 - Students/admissions foundation
 - Academic structure foundation
+- Attendance manual + QR foundation
 
 ## Planned Next
 
 ```txt
-06 - Attendance Manual + QR Foundation
+07 - Grades and Report Cards Foundation
 ```
 
 ## Later / Placeholder Only
@@ -129,7 +130,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Expanded permissions/capability layer.
 - Student promotions, transfers, withdrawals, achievements, discipline, import/export, and risk indicators.
 - Grades, exams, report cards, and evaluation systems.
-- Parent notifications and advanced attendance reports.
+- Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Manual timetable and conflict prevention, then automatic generation later.
 - Finance module and finance reports.
 - Communication module, notifications, events, announcements, complaints, and surveys.

@@ -34,6 +34,100 @@ export type Database = {
   }
   public: {
     Tables: {
+      absence_excuses: {
+        Row: {
+          attendance_record_id: string
+          created_at: string
+          id: string
+          reason: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by_user_id: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["absence_excuse_status"]
+          student_id: string
+          submitted_at: string
+          submitted_by_user_id: string | null
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          attendance_record_id: string
+          created_at?: string
+          id?: string
+          reason: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by_user_id?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["absence_excuse_status"]
+          student_id: string
+          submitted_at?: string
+          submitted_by_user_id?: string | null
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          attendance_record_id?: string
+          created_at?: string
+          id?: string
+          reason?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by_user_id?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["absence_excuse_status"]
+          student_id?: string
+          submitted_at?: string
+          submitted_by_user_id?: string | null
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "absence_excuses_attendance_record_id_fkey"
+            columns: ["attendance_record_id"]
+            isOneToOne: true
+            referencedRelation: "attendance_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "absence_excuses_reviewed_by_user_id_fkey"
+            columns: ["reviewed_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "absence_excuses_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "absence_excuses_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "absence_excuses_submitted_by_user_id_fkey"
+            columns: ["submitted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "absence_excuses_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       academic_years: {
         Row: {
           code: string
@@ -87,6 +181,214 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attendance_records: {
+        Row: {
+          academic_year_id: string
+          attendance_session_id: string
+          class_enrollment_id: string
+          class_id: string
+          created_at: string
+          id: string
+          method: Database["public"]["Enums"]["attendance_record_method"]
+          notes: string | null
+          recorded_at: string
+          recorded_by_user_id: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["attendance_status"]
+          student_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          attendance_session_id: string
+          class_enrollment_id: string
+          class_id: string
+          created_at?: string
+          id?: string
+          method?: Database["public"]["Enums"]["attendance_record_method"]
+          notes?: string | null
+          recorded_at?: string
+          recorded_by_user_id?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["attendance_status"]
+          student_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          attendance_session_id?: string
+          class_enrollment_id?: string
+          class_id?: string
+          created_at?: string
+          id?: string
+          method?: Database["public"]["Enums"]["attendance_record_method"]
+          notes?: string | null
+          recorded_at?: string
+          recorded_by_user_id?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["attendance_status"]
+          student_id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_attendance_session_id_fkey"
+            columns: ["attendance_session_id"]
+            isOneToOne: false
+            referencedRelation: "attendance_sessions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_class_enrollment_id_fkey"
+            columns: ["class_enrollment_id"]
+            isOneToOne: false
+            referencedRelation: "class_enrollments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_recorded_by_user_id_fkey"
+            columns: ["recorded_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attendance_sessions: {
+        Row: {
+          academic_year_id: string
+          class_id: string
+          created_at: string
+          ends_at: string | null
+          id: string
+          method: Database["public"]["Enums"]["attendance_session_method"]
+          notes: string | null
+          school_id: string
+          session_date: string
+          starts_at: string | null
+          status: Database["public"]["Enums"]["attendance_session_status"]
+          taken_by_user_id: string | null
+          tenant_id: string
+          term_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          class_id: string
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          method?: Database["public"]["Enums"]["attendance_session_method"]
+          notes?: string | null
+          school_id: string
+          session_date: string
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["attendance_session_status"]
+          taken_by_user_id?: string | null
+          tenant_id: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          class_id?: string
+          created_at?: string
+          ends_at?: string | null
+          id?: string
+          method?: Database["public"]["Enums"]["attendance_session_method"]
+          notes?: string | null
+          school_id?: string
+          session_date?: string
+          starts_at?: string | null
+          status?: Database["public"]["Enums"]["attendance_session_status"]
+          taken_by_user_id?: string | null
+          tenant_id?: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_sessions_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_sessions_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_sessions_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_sessions_taken_by_user_id_fkey"
+            columns: ["taken_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_sessions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_sessions_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "terms"
             referencedColumns: ["id"]
           },
         ]
@@ -1207,8 +1509,13 @@ export type Database = {
       generate_student_number: { Args: never; Returns: string }
     }
     Enums: {
+      absence_excuse_status: "pending" | "approved" | "rejected" | "cancelled"
       academic_year_status: "draft" | "active" | "closed" | "archived"
       admission_status: "pending" | "approved" | "rejected" | "cancelled"
+      attendance_record_method: "manual" | "qr" | "system"
+      attendance_session_method: "manual" | "qr"
+      attendance_session_status: "open" | "closed" | "cancelled"
+      attendance_status: "present" | "absent" | "late" | "excused"
       class_enrollment_status:
         | "active"
         | "transferred"
@@ -1384,8 +1691,13 @@ export const Constants = {
   },
   public: {
     Enums: {
+      absence_excuse_status: ["pending", "approved", "rejected", "cancelled"],
       academic_year_status: ["draft", "active", "closed", "archived"],
       admission_status: ["pending", "approved", "rejected", "cancelled"],
+      attendance_record_method: ["manual", "qr", "system"],
+      attendance_session_method: ["manual", "qr"],
+      attendance_session_status: ["open", "closed", "cancelled"],
+      attendance_status: ["present", "absent", "late", "excused"],
       class_enrollment_status: [
         "active",
         "transferred",

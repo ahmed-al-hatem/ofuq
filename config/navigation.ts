@@ -59,7 +59,7 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "الحضور",
         icon: CalendarCheck2,
-        placeholder: true,
+        href: appRoutes.attendance,
       },
       {
         label: "الدرجات",
