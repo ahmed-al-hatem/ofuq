@@ -1,17 +1,13 @@
 import Link from "next/link"
-import { Mail, Settings2, Sparkles } from "lucide-react"
+import { redirect } from "next/navigation"
+import { Settings2, Sparkles } from "lucide-react"
 
 import { buttonVariants } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { appRoutes } from "@/constants/routes"
+import { getAuthenticatedUser } from "@/lib/auth/session"
 import { cn } from "@/lib/utils"
+import { LoginForm } from "./login-form"
 
 const authPlans = [
   "تسجيل الدخول عبر البريد الإلكتروني وكلمة المرور",
@@ -19,7 +15,13 @@ const authPlans = [
   "إدارة الجلسات عبر Supabase Auth من جهة الخادم",
 ]
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const authenticatedUser = await getAuthenticatedUser()
+
+  if (authenticatedUser?.membership?.status === "active") {
+    redirect(appRoutes.dashboard)
+  }
+
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-8 sm:px-6 lg:px-8">
       <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
@@ -61,26 +63,7 @@ export default function LoginPage() {
           </div>
         </section>
 
-        <Card className="self-center border-border/70 shadow-sm">
-          <CardHeader>
-            <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-              <Mail className="size-5" />
-            </div>
-            <CardTitle className="pt-3">تخطيط المصادقة</CardTitle>
-            <CardDescription>
-              فصل واضح بين العميل والخادم قبل إضافة النموذج الفعلي.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm leading-6 text-muted-foreground">
-            <p>
-              سيُستخدم البريد الإلكتروني وكلمة المرور أولًا، مع ترك مساحة منظمة
-              لإضافة تسجيل Google لاحقًا.
-            </p>
-            <p>
-              وصول الخدمة الإدارية يبقى على الخادم فقط، ولن يُمرّر إلى الواجهة.
-            </p>
-          </CardContent>
-        </Card>
+        <LoginForm />
       </div>
     </main>
   )

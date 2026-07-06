@@ -1,4 +1,9 @@
+import "server-only"
+
+import type { User } from "@supabase/supabase-js"
+
 import { USER_ROLE_LABELS_AR, type UserRole } from "@/constants/roles"
+import { createSupabaseServerClient } from "@/lib/supabase/server"
 import type {
   AuthenticatedUser,
   SessionUser,
@@ -36,4 +41,80 @@ export function buildAuthenticatedUser(
 
 export function getRoleLabel(role: UserRole): string {
   return USER_ROLE_LABELS_AR[role]
+}
+
+export async function getCurrentAuthUser(): Promise<User | null> {
+  const supabase = await createSupabaseServerClient()
+  const { data, error } = await supabase.auth.getUser()
+
+  if (error || !data.user) {
+    return null
+  }
+
+  return data.user
+}
+
+export async function getUserProfile(userId: string): Promise<UserProfile | null> {
+  const supabase = await createSupabaseServerClient()
+  const { data, error } = await supabase
+    .from("user_profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle()
+
+  if (error || !data) {
+    return null
+  }
+
+  return data as UserProfile
+}
+
+export async function getUserMemberships(
+  userId: string
+): Promise<UserMembership[]> {
+  const supabase = await createSupabaseServerClient()
+  const { data, error } = await supabase
+    .from("user_memberships")
+    .select("*")
+    .eq("user_id", userId)
+    .order("is_primary", { ascending: false })
+    .order("created_at", { ascending: true })
+
+  if (error || !data) {
+    return []
+  }
+
+  return data as UserMembership[]
+}
+
+export async function getPrimaryMembership(
+  userId: string
+): Promise<UserMembership | null> {
+  const memberships = await getUserMemberships(userId)
+
+  return (
+    memberships.find(
+      (membership) => membership.status === "active" && membership.is_primary
+    ) ??
+    memberships.find((membership) => membership.status === "active") ??
+    null
+  )
+}
+
+export async function getAuthenticatedUser(): Promise<AuthenticatedUser | null> {
+  const authUser = await getCurrentAuthUser()
+
+  if (!authUser) {
+    return null
+  }
+
+  const profile = await getUserProfile(authUser.id)
+
+  if (!profile) {
+    return null
+  }
+
+  const membership = await getPrimaryMembership(authUser.id)
+
+  return buildAuthenticatedUser(profile, membership, authUser.email ?? null)
 }

@@ -1,6 +1,7 @@
 import type { ActionResult } from "@/lib/actions/action-result"
 import { failure, success } from "@/lib/actions/action-result"
-import { createSupabaseServerClient } from "@/lib/supabase/server"
+import { getAuthenticatedUser, getCurrentAuthUser } from "@/lib/auth/session"
+import type { AuthenticatedUser, UserMembership } from "@/types/auth"
 
 export type AuthenticatedRequest = {
   userId: string
@@ -8,15 +9,48 @@ export type AuthenticatedRequest = {
 }
 
 export async function requireAuth(): Promise<ActionResult<AuthenticatedRequest>> {
-  const supabase = await createSupabaseServerClient()
-  const { data, error } = await supabase.auth.getUser()
+  const user = await getCurrentAuthUser()
 
-  if (error || !data.user) {
+  if (!user) {
     return failure("يجب تسجيل الدخول أولاً")
   }
 
   return success({
-    userId: data.user.id,
-    email: data.user.email ?? null,
+    userId: user.id,
+    email: user.email ?? null,
+  })
+}
+
+export async function requireAuthenticatedUser(): Promise<
+  ActionResult<AuthenticatedUser>
+> {
+  const user = await getAuthenticatedUser()
+
+  if (!user) {
+    return failure("لا يمكن الوصول إلى بيانات الحساب الحالية")
+  }
+
+  return success(user)
+}
+
+export async function requireActiveMembership(): Promise<
+  ActionResult<AuthenticatedUser & { membership: UserMembership }>
+> {
+  const authenticatedUser = await getAuthenticatedUser()
+
+  if (!authenticatedUser) {
+    return failure("لا يمكن الوصول إلى بيانات الحساب الحالية")
+  }
+
+  if (
+    !authenticatedUser.membership ||
+    authenticatedUser.membership.status !== "active"
+  ) {
+    return failure("لا توجد عضوية نشطة مرتبطة بهذا الحساب")
+  }
+
+  return success({
+    ...authenticatedUser,
+    membership: authenticatedUser.membership,
   })
 }

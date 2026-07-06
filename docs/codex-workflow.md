@@ -26,3 +26,9 @@
 - Add new migrations under `supabase/migrations/`; do not rewrite old migrations.
 - Keep `.env.example`, `supabase/seed.sql`, and the database docs aligned with schema changes.
 - Prefer `supabase db reset` for local verification when Docker is available, and report clearly when it is not.
+
+## Auth slices
+
+- Resolve the current user from Supabase Auth first, then load `user_profiles` and `user_memberships`.
+- Keep login, sign-out, and protected-route checks on the server whenever possible.
+- Use fixed-role guards and tenant guards from membership context instead of introducing RBAC early.

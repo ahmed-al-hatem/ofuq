@@ -1,14 +1,16 @@
-import Link from "next/link"
-import { Sparkles } from "lucide-react"
+import { LogOut, Sparkles } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { appConfig } from "@/config/app"
-import { appRoutes } from "@/constants/routes"
-import { cn } from "@/lib/utils"
+import { signOutFromForm } from "@/lib/actions/auth"
+import { getRoleLabel } from "@/lib/auth/session"
+import type { SessionUser } from "@/types/auth"
 
-export function AppHeader() {
+export function AppHeader({ user }: Readonly<{ user: SessionUser }>) {
+  const roleLabel = user.role ? getRoleLabel(user.role) : "بدون عضوية نشطة"
+
   return (
     <header className="border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
       <div className="flex flex-col gap-4 px-4 py-4 sm:px-6 lg:px-8">
@@ -25,14 +27,20 @@ export function AppHeader() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Badge variant="outline">RTL</Badge>
-            <Link
-              href={appRoutes.login}
-              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
-            >
-              تسجيل الدخول
-            </Link>
+            <div className="flex flex-col items-end text-sm">
+              <span className="font-medium">
+                {user.display_name ?? user.full_name}
+              </span>
+              <span className="text-muted-foreground">{roleLabel}</span>
+            </div>
+            <form action={signOutFromForm}>
+              <Button type="submit" variant="outline" size="sm">
+                <LogOut data-icon="inline-start" />
+                تسجيل الخروج
+              </Button>
+            </form>
           </div>
         </div>
 
