@@ -44,12 +44,12 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "الطلاب",
         icon: Users2,
-        placeholder: true,
+        href: appRoutes.students,
       },
       {
         label: "القبول",
         icon: FileText,
-        placeholder: true,
+        href: appRoutes.admissions,
       },
       {
         label: "الأكاديمي",

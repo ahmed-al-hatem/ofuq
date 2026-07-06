@@ -27,6 +27,7 @@
 - Tenant context should be resolved from authenticated membership, not from a submitted `tenant_id`.
 - School-scoped actions should validate both `tenant_id` and `school_id`.
 - Future modules must keep these columns on every tenant-owned table.
+- Student and admission mutations should derive their tenant and school scope only from the active membership context.
 
 ## Session handling
 
@@ -45,3 +46,9 @@ Full production RLS is postponed until the auth and membership flows are stable.
 
 - Important server-side actions should write to `public.audit_logs`.
 - `metadata` should contain operational context only, never secrets or raw credentials.
+
+## Student document handling
+
+- Student and admission document uploads should stay server-side when privileged access is required.
+- Only metadata and storage paths belong in `public.student_documents`.
+- The `student-documents` bucket is private and should not expose public URLs by default.

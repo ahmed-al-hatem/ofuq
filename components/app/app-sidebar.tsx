@@ -47,7 +47,9 @@ export function AppSidebar() {
               <div className="flex flex-col gap-1">
                 {group.items.map((item) => {
                   const Icon = item.icon
-                  const active = item.href ? pathname === item.href : false
+                  const active = item.href
+                    ? pathname === item.href || pathname.startsWith(`${item.href}/`)
+                    : false
 
                   if (item.placeholder || !item.href) {
                     return (

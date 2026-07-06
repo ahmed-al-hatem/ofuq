@@ -12,6 +12,8 @@ Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumpin
 
 Students, academics, attendance, finance, communication, library, health, and reporting tables remain for later phases.
 
+Phase 04 extends this foundation with the first business-data slice for admissions and students.
+
 ## Core tables
 
 ### `tenants`
@@ -45,6 +47,37 @@ Students, academics, attendance, finance, communication, library, health, and re
 - Keeps `tenant_id`, `school_id`, and `actor_user_id` nullable for deletion safety and system-level actions.
 - `metadata` is flexible, but must never include secrets.
 
+## Phase 04 tables
+
+### `student_admissions`
+
+- Stores admission requests before a student becomes an official record.
+- Uses `tenant_id`, `school_id`, `submitted_by_user_id`, and `reviewed_by_user_id`.
+- Keeps the workflow simple with `pending`, `approved`, `rejected`, and `cancelled`.
+
+### `students`
+
+- Stores the official student record created after admission approval.
+- Includes `student_number` and `qr_token` foundations without implementing attendance yet.
+- Links back to the originating admission through `admission_id` when applicable.
+
+### `student_guardians`
+
+- Stores guardian contact data independently from Auth users.
+- Allows future linking to a `guardian_user_id` without requiring a guardian account today.
+- Supports one primary guardian per student.
+
+### `student_documents`
+
+- Stores document metadata only, not file bytes.
+- Supports either admission-linked or student-linked files.
+- Uses the private `student-documents` storage bucket as the intended file destination.
+
+### `student_status_history`
+
+- Captures status transitions such as the initial move into `active`.
+- Preserves who changed the status and when.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -56,6 +89,12 @@ Students, academics, attendance, finance, communication, library, health, and re
 - All tenant-owned records must include `tenant_id`.
 - School-owned records should also include `school_id`.
 - Tenant and school context must be derived server-side from authenticated membership, never trusted from raw client input.
+
+## Storage note
+
+- Student files belong in the private `student-documents` bucket.
+- Application code should store only file metadata and storage paths in `student_documents`.
+- Attendance, academic structure, and finance remain later-phase modules and are intentionally absent from this slice.
 
 ## RLS later
 

@@ -22,7 +22,14 @@
 
 ## Current focus
 
-The current foundation phase only prepares structure, helpers, placeholders, and local development readiness. Business modules should be added one slice at a time after auth and tenant foundations are in place.
+The project now has its auth and tenant foundation in place, and Phase 04 is the first real business-data slice.
+New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 04 snapshot
+
+- Students and admissions foundation is now the active business-data slice.
+- This phase covers admissions, student records, guardian links, document metadata, and status history.
+- Academic structure, attendance, grades, and finance remain future slices.
 
 ## Phase 02 snapshot
 

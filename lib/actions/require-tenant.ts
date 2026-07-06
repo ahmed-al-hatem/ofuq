@@ -24,3 +24,22 @@ export function requireTenant(
     school_id: schoolId,
   })
 }
+
+export function requireSchoolContext(
+  context: TenantContext | null | undefined
+): ActionResult<{ tenant_id: TenantId; school_id: SchoolId }> {
+  const tenantResult = requireTenant(context)
+
+  if (!tenantResult.ok) {
+    return tenantResult
+  }
+
+  if (!tenantResult.data.school_id) {
+    return failure("سياق المدرسة غير متوفر لهذا الإجراء")
+  }
+
+  return success({
+    tenant_id: tenantResult.data.tenant_id,
+    school_id: tenantResult.data.school_id,
+  })
+}
