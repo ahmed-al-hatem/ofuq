@@ -1,0 +1,158 @@
+# Requirements Roadmap
+
+## Purpose
+
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 05. It is a planning snapshot, not a feature specification for the next phase.
+
+## Status Legend
+
+| Status | Meaning |
+| --- | --- |
+| Done | Implemented as a foundation or usable slice. |
+| In Progress | Current documentation/verification phase. |
+| Planned | Intended for upcoming MVP phases. |
+| Later | Deferred until the MVP foundation is stable. |
+| UI / Settings Only | May have placeholder/settings screens, but no real integration logic yet. |
+| Excluded | Explicitly out of scope for now. |
+
+## MVP Decisions
+
+- Fixed roles now; extensible permissions later.
+- Keep Multi-Tenant foundations from the beginning.
+- Use Supabase Auth.
+- Use Server Actions and server-side services for mutations.
+- RLS later.
+- Backup/Restore excluded.
+- Sandbox excluded.
+- External integrations are UI/settings only for now.
+- AI Query and Chatbot are UI placeholders only until enough data exists.
+- Report Builder drag-and-drop is later; ready-made reports first.
+- Timetabling starts manual with conflict prevention later, algorithm later.
+- QR attendance starts with teacher scanning student QR or QR-token foundation; Beacon later.
+
+## Roadmap Table
+
+| Area | Requirement | Phase | Status | Notes |
+| --- | --- | --- | --- | --- |
+| Security/Auth | Email/password login | 03 | Done | Supabase Auth login is implemented. |
+| Security/Auth | Google SSO | Later | Later | Optional if it fits cleanly. |
+| Security/Auth | OTP mobile later | Later | Later | Deferred. |
+| Security/Auth | Fixed roles | 02-03 | Done | Stored through `user_memberships`. |
+| Security/Auth | Extensible permissions later | Later | Later | Do not add RBAC tables yet. |
+| Security/Auth | Multi-Tenant | 02+ | Done | Tenant/school context exists and is used by later slices. |
+| Security/Auth | Audit logs | 02+ | Done | Foundation table exists; key actions write logs where practical. |
+| Security/Auth | RLS later | Later | Later | Deferred until auth/membership flows stabilize. |
+| Students | Admissions workflow | 04 | Done | Pending/approved/rejected/cancelled foundation. |
+| Students | Student profile foundation | 04 | Done | Official student records exist. |
+| Students | Guardian links | 04 | Done | Guardian table exists. |
+| Students | Student documents metadata | 04 | Done | Metadata and private bucket foundation exist. |
+| Students | Student status history | 04 | Done | Status history table exists. |
+| Students | Student QR token foundation | 04 | Done | `students.qr_token` exists; attendance QR is not implemented. |
+| Students | Promotions/transfers later | Later | Later | Not implemented. |
+| Students | Withdrawal workflow later | Later | Later | Not implemented. |
+| Students | Achievements later | Later | Later | Not implemented. |
+| Students | Discipline later | Later | Later | Not implemented. |
+| Students | Import/export later | Later | Later | Not implemented. |
+| Students | Dropout risk later | Later | Later | Not implemented. |
+| Academic | Academic years | 05 | Done | Implemented. |
+| Academic | Terms | 05 | Done | Implemented. |
+| Academic | Grade levels | 05 | Done | Implemented. |
+| Academic | Classes | 05 | Done | Implemented. |
+| Academic | Subjects | 05 | Done | Implemented. |
+| Academic | Grade-level subject assignments | 05 | Done | Implemented. |
+| Academic | Class enrollments | 05 | Done | Implemented. |
+| Academic | Grades later | 07 | Planned | Not implemented. |
+| Academic | Exams later | 07 | Planned | Not implemented. |
+| Academic | Report cards later | 07 | Planned | Not implemented. |
+| Academic | Evaluation systems later | Later | Later | Not implemented. |
+| Attendance | Manual attendance planned | 06 | Planned | Recommended next implementation phase. |
+| Attendance | Teacher scans student QR planned | 06 | Planned | Builds on student QR token and class enrollments. |
+| Attendance | Absence excuses planned | 06 | Planned | Expected in attendance foundation. |
+| Attendance | Parent notifications later | Later | Later | Requires communication/notification foundation. |
+| Attendance | Beacon later | Later | Later | Explicitly deferred. |
+| Attendance | Advanced attendance reports later | Later | Later | Ready-made basic reports should come first. |
+| Timetable | Manual timetable with conflict prevention planned later | 08 | Planned | Not implemented. |
+| Timetable | Automatic generation algorithm later | Later | Later | Deferred until manual timetable is stable. |
+| Timetable | Beacon/timetable integration excluded from current phases | Later | Excluded | Not part of current MVP slices. |
+| Finance | Fee structures planned | 09 | Planned | Not implemented. |
+| Finance | Invoices planned | 09 | Planned | Not implemented. |
+| Finance | Payments planned | 09 | Planned | Not implemented. |
+| Finance | Discounts planned | 09 | Planned | Not implemented. |
+| Finance | Receipts planned | 09 | Planned | Not implemented. |
+| Finance | Expenses/budget later | Later | Later | Not implemented. |
+| Finance | Payment integrations later or UI/settings only | Later | UI / Settings Only | No real integration for now. |
+| Communication | Internal messages planned | 10 | Planned | Not implemented. |
+| Communication | Announcements planned | 10 | Planned | Not implemented. |
+| Communication | Events planned | 10 | Planned | Not implemented. |
+| Communication | Complaints planned | 10 | Planned | Not implemented. |
+| Communication | Surveys later | Later | Later | Not implemented. |
+| Communication | Notifications foundation later | 10 | Planned | Not implemented. |
+| Reports | Ready-made reports planned | 10 | Planned | Not implemented. |
+| Reports | Dashboard summaries planned | 10 | Planned | Current dashboard is foundational only. |
+| Reports | Financial reports planned | Later | Later | Depends on finance. |
+| Reports | Drag-and-drop builder later | Later | Later | Deferred. |
+| Reports | AI Query UI placeholder only later | Later | UI / Settings Only | No AI query logic until stable data exists. |
+| Library | Textbook distribution later | Later | Later | Not implemented. |
+| Library | Full library workflow later if needed | Later | Later | Not implemented. |
+| Health | Basic health record later | Later | Later | Not implemented. |
+| Health | Vaccinations later | Later | Later | Not implemented. |
+| Settings | School identity/white-label later | Later | Later | Not implemented. |
+| Settings | Template management later | Later | Later | Not implemented. |
+| Settings | Plugin/module toggles later | Later | Later | Not implemented. |
+| Settings | Backup/Restore excluded | None | Excluded | Explicitly out of scope. |
+| Settings | Sandbox excluded | None | Excluded | Explicitly out of scope. |
+| Integrations | WhatsApp Business UI/settings only later | Later | UI / Settings Only | No real integration now. |
+| Integrations | Webhooks UI/settings only later | Later | UI / Settings Only | No real integration now. |
+| Integrations | MoE UI/settings only later | Later | UI / Settings Only | No real integration now. |
+| Integrations | Google/Microsoft Calendar UI/settings only later | Later | UI / Settings Only | No real integration now. |
+| Integrations | Power BI/Looker UI/settings only later | Later | UI / Settings Only | No real integration now. |
+| Integrations | Zapier/Make UI/settings only later | Later | UI / Settings Only | No real integration now. |
+
+## Implemented Now
+
+- Project setup
+- Core schema
+- Auth + fixed roles
+- Students/admissions foundation
+- Academic structure foundation
+
+## Planned Next
+
+```txt
+06 - Attendance Manual + QR Foundation
+```
+
+## Later / Placeholder Only
+
+- Google SSO if it fits cleanly.
+- Mobile OTP.
+- Expanded permissions/capability layer.
+- Student promotions, transfers, withdrawals, achievements, discipline, import/export, and risk indicators.
+- Grades, exams, report cards, and evaluation systems.
+- Parent notifications and advanced attendance reports.
+- Manual timetable and conflict prevention, then automatic generation later.
+- Finance module and finance reports.
+- Communication module, notifications, events, announcements, complaints, and surveys.
+- Ready-made reports, then report builder later.
+- AI Query and Chatbot UI placeholders only until enough stable data exists.
+- Library and textbook workflows.
+- Health records and vaccinations.
+- School identity, templates, plugin toggles, and integration settings.
+- External integration settings placeholders.
+
+## Explicitly Excluded
+
+- Backup/Restore
+- Sandbox
+
+## Notes For Future Codex Prompts
+
+- Keep one vertical slice per prompt.
+- Add migrations only under `supabase/migrations/`.
+- Do not rewrite old migrations.
+- Always run verification after schema changes.
+- Do not trust tenant/school from forms.
+- Use membership context server-side.
+- Do not introduce RBAC tables unless explicitly requested.
+- Keep Arabic-first RTL UI copy for user-facing screens.
+- Do not start later modules inside a quality gate or documentation prompt.
