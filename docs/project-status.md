@@ -3,8 +3,9 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: 05.5 Quality Gate + Documentation Snapshot
+- Current phase: Ready for 06 Attendance Manual + QR Foundation
 - Last completed implementation phase: 05 Academic Structure Foundation
+- Last completed quality phase: 05.5 Quality Gate + Documentation Snapshot
 - Next implementation phase: 06 Attendance Manual + QR Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -31,7 +32,7 @@
 | Phase 03 Auth + Fixed Roles + Membership Context | Done | Email/password login, sign-out, protected dashboard layout, session helpers, fixed role guards, and active membership context. |
 | Phase 04 Students and Admissions Foundation | Done | Admissions workflow, student records, guardian links, document metadata, status history, and student QR token foundation. |
 | Phase 05 Academic Structure Foundation | Done | Academic years, terms, grade levels, classes, subjects, grade-level subject assignments, class enrollments, and academic dashboard pages. |
-| Phase 05.5 Quality Gate + Documentation Snapshot | In Progress | Documentation snapshot and verification report created before starting attendance work. |
+| Phase 05.5 Quality Gate + Documentation Snapshot | Done | Documentation snapshot and verification report were created. The Supabase local reset/type-generation blocker was resolved and the project is ready for Phase 06. |
 
 ## Current Implemented Modules
 
@@ -69,6 +70,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Students/admissions tables: `student_admissions`, `students`, `student_guardians`, `student_documents`, `student_status_history`.
 - Academic structure tables: `academic_years`, `terms`, `grade_levels`, `classes`, `subjects`, `grade_level_subjects`, `class_enrollments`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
+- Local Supabase schema replay is currently verified with `supabase db reset`.
+- Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
 - RLS remains deferred by design; tenant/school isolation is currently enforced in server-side code and schema constraints.
 
 ## Current Security Model
@@ -106,7 +109,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No full RBAC yet.
 - No external integrations yet.
 - No automated test suite beyond lint/build verification.
-- Local Supabase `db reset` failed during this 05.5 verification run with a container initialization error; see `docs/verification-report.md`.
+- Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
+- On Windows, Supabase local development may require Docker Desktop TCP daemon exposure for analytics/vector health.
 
 ## Recommended Next Phase
 
@@ -117,3 +121,5 @@ Recommended next phase:
 ```
 
 Rationale: students now exist, academic years/classes/enrollments now exist, and attendance can build on `class_enrollments` without inventing its own student/class context.
+
+Go/no-go status: Go for Phase 06 schema work after the successful Supabase local reset/type-generation recovery documented in `docs/verification-report.md`.
