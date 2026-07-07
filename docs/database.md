@@ -28,6 +28,8 @@ Phase 10 adds the communication and ready-made reports foundation for internal m
 
 Phase 11 adds the library foundation for book catalog records, physical book copies, student loans, return handling, and overdue visibility.
 
+Phase 12 adds the student-care foundation for basic health records, vaccinations, clinic visits, discipline records, and student achievements.
+
 ## Core tables
 
 ### `tenants`
@@ -310,6 +312,43 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Loan issue sets the copy to `loaned`; return sets the loan to `returned` and returns a `loaned` copy to `available`.
 - Overdue visibility is computed from active loans with `due_at < now()`; no fine billing or finance integration exists yet.
 
+## Phase 12 tables
+
+### `health_records`
+
+- Stores one active school health profile per student where practical.
+- Keeps only school-operational fields such as blood type, allergies, chronic conditions, medications, emergency notes, and doctor contact.
+- Uses a partial unique index so one active health record per student is enforced per tenant and school.
+- Does not store diagnoses, prescriptions, or medical file uploads.
+
+### `vaccinations`
+
+- Stores student vaccination records with simple status tracking.
+- Supports vaccine name, optional dose label, optional vaccination date, optional next due date, and notes.
+- Uses a date-order constraint so `next_due_on` cannot be earlier than `vaccinated_on`.
+- Reminder flows and parent notifications are deferred.
+
+### `clinic_visits`
+
+- Stores simple school clinic visits or health incidents handled inside the school.
+- Supports reason, symptoms, action taken, guardian-contacted flag, referral flag, and close state.
+- Open visits can be closed later; referred visits keep the same record without external integration.
+- Medical diagnosis, prescriptions, and hospital integration are out of scope.
+
+### `discipline_records`
+
+- Stores student discipline incidents with incident type, severity, title, description, action taken, and review status.
+- Teachers can create records; review and final resolution remain limited to fixed admin roles in server-side code.
+- Review metadata stores reviewer identity and review time once a record moves to `reviewed` or `resolved`.
+- Advanced sanction workflows, escalation ladders, and parent notifications remain deferred.
+
+### `achievements`
+
+- Stores student achievements and recognitions with date, category, level, and publication status.
+- New achievements start as drafts and can later be published or archived by fixed admin roles.
+- The table supports school-facing recognition tracking only.
+- PDF certificates, parent notifications, and advanced analytics are not implemented.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -328,6 +367,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Communication mutations derive tenant and school scope from authenticated membership, validate recipients, related students, announcement targets, and event targets server-side, and do not trust client-submitted tenant, school, or role values.
 - Ready-made reports derive tenant and school scope from authenticated membership and write minimal `reports.viewed` audit logs.
 - Library mutations derive tenant/school/user scope from authenticated membership, validate catalog, copy, student, and loan ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
+- Student-care mutations derive tenant/school/user scope from authenticated membership, validate student ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 
 ## Storage note
 
@@ -338,6 +378,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Finance receipt/payment detail views are application views only; invoice and receipt PDF generation remains deferred.
 - Phase 10 reports are application views only; PDF/Excel export and drag-and-drop report builder remain deferred.
 - Phase 11 library stores book metadata and physical copy records only. Public library portals, e-book lending, barcode hardware, and finance fine billing remain deferred.
+- Phase 12 student care stores text-first operational records only. Medical uploads, prescriptions, diagnosis workflows, parent alerts, and PDF certificates remain deferred.
 
 ## RLS later
 

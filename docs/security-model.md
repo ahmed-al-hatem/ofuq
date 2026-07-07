@@ -51,6 +51,9 @@
 - Library reads derive tenant/school scope from authenticated membership. Library mutations are limited to `system_admin`, `school_admin`, and `librarian`.
 - Library catalog, copy, student, and loan relationships are validated server-side before writes. Loan issue verifies copy availability and blocks duplicate active copy loans; return verifies the loan is active before updating loan and copy state.
 - Library forms do not expose tenant, school, role, creator, issuer, or return actor fields. Fine billing, public library portals, barcode hardware integration, and e-book lending are not implemented.
+- Student-care reads derive tenant/school scope from authenticated membership. Health records, vaccinations, and clinic visits are limited to `system_admin` and `school_admin`.
+- Teachers may create discipline records and achievements, but discipline review/resolution and achievement publish/archive remain limited to fixed admin roles in server-side code.
+- Student-care forms do not expose tenant, school, role, creator, reviewer, handler, or publisher fields. Diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, and AI analysis are not implemented.
 
 ## Session handling
 
@@ -76,6 +79,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Communication audit metadata should use operational IDs, target types, and counts, not long message bodies or external payloads.
 - Ready-made reports write minimal `reports.viewed` audit events with the report key only.
 - Library audit metadata should use IDs such as catalog, copy, loan, and student IDs, not long descriptions, cover URLs, or external payloads.
+- Student-care audit metadata should use IDs and status only. Health notes, medications, chronic-condition text, and symptoms must not be written into audit logs.
 
 ## Student document handling
 

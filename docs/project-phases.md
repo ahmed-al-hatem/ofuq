@@ -11,7 +11,8 @@
 9. Finance basics
 10. Communication and ready-made reports
 11. Library foundation
-12. Later modules and placeholders
+12. Health, discipline, and achievements foundation
+13. Later modules and placeholders
 
 ## Later-phase items
 
@@ -24,8 +25,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, ready-made reports, and library foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, ready-made reports, library, and student-care foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 12 snapshot
+
+- Student-care foundation is implemented with basic health records, vaccination records, clinic visits, discipline records, and student achievements.
+- Health records, vaccinations, and clinic visits are limited to `system_admin` and `school_admin` in server-side code. Teachers do not manage sensitive health data in this phase.
+- Teachers can create discipline records and achievements. Review/resolution for discipline records and publish/archive actions for achievements remain limited to fixed admin roles.
+- Diagnosis workflows, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, and behavior-risk scoring remain deferred.
 
 ## Phase 11 snapshot
 

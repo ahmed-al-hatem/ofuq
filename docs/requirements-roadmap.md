@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 11. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 12. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -50,7 +50,8 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Students | Student QR token foundation | 04 | Done | `students.qr_token` now feeds the Phase 06 QR-token attendance foundation. |
 | Students | Promotions/transfers later | Later | Later | Not implemented. |
 | Students | Withdrawal workflow later | Later | Later | Not implemented. |
-| Students | Achievements later | Later | Later | Not implemented. |
+| Students | Achievements foundation | 12 | Done | Student achievements now support draft, publish, and archive status with fixed-role controls. |
+| Students | Discipline foundation | 12 | Done | Basic student discipline incidents, review state, and admin resolution are implemented. |
 | Students | Discipline later | Later | Later | Not implemented. |
 | Students | Import/export later | Later | Later | Not implemented. |
 | Students | Dropout risk later | Later | Later | Not implemented. |
@@ -98,8 +99,10 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Library | Basic overdue visibility | 11 | Done | Active loans past `due_at` are surfaced without finance fine billing. |
 | Library | Barcode scanner hardware integration | Later | Later | Not implemented; barcode is a manual text field only. |
 | Library | Public library portal and e-book lending | Later | Later | Not implemented. |
-| Health | Basic health record later | Later | Later | Not implemented. |
-| Health | Vaccinations later | Later | Later | Not implemented. |
+| Health | Basic health record foundation | 12 | Done | One active school health profile per student is supported with basic school-safe medical notes. |
+| Health | Vaccination tracking foundation | 12 | Done | Vaccination name, dose, dates, and status are implemented without reminders. |
+| Health | Clinic visits foundation | 12 | Done | School clinic visits can be created, listed, and closed or referred in a simple workflow. |
+| Health | Diagnosis and prescriptions | Later | Later | Explicitly not implemented in this phase. |
 | Settings | School identity/white-label later | Later | Later | Not implemented. |
 | Settings | Template management later | Later | Later | Not implemented. |
 | Settings | Plugin/module toggles later | Later | Later | Not implemented. |
@@ -125,11 +128,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Finance basics foundation
 - Communication and ready-made reports foundation
 - Library foundation
+- Student-care foundation
 
 ## Planned Next
 
 ```txt
-Next phase to be planned separately after Phase 11 closure.
+Next phase to be planned separately after Phase 12 closure.
 ```
 
 ## Later / Placeholder Only
@@ -137,7 +141,7 @@ Next phase to be planned separately after Phase 11 closure.
 - Google SSO if it fits cleanly.
 - Mobile OTP.
 - Expanded permissions/capability layer.
-- Student promotions, transfers, withdrawals, achievements, discipline, import/export, and risk indicators.
+- Student promotions, transfers, withdrawals, import/export, and risk indicators.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Automatic timetable generation later.
@@ -146,7 +150,7 @@ Next phase to be planned separately after Phase 11 closure.
 - Drag-and-drop report builder later.
 - AI Query and Chatbot UI placeholders only until enough stable data exists.
 - Advanced library workflows such as reservations, public portal, e-book lending, ISBN lookup, barcode hardware, fines, and advanced analytics.
-- Health records and vaccinations.
+- Advanced health workflows such as diagnosis, prescriptions, uploads, parent alerts, and external care integrations.
 - School identity, templates, plugin toggles, and integration settings.
 - External integration settings placeholders.
 

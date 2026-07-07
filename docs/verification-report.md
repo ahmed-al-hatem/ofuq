@@ -3,6 +3,31 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 12 Health, Discipline, and Achievements Foundation Verification
+
+Phase 12 Student Care Foundation was verified after implementation of health records, vaccinations, clinic visits, discipline records, and achievements.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status before work | Passed | `git -c safe.directory=D:/ofuq/ofuq status --short` was clean before the Phase 12 work started. |
+| Supabase status | Passed after elevation | Local Supabase was running; Docker access required elevated permissions in this Windows environment. |
+| Supabase database reset | Passed | `supabase db reset` replayed all migrations through `20260707200000_student_care_foundation.sql` and applied existing seed files. |
+| Supabase type generation | Passed | `supabase gen types typescript --local > types/database.ts` completed and generated types include `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, and `achievements`. |
+| Student-care SQL spot checks | Passed | `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, and `achievements` all existed and returned count `0` after reset; duplicate active health-record query returned `0 rows`. |
+| Lint | Passed | `npm run lint` completed with exit code 0. |
+| Build | Passed | `npm run build` completed successfully and included all student-care dashboard routes. |
+| Whitespace diff check | Passed | `git -c safe.directory=D:/ofuq/ofuq diff --check` completed with exit code 0. |
+| Browser smoke | Not performed | Authenticated browser workflow smoke was not run in this session, so it is not claimed as passed. |
+
+Phase 12 scope notes:
+
+- Student care is an operational foundation only.
+- Basic health records, vaccinations, clinic visits, discipline records, and achievements are implemented with server-side tenant, school, and student validation.
+- Health records, vaccinations, and clinic visits remain limited to `system_admin` and `school_admin`; teachers can create discipline records and achievements only.
+- No diagnosis workflows, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, risk scoring, seed changes, or Supabase config changes were added.
+
+Go/no-go after Phase 12: Go for planning the next phase separately, such as `13 - Complaints and Surveys Foundation`.
+
 ## Phase 11 Library Foundation Verification
 
 | Check | Result | Notes |

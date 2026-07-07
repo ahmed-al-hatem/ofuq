@@ -97,9 +97,9 @@ export const dashboardNavigation: NavigationGroup[] = [
     label: "إعدادات ومراحل لاحقة",
     items: [
       {
-        label: "الصحة",
+        label: "الرعاية الطلابية",
         icon: HeartPulse,
-        placeholder: true,
+        href: appRoutes.studentCare,
       },
       {
         label: "الإعدادات",

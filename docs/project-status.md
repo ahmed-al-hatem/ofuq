@@ -3,9 +3,9 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 11 Library Foundation implemented
-- Last completed implementation phase: 11 Library Foundation
-- Last completed quality phase: 11 Library Foundation Verification
+- Current phase: Phase 12 Health, Discipline, and Achievements Foundation implemented
+- Last completed implementation phase: 12 Health, Discipline, and Achievements Foundation
+- Last completed quality phase: 12 Health, Discipline, and Achievements Foundation Verification
 - Next implementation phase: To be planned separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -41,6 +41,7 @@
 | Phase 09.2 Finance Closure After Manual Supabase Recovery | Done | Supabase reset, type generation, finance SQL spot checks, local Auth sanity, lint, build, diff check, and documentation closure. |
 | Phase 10 Communication and Ready-Made Reports Foundation | Done | Internal messages, announcements, notification logs, school events, and ready-made report pages. |
 | Phase 11 Library Foundation | Done | Book catalog, physical copies, student loans, returns, overdue visibility, and Arabic dashboard pages. |
+| Phase 12 Health, Discipline, and Achievements Foundation | Done | Basic health records, vaccinations, clinic visits, discipline records, achievements, and Arabic dashboard pages. |
 
 ## Current Implemented Modules
 
@@ -56,6 +57,7 @@
 - Communication foundation, including internal messages, announcements, in-app notification logs, and school events.
 - Ready-made reports for students, attendance, grades, finance balances, and timetable overview.
 - Library foundation, including book catalog records, physical copies, loan issue/return flow, and overdue visibility.
+- Student-care foundation, including basic health records, vaccinations, clinic visits, discipline records, and achievements.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
 Health, complaints, AI Query, chatbot, external integrations, and report builder are not implemented yet.
@@ -116,6 +118,16 @@ Health, complaints, AI Query, chatbot, external integrations, and report builder
 | `/dashboard/reports/grades` | Active | Grades summary report. |
 | `/dashboard/reports/finance` | Active | Finance balances report. |
 | `/dashboard/reports/timetable` | Active | Timetable overview report. |
+| `/dashboard/student-care` | Active | Student-care overview. |
+| `/dashboard/student-care/health` | Active | Health record list. |
+| `/dashboard/student-care/health/[studentId]` | Active | Per-student health record upsert view. |
+| `/dashboard/student-care/vaccinations` | Active | Vaccination list and creation form. |
+| `/dashboard/student-care/clinic-visits` | Active | Clinic visit list with close action. |
+| `/dashboard/student-care/clinic-visits/new` | Active | Clinic visit creation form. |
+| `/dashboard/student-care/discipline` | Active | Discipline list with admin review actions. |
+| `/dashboard/student-care/discipline/new` | Active | Discipline record creation form. |
+| `/dashboard/student-care/achievements` | Active | Achievement list with publish/archive actions. |
+| `/dashboard/student-care/achievements/new` | Active | Achievement creation form. |
 | `/dashboard/library` | Active | Library overview cards and quick links. |
 | `/dashboard/library/catalog` | Active | Book catalog list. |
 | `/dashboard/library/catalog/new` | Active | Book catalog creation form. |
@@ -140,6 +152,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Finance tables: `fee_structures`, `fee_items`, `discount_types`, `student_discounts`, `invoices`, `invoice_items`, `payments`.
 - Communication tables: `messages`, `message_recipients`, `announcements`, `notification_logs`, `school_events`.
 - Library tables: `book_catalog`, `book_copies`, `book_loans`.
+- Student-care tables: `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, `achievements`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -157,6 +170,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Communication mutations derive tenant/school scope from active membership and validate recipients, related students, announcement targets, and event targets server-side.
 - Ready-made report pages derive tenant/school scope from active membership and write minimal `reports.viewed` audit logs.
 - Library mutations derive tenant/school/user scope from active membership, validate catalog/copy/student/loan relationships server-side, and write minimal audit logs for catalog, copy, loan issue, loan return, lost, and damaged actions.
+- Student-care mutations derive tenant/school/user scope from active membership, validate student ownership server-side, and write minimal audit logs without sensitive medical payloads.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -180,6 +194,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 - Communication is internal/in-app only; no real-time chat or external notification providers are implemented.
 - Library is an operational foundation only; no fine billing, finance integration, barcode hardware, ISBN lookup, reservations, public portal, e-book storage, or advanced analytics are implemented.
+- Student care is an operational foundation only; no diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, or behavior-risk scoring are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
@@ -197,6 +212,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: plan separately after Phase 11 closure.
+Recommended next phase: plan separately after Phase 12 closure.
 
-Go/no-go status: Go for planning the next phase after Phase 11 verification. Database reset, type generation, library SQL spot checks, lint, build, and diff check passed. Authenticated browser workflow smoke was not performed in this closure session.
+Go/no-go status: Go for planning the next phase after Phase 12 verification. Database reset, type generation, student-care SQL spot checks, lint, build, and diff check passed. Authenticated browser workflow smoke was not performed in this closure session.

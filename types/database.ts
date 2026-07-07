@@ -185,6 +185,96 @@ export type Database = {
           },
         ]
       }
+      achievements: {
+        Row: {
+          achievement_date: string
+          awarded_by_user_id: string | null
+          category: Database["public"]["Enums"]["achievement_category"]
+          created_at: string
+          created_by_user_id: string
+          description: string | null
+          id: string
+          level: Database["public"]["Enums"]["achievement_level"]
+          published_at: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["achievement_status"]
+          student_id: string
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          achievement_date: string
+          awarded_by_user_id?: string | null
+          category?: Database["public"]["Enums"]["achievement_category"]
+          created_at?: string
+          created_by_user_id: string
+          description?: string | null
+          id?: string
+          level?: Database["public"]["Enums"]["achievement_level"]
+          published_at?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["achievement_status"]
+          student_id: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          achievement_date?: string
+          awarded_by_user_id?: string | null
+          category?: Database["public"]["Enums"]["achievement_category"]
+          created_at?: string
+          created_by_user_id?: string
+          description?: string | null
+          id?: string
+          level?: Database["public"]["Enums"]["achievement_level"]
+          published_at?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["achievement_status"]
+          student_id?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "achievements_awarded_by_user_id_fkey"
+            columns: ["awarded_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "achievements_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "achievements_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "achievements_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "achievements_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       announcements: {
         Row: {
           body: string
@@ -995,6 +1085,188 @@ export type Database = {
           },
         ]
       }
+      clinic_visits: {
+        Row: {
+          action_taken: string | null
+          closed_at: string | null
+          created_at: string
+          guardian_contacted: boolean
+          handled_by_user_id: string | null
+          id: string
+          notes: string | null
+          reason: string
+          referred_to_external_care: boolean
+          returned_to_class: boolean
+          school_id: string
+          status: Database["public"]["Enums"]["clinic_visit_status"]
+          student_id: string
+          symptoms: string | null
+          tenant_id: string
+          updated_at: string
+          visited_at: string
+        }
+        Insert: {
+          action_taken?: string | null
+          closed_at?: string | null
+          created_at?: string
+          guardian_contacted?: boolean
+          handled_by_user_id?: string | null
+          id?: string
+          notes?: string | null
+          reason: string
+          referred_to_external_care?: boolean
+          returned_to_class?: boolean
+          school_id: string
+          status?: Database["public"]["Enums"]["clinic_visit_status"]
+          student_id: string
+          symptoms?: string | null
+          tenant_id: string
+          updated_at?: string
+          visited_at?: string
+        }
+        Update: {
+          action_taken?: string | null
+          closed_at?: string | null
+          created_at?: string
+          guardian_contacted?: boolean
+          handled_by_user_id?: string | null
+          id?: string
+          notes?: string | null
+          reason?: string
+          referred_to_external_care?: boolean
+          returned_to_class?: boolean
+          school_id?: string
+          status?: Database["public"]["Enums"]["clinic_visit_status"]
+          student_id?: string
+          symptoms?: string | null
+          tenant_id?: string
+          updated_at?: string
+          visited_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "clinic_visits_handled_by_user_id_fkey"
+            columns: ["handled_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clinic_visits_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clinic_visits_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clinic_visits_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discipline_records: {
+        Row: {
+          action_taken: string | null
+          created_at: string
+          description: string
+          id: string
+          incident_date: string
+          incident_type: Database["public"]["Enums"]["discipline_incident_type"]
+          reported_by_user_id: string
+          reviewed_at: string | null
+          reviewed_by_user_id: string | null
+          school_id: string
+          severity: Database["public"]["Enums"]["discipline_severity"]
+          status: Database["public"]["Enums"]["discipline_status"]
+          student_id: string
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          action_taken?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          incident_date: string
+          incident_type?: Database["public"]["Enums"]["discipline_incident_type"]
+          reported_by_user_id: string
+          reviewed_at?: string | null
+          reviewed_by_user_id?: string | null
+          school_id: string
+          severity?: Database["public"]["Enums"]["discipline_severity"]
+          status?: Database["public"]["Enums"]["discipline_status"]
+          student_id: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          action_taken?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          incident_date?: string
+          incident_type?: Database["public"]["Enums"]["discipline_incident_type"]
+          reported_by_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by_user_id?: string | null
+          school_id?: string
+          severity?: Database["public"]["Enums"]["discipline_severity"]
+          status?: Database["public"]["Enums"]["discipline_status"]
+          student_id?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discipline_records_reported_by_user_id_fkey"
+            columns: ["reported_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discipline_records_reviewed_by_user_id_fkey"
+            columns: ["reviewed_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discipline_records_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discipline_records_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "discipline_records_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discount_types: {
         Row: {
           created_at: string
@@ -1732,6 +2004,99 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      health_records: {
+        Row: {
+          allergies: string | null
+          blood_type: string | null
+          chronic_conditions: string | null
+          created_at: string
+          created_by_user_id: string | null
+          doctor_name: string | null
+          doctor_phone: string | null
+          emergency_notes: string | null
+          id: string
+          medications: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["health_record_status"]
+          student_id: string
+          tenant_id: string
+          updated_at: string
+          updated_by_user_id: string | null
+        }
+        Insert: {
+          allergies?: string | null
+          blood_type?: string | null
+          chronic_conditions?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          doctor_name?: string | null
+          doctor_phone?: string | null
+          emergency_notes?: string | null
+          id?: string
+          medications?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["health_record_status"]
+          student_id: string
+          tenant_id: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Update: {
+          allergies?: string | null
+          blood_type?: string | null
+          chronic_conditions?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          doctor_name?: string | null
+          doctor_phone?: string | null
+          emergency_notes?: string | null
+          id?: string
+          medications?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["health_record_status"]
+          student_id?: string
+          tenant_id?: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_records_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "health_records_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "health_records_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "health_records_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "health_records_updated_by_user_id_fkey"
+            columns: ["updated_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -3571,6 +3936,83 @@ export type Database = {
         }
         Relationships: []
       }
+      vaccinations: {
+        Row: {
+          created_at: string
+          dose_label: string | null
+          id: string
+          next_due_on: string | null
+          notes: string | null
+          recorded_by_user_id: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["vaccination_status"]
+          student_id: string
+          tenant_id: string
+          updated_at: string
+          vaccinated_on: string | null
+          vaccine_name: string
+        }
+        Insert: {
+          created_at?: string
+          dose_label?: string | null
+          id?: string
+          next_due_on?: string | null
+          notes?: string | null
+          recorded_by_user_id?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["vaccination_status"]
+          student_id: string
+          tenant_id: string
+          updated_at?: string
+          vaccinated_on?: string | null
+          vaccine_name: string
+        }
+        Update: {
+          created_at?: string
+          dose_label?: string | null
+          id?: string
+          next_due_on?: string | null
+          notes?: string | null
+          recorded_by_user_id?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["vaccination_status"]
+          student_id?: string
+          tenant_id?: string
+          updated_at?: string
+          vaccinated_on?: string | null
+          vaccine_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vaccinations_recorded_by_user_id_fkey"
+            columns: ["recorded_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaccinations_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaccinations_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vaccinations_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -3592,6 +4034,23 @@ export type Database = {
     Enums: {
       absence_excuse_status: "pending" | "approved" | "rejected" | "cancelled"
       academic_year_status: "draft" | "active" | "closed" | "archived"
+      achievement_category:
+        | "academic"
+        | "sports"
+        | "arts"
+        | "behavior"
+        | "attendance"
+        | "community"
+        | "competition"
+        | "other"
+      achievement_level:
+        | "class"
+        | "school"
+        | "district"
+        | "regional"
+        | "national"
+        | "international"
+      achievement_status: "draft" | "published" | "archived"
       admission_status: "pending" | "approved" | "rejected" | "cancelled"
       announcement_status: "draft" | "published" | "archived"
       announcement_target_type: "school" | "role" | "grade_level" | "class"
@@ -3616,7 +4075,23 @@ export type Database = {
         | "completed"
         | "archived"
       class_status: "active" | "inactive" | "archived"
+      clinic_visit_status: "open" | "closed" | "referred" | "cancelled"
       communication_message_status: "sent" | "archived"
+      discipline_incident_type:
+        | "behavior"
+        | "attendance"
+        | "uniform"
+        | "bullying"
+        | "damage"
+        | "academic_misconduct"
+        | "other"
+      discipline_severity: "low" | "medium" | "high" | "critical"
+      discipline_status:
+        | "draft"
+        | "submitted"
+        | "reviewed"
+        | "resolved"
+        | "cancelled"
       discount_status: "active" | "inactive" | "archived"
       discount_value_type: "percentage" | "fixed_amount"
       exam_result_status:
@@ -3659,6 +4134,7 @@ export type Database = {
         | "other"
       grade_level_status: "active" | "inactive" | "archived"
       guardian_relation: "father" | "mother" | "guardian" | "other"
+      health_record_status: "active" | "archived"
       invoice_status:
         | "draft"
         | "issued"
@@ -3726,6 +4202,12 @@ export type Database = {
         | "student"
         | "accountant"
         | "librarian"
+      vaccination_status:
+        | "scheduled"
+        | "completed"
+        | "missed"
+        | "exempted"
+        | "unknown"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3858,6 +4340,25 @@ export const Constants = {
     Enums: {
       absence_excuse_status: ["pending", "approved", "rejected", "cancelled"],
       academic_year_status: ["draft", "active", "closed", "archived"],
+      achievement_category: [
+        "academic",
+        "sports",
+        "arts",
+        "behavior",
+        "attendance",
+        "community",
+        "competition",
+        "other",
+      ],
+      achievement_level: [
+        "class",
+        "school",
+        "district",
+        "regional",
+        "national",
+        "international",
+      ],
+      achievement_status: ["draft", "published", "archived"],
       admission_status: ["pending", "approved", "rejected", "cancelled"],
       announcement_status: ["draft", "published", "archived"],
       announcement_target_type: ["school", "role", "grade_level", "class"],
@@ -3884,7 +4385,25 @@ export const Constants = {
         "archived",
       ],
       class_status: ["active", "inactive", "archived"],
+      clinic_visit_status: ["open", "closed", "referred", "cancelled"],
       communication_message_status: ["sent", "archived"],
+      discipline_incident_type: [
+        "behavior",
+        "attendance",
+        "uniform",
+        "bullying",
+        "damage",
+        "academic_misconduct",
+        "other",
+      ],
+      discipline_severity: ["low", "medium", "high", "critical"],
+      discipline_status: [
+        "draft",
+        "submitted",
+        "reviewed",
+        "resolved",
+        "cancelled",
+      ],
       discount_status: ["active", "inactive", "archived"],
       discount_value_type: ["percentage", "fixed_amount"],
       exam_result_status: [
@@ -3932,6 +4451,7 @@ export const Constants = {
       ],
       grade_level_status: ["active", "inactive", "archived"],
       guardian_relation: ["father", "mother", "guardian", "other"],
+      health_record_status: ["active", "archived"],
       invoice_status: [
         "draft",
         "issued",
@@ -4005,6 +4525,13 @@ export const Constants = {
         "student",
         "accountant",
         "librarian",
+      ],
+      vaccination_status: [
+        "scheduled",
+        "completed",
+        "missed",
+        "exempted",
+        "unknown",
       ],
     },
   },
