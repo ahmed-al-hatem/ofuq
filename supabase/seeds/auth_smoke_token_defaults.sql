@@ -27,19 +27,9 @@ begin
     end if;
   end loop;
 
-  if exists (
-    select 1
-    from information_schema.columns
-    where table_schema = 'auth'
-      and table_name = 'users'
-      and column_name = 'confirmed_at'
-  ) then
-    update auth.users
-    set confirmed_at = coalesce(confirmed_at, email_confirmed_at, now())
-    where email in ('admin@ofuq.local', 'teacher@ofuq.local');
-  end if;
-
   update auth.users
-  set updated_at = now()
+  set
+    email_confirmed_at = coalesce(email_confirmed_at, now()),
+    updated_at = now()
   where email in ('admin@ofuq.local', 'teacher@ofuq.local');
 end $$;
