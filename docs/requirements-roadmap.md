@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 09. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 10. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -81,14 +81,14 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Finance | Receipts | 09 | Done | Basic receipt/payment detail views are implemented; PDF generation remains deferred. |
 | Finance | Expenses/budget later | Later | Later | Not implemented. |
 | Finance | Payment integrations later or UI/settings only | Later | UI / Settings Only | No real integration for now. |
-| Communication | Internal messages planned | 10 | Planned | Not implemented. |
-| Communication | Announcements planned | 10 | Planned | Not implemented. |
-| Communication | Events planned | 10 | Planned | Not implemented. |
+| Communication | Internal messages foundation | 10 | Done | Internal school messages and per-recipient read/archive state are implemented. |
+| Communication | Announcements foundation | 10 | Done | Draft/publish/archive announcements with simple target types are implemented. |
+| Communication | Events foundation | 10 | Done | Simple school events with cancellation are implemented. |
 | Communication | Complaints planned | 10 | Planned | Not implemented. |
 | Communication | Surveys later | Later | Later | Not implemented. |
-| Communication | Notifications foundation later | 10 | Planned | Not implemented. |
-| Reports | Ready-made reports planned | 10 | Planned | Not implemented. |
-| Reports | Dashboard summaries planned | 10 | Planned | Current dashboard is foundational only. |
+| Communication | Notifications foundation | 10 | Done | In-app notification logs only; no external sending providers. |
+| Reports | Ready-made reports foundation | 10 | Done | Student, attendance, grades, finance, and timetable report pages are implemented. |
+| Reports | Dashboard summaries planned | 10 | Done | Reports overview and communication overview pages are implemented. |
 | Reports | Financial reports planned | Later | Later | Depends on finance. |
 | Reports | Drag-and-drop builder later | Later | Later | Deferred. |
 | Reports | AI Query UI placeholder only later | Later | UI / Settings Only | No AI query logic until stable data exists. |
@@ -119,11 +119,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Grades and report cards foundation
 - Manual timetable with conflict prevention foundation
 - Finance basics foundation
+- Communication and ready-made reports foundation
 
 ## Planned Next
 
 ```txt
-10 - Communication and Ready-Made Reports Foundation
+Next phase to be planned separately after Phase 10 closure.
 ```
 
 ## Later / Placeholder Only
@@ -135,9 +136,9 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Automatic timetable generation later.
-- Finance reports.
-- Communication module, notifications, events, announcements, complaints, and surveys.
-- Ready-made reports, then report builder later.
+- Complaints and surveys.
+- Advanced finance reports and exports.
+- Drag-and-drop report builder later.
 - AI Query and Chatbot UI placeholders only until enough stable data exists.
 - Library and textbook workflows.
 - Health records and vaccinations.

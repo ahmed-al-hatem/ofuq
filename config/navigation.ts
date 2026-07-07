@@ -79,12 +79,12 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "التواصل",
         icon: MessageSquareMore,
-        placeholder: true,
+        href: appRoutes.communication,
       },
       {
         label: "التقارير",
         icon: BarChart3,
-        placeholder: true,
+        href: appRoutes.reports,
       },
     ],
   },

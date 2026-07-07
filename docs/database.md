@@ -10,7 +10,7 @@ Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumpin
 - `user_memberships`
 - `audit_logs`
 
-Communication, library, health, and reporting tables remain for later phases.
+Library and health tables remain for later phases.
 
 Phase 04 extends this foundation with the first business-data slice for admissions and students.
 
@@ -23,6 +23,8 @@ Phase 07 adds the grades and report cards foundation for exams, exam results, gr
 Phase 08 adds the manual timetable foundation for rooms, teacher-subject assignments, timetable slots, and server-side conflict prevention.
 
 Phase 09 adds the finance basics foundation for fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
+
+Phase 10 adds the communication and ready-made reports foundation for internal messages, announcements, in-app notification logs, school events, and server-rendered report pages.
 
 ## Core tables
 
@@ -241,6 +243,47 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Receipt numbers are unique per tenant and school.
 - Payment amount must be positive; payment gateway data, card details, refunds, and reconciliation remain deferred.
 
+## Phase 10 tables
+
+### `messages`
+
+- Stores internal school messages between application users.
+- Uses `tenant_id`, `school_id`, `sender_user_id`, subject/body, optional `related_student_id`, and simple status tracking.
+- Attachments, real-time delivery, and external sending are not implemented.
+
+### `message_recipients`
+
+- Stores one recipient row per message recipient, including `read_at` and recipient-specific `archived_at`.
+- Enforces one row per `(message_id, recipient_user_id)`.
+- Recipient ownership is validated server-side through active school membership.
+
+### `announcements`
+
+- Stores school announcements as drafts, published items, or archived items.
+- Targets are intentionally simple: whole school, fixed role, grade level, or class.
+- Target grade/class ownership is validated server-side before writes.
+
+### `notification_logs`
+
+- Stores internal in-app notification log rows only.
+- The only supported channel is `in_app`.
+- Email, SMS, WhatsApp, push providers, provider payloads, and secrets are not part of this phase.
+
+### `school_events`
+
+- Stores simple school events with start/end times, optional location, target audience, and scheduled/cancelled/completed/archived status.
+- Recurrence and external calendar sync are deferred.
+
+## Phase 10 ready-made reports
+
+Ready-made reports are implemented as server-side query services and dashboard pages only. No report-builder tables were added.
+
+- Student roster report.
+- Attendance summary report.
+- Grades summary report.
+- Finance balances report.
+- Timetable overview report.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -256,6 +299,8 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Grades mutations verify exam, class, academic year, term, subject, student, and active enrollment ownership server-side before writes.
 - Timetable mutations verify rooms, teacher assignments, classes, academic years, terms, subjects, and conflict checks server-side before writes.
 - Finance mutations derive tenant and school scope from authenticated membership, validate students, academic years, terms, fee structures, discounts, invoices, and payments server-side, and do not trust client-submitted totals.
+- Communication mutations derive tenant and school scope from authenticated membership, validate recipients, related students, announcement targets, and event targets server-side, and do not trust client-submitted tenant, school, or role values.
+- Ready-made reports derive tenant and school scope from authenticated membership and write minimal `reports.viewed` audit logs.
 
 ## Storage note
 
@@ -264,6 +309,7 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Attendance absence excuses store text reasons only; document uploads can be added later if needed.
 - Report card snapshots store summary JSON only; generated PDF files and template assets remain deferred.
 - Finance receipt/payment detail views are application views only; invoice and receipt PDF generation remains deferred.
+- Phase 10 reports are application views only; PDF/Excel export and drag-and-drop report builder remain deferred.
 
 ## RLS later
 

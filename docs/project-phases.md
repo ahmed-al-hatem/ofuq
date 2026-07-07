@@ -8,8 +8,9 @@
 6. Grades and report cards
 7. Manual timetable with conflict prevention
 8. Finance basics
-9. Communication and ready-made reports
-10. Later modules and placeholders
+9. Finance basics
+10. Communication and ready-made reports
+11. Later modules and placeholders
 
 ## Later-phase items
 
@@ -22,8 +23,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, and finance basics foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, and ready-made reports foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 10 snapshot
+
+- Communication foundation is implemented with internal messages, message recipients, announcements, in-app notification logs, and school events.
+- Communication management uses server-side membership context and fixed role checks. Admin roles can manage announcements/events and school-wide notification logs; approved operational roles can send/read internal messages.
+- Ready-made reports are implemented as server-rendered pages and query services for students, attendance, grades, finance balances, and timetable overview.
+- Real-time chat, email/SMS/WhatsApp/push sending, external integrations, AI Query, chatbot, drag-and-drop report builder, report PDFs, full RLS, and full RBAC remain deferred.
 
 ## Phase 09 snapshot
 

@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Ready for 10 Communication and Ready-Made Reports Foundation
-- Last completed implementation phase: 09 Finance Basics Foundation
-- Last completed quality phase: 09.2 Finance Closure After Manual Supabase Recovery
-- Next implementation phase: 10 Communication and Ready-Made Reports Foundation
+- Current phase: Phase 10 Communication and Ready-Made Reports Foundation implemented
+- Last completed implementation phase: 10 Communication and Ready-Made Reports Foundation
+- Last completed quality phase: 10 Communication and Ready-Made Reports Verification
+- Next implementation phase: To be planned separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -39,6 +39,7 @@
 | Phase 08 Manual Timetable with Conflict Prevention Foundation | Done | Rooms, teacher-subject assignments, timetable slots, overlap checks, and Arabic dashboard pages. |
 | Phase 09 Finance Basics Foundation | Done | Fee structures, fee items, discounts, invoices, invoice items, manual payments, and basic receipt/payment detail views. |
 | Phase 09.2 Finance Closure After Manual Supabase Recovery | Done | Supabase reset, type generation, finance SQL spot checks, local Auth sanity, lint, build, diff check, and documentation closure. |
+| Phase 10 Communication and Ready-Made Reports Foundation | Done | Internal messages, announcements, notification logs, school events, and ready-made report pages. |
 
 ## Current Implemented Modules
 
@@ -51,9 +52,11 @@
 - Grades foundation, including exams, exam result entry, grade entries, and basic report-card snapshots/views.
 - Manual timetable foundation, including rooms, teacher-subject assignments, timetable slots, and class/teacher/room conflict prevention.
 - Finance basics foundation, including fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
+- Communication foundation, including internal messages, announcements, in-app notification logs, and school events.
+- Ready-made reports for students, attendance, grades, finance balances, and timetable overview.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-Communication, library, and health are not implemented yet.
+Library, health, complaints, AI Query, chatbot, external integrations, and report builder are not implemented yet.
 
 ## Current Routes
 
@@ -96,6 +99,21 @@ Communication, library, and health are not implemented yet.
 | `/dashboard/finance/invoices/[invoiceId]` | Active | Invoice detail, issue/cancel actions, and payment entry. |
 | `/dashboard/finance/payments` | Active | Payment list. |
 | `/dashboard/finance/payments/[paymentId]` | Active | Basic receipt/payment detail view. |
+| `/dashboard/communication` | Active | Communication overview. |
+| `/dashboard/communication/messages` | Active | Inbox and sent internal messages. |
+| `/dashboard/communication/messages/new` | Active | Internal message creation. |
+| `/dashboard/communication/messages/[messageId]` | Active | Message details, read/archive actions for recipients. |
+| `/dashboard/communication/announcements` | Active | Announcement list and publish/archive actions for admins. |
+| `/dashboard/communication/announcements/new` | Active | Announcement draft creation. |
+| `/dashboard/communication/events` | Active | School event list and cancel action for admins. |
+| `/dashboard/communication/events/new` | Active | School event creation. |
+| `/dashboard/communication/notifications` | Active | In-app notification logs. |
+| `/dashboard/reports` | Active | Ready-made reports overview. |
+| `/dashboard/reports/students` | Active | Student roster report. |
+| `/dashboard/reports/attendance` | Active | Attendance summary report. |
+| `/dashboard/reports/grades` | Active | Grades summary report. |
+| `/dashboard/reports/finance` | Active | Finance balances report. |
+| `/dashboard/reports/timetable` | Active | Timetable overview report. |
 
 Configured dynamic helpers also exist for admission and student detail URLs, but matching route files are not currently present.
 
@@ -108,6 +126,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Grades tables: `exams`, `exam_results`, `grade_entries`, `report_cards`.
 - Timetable tables: `rooms`, `teacher_subject_assignments`, `timetable_slots`.
 - Finance tables: `fee_structures`, `fee_items`, `discount_types`, `student_discounts`, `invoices`, `invoice_items`, `payments`.
+- Communication tables: `messages`, `message_recipients`, `announcements`, `notification_logs`, `school_events`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -122,6 +141,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Sensitive reads and mutations use Server Components, Server Actions, or server-side service modules.
 - Client-submitted `tenant_id`, `school_id`, and `role` are not trusted.
 - Finance mutations derive tenant/school/user scope from active membership and calculate financial totals server-side.
+- Communication mutations derive tenant/school scope from active membership and validate recipients, related students, announcement targets, and event targets server-side.
+- Ready-made report pages derive tenant/school scope from active membership and write minimal `reports.viewed` audit logs.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -143,14 +164,15 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Current Known Limitations
 
+- Communication is internal/in-app only; no real-time chat or external notification providers are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
-- No parent notifications or communication module yet.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics are deferred.
 - No full RLS yet.
 - No full RBAC yet.
 - No external integrations yet.
+- No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - No automated test suite beyond lint/build verification.
 - Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
@@ -160,12 +182,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase:
+Recommended next phase: plan separately after Phase 10 closure.
 
-```txt
-10 - Communication and Ready-Made Reports Foundation
-```
-
-Rationale: students, academics, attendance, grades, timetabling, and finance basics now exist, so internal communication and ready-made reports can be added as the next operational slice.
-
-Go/no-go status: Go for Phase 10 after Phase 09 verification. Database reset, type generation, finance SQL spot checks, lint, build, and `git diff --check` passed. Authenticated browser workflow smoke was not performed in this closure session.
+Go/no-go status: Go for planning the next phase after Phase 10 verification. Database reset, type generation, communication SQL spot checks, lint, and build passed. Authenticated browser workflow smoke was not performed in this closure session.

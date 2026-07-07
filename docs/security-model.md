@@ -43,6 +43,11 @@
 - Finance mutations derive tenant/school scope from authenticated membership and do not trust client-submitted totals or tenant/school fields.
 - Finance fee, discount, invoice, and payment writes validate related academic years, terms, students, fee structures, discounts, invoices, and payment balances server-side.
 - Finance management is limited to fixed `system_admin`, `school_admin`, and `accountant` roles in server-side code.
+- Communication mutations derive tenant/school scope from authenticated active membership and do not trust submitted tenant, school, or role values.
+- Internal messages validate recipients through active user memberships in the same tenant and school. Related students are validated against the same tenant and school.
+- Announcement and school event writes are limited to `system_admin` and `school_admin`, with grade/class targets validated inside the current school.
+- Notification logs are in-app only. No external provider secrets, payloads, email, SMS, WhatsApp, or push integrations are stored or sent.
+- Ready-made reports derive tenant and school scope server-side and are limited by fixed role checks per report area.
 
 ## Session handling
 
@@ -65,6 +70,8 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Grades audit metadata should use operational IDs such as exam, class, subject, student, and report-card IDs, not large grade payloads.
 - Timetable audit metadata should use operational IDs such as room, teacher, subject, class, year, term, and slot IDs.
 - Finance audit metadata should use operational IDs such as fee structure, fee item, discount, invoice, payment, student, and amount summaries, not card data or external payment secrets.
+- Communication audit metadata should use operational IDs, target types, and counts, not long message bodies or external payloads.
+- Ready-made reports write minimal `reports.viewed` audit events with the report key only.
 
 ## Student document handling
 

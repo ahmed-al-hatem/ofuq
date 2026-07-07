@@ -42,4 +42,20 @@ export const appRoutes = {
   financePayments: "/dashboard/finance/payments",
   financePaymentDetails: (paymentId: string) =>
     `/dashboard/finance/payments/${paymentId}`,
+  communication: "/dashboard/communication",
+  communicationMessages: "/dashboard/communication/messages",
+  newCommunicationMessage: "/dashboard/communication/messages/new",
+  communicationMessageDetails: (messageId: string) =>
+    `/dashboard/communication/messages/${messageId}`,
+  communicationAnnouncements: "/dashboard/communication/announcements",
+  newCommunicationAnnouncement: "/dashboard/communication/announcements/new",
+  communicationEvents: "/dashboard/communication/events",
+  newCommunicationEvent: "/dashboard/communication/events/new",
+  communicationNotifications: "/dashboard/communication/notifications",
+  reports: "/dashboard/reports",
+  reportsStudents: "/dashboard/reports/students",
+  reportsAttendance: "/dashboard/reports/attendance",
+  reportsGrades: "/dashboard/reports/grades",
+  reportsFinance: "/dashboard/reports/finance",
+  reportsTimetable: "/dashboard/reports/timetable",
 } as const
