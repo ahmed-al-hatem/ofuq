@@ -3,6 +3,29 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 11 Library Foundation Verification
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status before work | Passed with safe-directory override | `git -c safe.directory=D:/ofuq/ofuq status --short` was required because repository ownership differs from the shell user. |
+| Supabase status | Passed after elevation | Local Supabase was running; Docker access required elevated permissions in this Windows environment. Local development keys were not copied into docs. |
+| Supabase database reset | Passed after local stack recovery | Initial reset hit a local Realtime seed duplication/container state issue. Recovery used `supabase stop --no-backup`, then `supabase start -x logflare,postgres-meta`; the requested `supabase db reset` then replayed all migrations through `20260707180000_library_foundation.sql` and applied existing seeds. |
+| Supabase type generation | Passed | `supabase gen types typescript --local > types/database.ts` completed and generated types include `book_catalog`, `book_copies`, `book_loans`, and the library enums. |
+| Library SQL spot checks | Passed | `book_catalog`, `book_copies`, and `book_loans` all existed and returned count `0` after reset because seed data was not changed. Duplicate active-loan query returned `0 rows`. |
+| Lint | Passed | `npm run lint` completed with exit code 0. |
+| Build | Passed | `npm run build` completed successfully and included all library dashboard routes. |
+| Whitespace diff check | Passed | `git -c safe.directory=D:/ofuq/ofuq diff --check` completed with exit code 0; Git reported Windows line-ending warnings only. |
+| Browser smoke | Not performed | Authenticated browser workflow smoke was not run in this session, so it is not claimed as passed. |
+
+Phase 11 scope notes:
+
+- Library foundation covers book catalog records, physical copies, student loan issue/return, and overdue visibility.
+- Library management is limited to `system_admin`, `school_admin`, and `librarian`; `teacher` and `accountant` have read-only dashboard access.
+- Server-side code derives tenant/school/user scope from active membership and validates catalog, copy, student, and loan relationships.
+- No seed, Supabase config, finance fine billing, barcode hardware integration, public portal, e-book lending, reservations, external ISBN lookup, or advanced analytics were added.
+
+Go/no-go after Phase 11: Go for planning the next phase. Suggested next phase remains separate, such as `12 - Health, Discipline, and Achievements Foundation`.
+
 ## Phase 09 Finance Closure Verification
 
 Phase 09 Finance Basics Foundation was verified after manual local Supabase recovery.

@@ -547,6 +547,272 @@ export type Database = {
           },
         ]
       }
+      book_catalog: {
+        Row: {
+          author: string | null
+          category: string | null
+          cover_image_url: string | null
+          created_at: string
+          created_by_user_id: string | null
+          description: string | null
+          id: string
+          isbn: string | null
+          language: string | null
+          publication_year: number | null
+          publisher: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["book_catalog_status"]
+          subtitle: string | null
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          description?: string | null
+          id?: string
+          isbn?: string | null
+          language?: string | null
+          publication_year?: number | null
+          publisher?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["book_catalog_status"]
+          subtitle?: string | null
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          category?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          description?: string | null
+          id?: string
+          isbn?: string | null
+          language?: string | null
+          publication_year?: number | null
+          publisher?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["book_catalog_status"]
+          subtitle?: string | null
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_catalog_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_catalog_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_catalog_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      book_copies: {
+        Row: {
+          accession_number: string | null
+          barcode: string | null
+          catalog_id: string
+          condition: Database["public"]["Enums"]["book_copy_condition"]
+          created_at: string
+          created_by_user_id: string | null
+          id: string
+          notes: string | null
+          school_id: string
+          shelf_location: string | null
+          status: Database["public"]["Enums"]["book_copy_status"]
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          accession_number?: string | null
+          barcode?: string | null
+          catalog_id: string
+          condition?: Database["public"]["Enums"]["book_copy_condition"]
+          created_at?: string
+          created_by_user_id?: string | null
+          id?: string
+          notes?: string | null
+          school_id: string
+          shelf_location?: string | null
+          status?: Database["public"]["Enums"]["book_copy_status"]
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          accession_number?: string | null
+          barcode?: string | null
+          catalog_id?: string
+          condition?: Database["public"]["Enums"]["book_copy_condition"]
+          created_at?: string
+          created_by_user_id?: string | null
+          id?: string
+          notes?: string | null
+          school_id?: string
+          shelf_location?: string | null
+          status?: Database["public"]["Enums"]["book_copy_status"]
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_copies_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "book_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_copies_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_copies_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_copies_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      book_loans: {
+        Row: {
+          borrowed_at: string
+          catalog_id: string
+          copy_id: string
+          created_at: string
+          due_at: string
+          id: string
+          issued_by_user_id: string
+          notes: string | null
+          return_notes: string | null
+          returned_at: string | null
+          returned_by_user_id: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["book_loan_status"]
+          student_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          borrowed_at?: string
+          catalog_id: string
+          copy_id: string
+          created_at?: string
+          due_at: string
+          id?: string
+          issued_by_user_id: string
+          notes?: string | null
+          return_notes?: string | null
+          returned_at?: string | null
+          returned_by_user_id?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["book_loan_status"]
+          student_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          borrowed_at?: string
+          catalog_id?: string
+          copy_id?: string
+          created_at?: string
+          due_at?: string
+          id?: string
+          issued_by_user_id?: string
+          notes?: string | null
+          return_notes?: string | null
+          returned_at?: string | null
+          returned_by_user_id?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["book_loan_status"]
+          student_id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "book_loans_catalog_id_fkey"
+            columns: ["catalog_id"]
+            isOneToOne: false
+            referencedRelation: "book_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_loans_copy_id_fkey"
+            columns: ["copy_id"]
+            isOneToOne: false
+            referencedRelation: "book_copies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_loans_issued_by_user_id_fkey"
+            columns: ["issued_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_loans_returned_by_user_id_fkey"
+            columns: ["returned_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_loans_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_loans_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "book_loans_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       class_enrollments: {
         Row: {
           academic_year_id: string
@@ -3333,6 +3599,16 @@ export type Database = {
       attendance_session_method: "manual" | "qr"
       attendance_session_status: "open" | "closed" | "cancelled"
       attendance_status: "present" | "absent" | "late" | "excused"
+      book_catalog_status: "active" | "inactive" | "archived"
+      book_copy_condition: "new" | "good" | "fair" | "poor" | "damaged"
+      book_copy_status:
+        | "available"
+        | "loaned"
+        | "reserved"
+        | "lost"
+        | "damaged"
+        | "archived"
+      book_loan_status: "active" | "returned" | "overdue" | "lost" | "cancelled"
       class_enrollment_status:
         | "active"
         | "transferred"
@@ -3589,6 +3865,17 @@ export const Constants = {
       attendance_session_method: ["manual", "qr"],
       attendance_session_status: ["open", "closed", "cancelled"],
       attendance_status: ["present", "absent", "late", "excused"],
+      book_catalog_status: ["active", "inactive", "archived"],
+      book_copy_condition: ["new", "good", "fair", "poor", "damaged"],
+      book_copy_status: [
+        "available",
+        "loaned",
+        "reserved",
+        "lost",
+        "damaged",
+        "archived",
+      ],
+      book_loan_status: ["active", "returned", "overdue", "lost", "cancelled"],
       class_enrollment_status: [
         "active",
         "transferred",

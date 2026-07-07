@@ -48,6 +48,9 @@
 - Announcement and school event writes are limited to `system_admin` and `school_admin`, with grade/class targets validated inside the current school.
 - Notification logs are in-app only. No external provider secrets, payloads, email, SMS, WhatsApp, or push integrations are stored or sent.
 - Ready-made reports derive tenant and school scope server-side and are limited by fixed role checks per report area.
+- Library reads derive tenant/school scope from authenticated membership. Library mutations are limited to `system_admin`, `school_admin`, and `librarian`.
+- Library catalog, copy, student, and loan relationships are validated server-side before writes. Loan issue verifies copy availability and blocks duplicate active copy loans; return verifies the loan is active before updating loan and copy state.
+- Library forms do not expose tenant, school, role, creator, issuer, or return actor fields. Fine billing, public library portals, barcode hardware integration, and e-book lending are not implemented.
 
 ## Session handling
 
@@ -72,6 +75,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Finance audit metadata should use operational IDs such as fee structure, fee item, discount, invoice, payment, student, and amount summaries, not card data or external payment secrets.
 - Communication audit metadata should use operational IDs, target types, and counts, not long message bodies or external payloads.
 - Ready-made reports write minimal `reports.viewed` audit events with the report key only.
+- Library audit metadata should use IDs such as catalog, copy, loan, and student IDs, not long descriptions, cover URLs, or external payloads.
 
 ## Student document handling
 

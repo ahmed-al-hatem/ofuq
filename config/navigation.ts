@@ -86,16 +86,16 @@ export const dashboardNavigation: NavigationGroup[] = [
         icon: BarChart3,
         href: appRoutes.reports,
       },
+      {
+        label: "المكتبة",
+        icon: LibraryBig,
+        href: appRoutes.library,
+      },
     ],
   },
   {
     label: "إعدادات ومراحل لاحقة",
     items: [
-      {
-        label: "المكتبة",
-        icon: LibraryBig,
-        placeholder: true,
-      },
       {
         label: "الصحة",
         icon: HeartPulse,

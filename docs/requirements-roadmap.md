@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 10. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 11. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -92,8 +92,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Reports | Financial reports planned | Later | Later | Depends on finance. |
 | Reports | Drag-and-drop builder later | Later | Later | Deferred. |
 | Reports | AI Query UI placeholder only later | Later | UI / Settings Only | No AI query logic until stable data exists. |
-| Library | Textbook distribution later | Later | Later | Not implemented. |
-| Library | Full library workflow later if needed | Later | Later | Not implemented. |
+| Library | Book catalog foundation | 11 | Done | Book catalog records with school-scoped ISBN uniqueness are implemented. |
+| Library | Physical book copy management | 11 | Done | Copies include barcode text, accession number, shelf location, condition, and availability status. |
+| Library | Student book loans and returns | 11 | Done | Loan issue/return validates tenant/school/student/copy ownership and prevents duplicate active copy loans. |
+| Library | Basic overdue visibility | 11 | Done | Active loans past `due_at` are surfaced without finance fine billing. |
+| Library | Barcode scanner hardware integration | Later | Later | Not implemented; barcode is a manual text field only. |
+| Library | Public library portal and e-book lending | Later | Later | Not implemented. |
 | Health | Basic health record later | Later | Later | Not implemented. |
 | Health | Vaccinations later | Later | Later | Not implemented. |
 | Settings | School identity/white-label later | Later | Later | Not implemented. |
@@ -120,11 +124,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Manual timetable with conflict prevention foundation
 - Finance basics foundation
 - Communication and ready-made reports foundation
+- Library foundation
 
 ## Planned Next
 
 ```txt
-Next phase to be planned separately after Phase 10 closure.
+Next phase to be planned separately after Phase 11 closure.
 ```
 
 ## Later / Placeholder Only
@@ -140,7 +145,7 @@ Next phase to be planned separately after Phase 10 closure.
 - Advanced finance reports and exports.
 - Drag-and-drop report builder later.
 - AI Query and Chatbot UI placeholders only until enough stable data exists.
-- Library and textbook workflows.
+- Advanced library workflows such as reservations, public portal, e-book lending, ISBN lookup, barcode hardware, fines, and advanced analytics.
 - Health records and vaccinations.
 - School identity, templates, plugin toggles, and integration settings.
 - External integration settings placeholders.

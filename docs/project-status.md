@@ -3,9 +3,9 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 10 Communication and Ready-Made Reports Foundation implemented
-- Last completed implementation phase: 10 Communication and Ready-Made Reports Foundation
-- Last completed quality phase: 10 Communication and Ready-Made Reports Verification
+- Current phase: Phase 11 Library Foundation implemented
+- Last completed implementation phase: 11 Library Foundation
+- Last completed quality phase: 11 Library Foundation Verification
 - Next implementation phase: To be planned separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -40,6 +40,7 @@
 | Phase 09 Finance Basics Foundation | Done | Fee structures, fee items, discounts, invoices, invoice items, manual payments, and basic receipt/payment detail views. |
 | Phase 09.2 Finance Closure After Manual Supabase Recovery | Done | Supabase reset, type generation, finance SQL spot checks, local Auth sanity, lint, build, diff check, and documentation closure. |
 | Phase 10 Communication and Ready-Made Reports Foundation | Done | Internal messages, announcements, notification logs, school events, and ready-made report pages. |
+| Phase 11 Library Foundation | Done | Book catalog, physical copies, student loans, returns, overdue visibility, and Arabic dashboard pages. |
 
 ## Current Implemented Modules
 
@@ -54,9 +55,10 @@
 - Finance basics foundation, including fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Communication foundation, including internal messages, announcements, in-app notification logs, and school events.
 - Ready-made reports for students, attendance, grades, finance balances, and timetable overview.
+- Library foundation, including book catalog records, physical copies, loan issue/return flow, and overdue visibility.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-Library, health, complaints, AI Query, chatbot, external integrations, and report builder are not implemented yet.
+Health, complaints, AI Query, chatbot, external integrations, and report builder are not implemented yet.
 
 ## Current Routes
 
@@ -114,6 +116,16 @@ Library, health, complaints, AI Query, chatbot, external integrations, and repor
 | `/dashboard/reports/grades` | Active | Grades summary report. |
 | `/dashboard/reports/finance` | Active | Finance balances report. |
 | `/dashboard/reports/timetable` | Active | Timetable overview report. |
+| `/dashboard/library` | Active | Library overview cards and quick links. |
+| `/dashboard/library/catalog` | Active | Book catalog list. |
+| `/dashboard/library/catalog/new` | Active | Book catalog creation form. |
+| `/dashboard/library/catalog/[catalogId]` | Active | Catalog detail and related copies. |
+| `/dashboard/library/copies` | Active | Physical book copy list and simple lost/damaged actions. |
+| `/dashboard/library/copies/new` | Active | Physical copy creation form. |
+| `/dashboard/library/loans` | Active | Loan list with overdue indicator. |
+| `/dashboard/library/loans/new` | Active | Student loan issue form. |
+| `/dashboard/library/loans/[loanId]` | Active | Loan detail and return action when active. |
+| `/dashboard/library/overdue` | Active | Basic overdue active-loan view. |
 
 Configured dynamic helpers also exist for admission and student detail URLs, but matching route files are not currently present.
 
@@ -127,6 +139,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Timetable tables: `rooms`, `teacher_subject_assignments`, `timetable_slots`.
 - Finance tables: `fee_structures`, `fee_items`, `discount_types`, `student_discounts`, `invoices`, `invoice_items`, `payments`.
 - Communication tables: `messages`, `message_recipients`, `announcements`, `notification_logs`, `school_events`.
+- Library tables: `book_catalog`, `book_copies`, `book_loans`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -143,6 +156,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Finance mutations derive tenant/school/user scope from active membership and calculate financial totals server-side.
 - Communication mutations derive tenant/school scope from active membership and validate recipients, related students, announcement targets, and event targets server-side.
 - Ready-made report pages derive tenant/school scope from active membership and write minimal `reports.viewed` audit logs.
+- Library mutations derive tenant/school/user scope from active membership, validate catalog/copy/student/loan relationships server-side, and write minimal audit logs for catalog, copy, loan issue, loan return, lost, and damaged actions.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -165,6 +179,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 ## Current Known Limitations
 
 - Communication is internal/in-app only; no real-time chat or external notification providers are implemented.
+- Library is an operational foundation only; no fine billing, finance integration, barcode hardware, ISBN lookup, reservations, public portal, e-book storage, or advanced analytics are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
@@ -182,6 +197,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: plan separately after Phase 10 closure.
+Recommended next phase: plan separately after Phase 11 closure.
 
-Go/no-go status: Go for planning the next phase after Phase 10 verification. Database reset, type generation, communication SQL spot checks, lint, and build passed. Authenticated browser workflow smoke was not performed in this closure session.
+Go/no-go status: Go for planning the next phase after Phase 11 verification. Database reset, type generation, library SQL spot checks, lint, build, and diff check passed. Authenticated browser workflow smoke was not performed in this closure session.

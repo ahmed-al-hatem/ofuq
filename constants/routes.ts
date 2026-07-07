@@ -58,4 +58,15 @@ export const appRoutes = {
   reportsGrades: "/dashboard/reports/grades",
   reportsFinance: "/dashboard/reports/finance",
   reportsTimetable: "/dashboard/reports/timetable",
+  library: "/dashboard/library",
+  libraryCatalog: "/dashboard/library/catalog",
+  newLibraryCatalog: "/dashboard/library/catalog/new",
+  libraryCatalogDetails: (catalogId: string) =>
+    `/dashboard/library/catalog/${catalogId}`,
+  libraryCopies: "/dashboard/library/copies",
+  newLibraryCopy: "/dashboard/library/copies/new",
+  libraryLoans: "/dashboard/library/loans",
+  newLibraryLoan: "/dashboard/library/loans/new",
+  libraryLoanDetails: (loanId: string) => `/dashboard/library/loans/${loanId}`,
+  libraryOverdue: "/dashboard/library/overdue",
 } as const

@@ -10,7 +10,8 @@
 8. Finance basics
 9. Finance basics
 10. Communication and ready-made reports
-11. Later modules and placeholders
+11. Library foundation
+12. Later modules and placeholders
 
 ## Later-phase items
 
@@ -23,8 +24,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, and ready-made reports foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, ready-made reports, and library foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 11 snapshot
+
+- Library foundation is implemented with book catalog records, physical book copies, student loans, return handling, and overdue visibility.
+- Library management uses server-side membership context and fixed role checks. `system_admin`, `school_admin`, and `librarian` can create catalog records, create copies, issue loans, return loans, and mark copies lost/damaged. `teacher` and `accountant` have read-only access.
+- Loan issue validates active student ownership, copy/catalog ownership, copy availability, and duplicate active loans. Return validates active loan state and updates the loan and copy together in service logic with database constraints as a backstop.
+- Fine billing, finance integration, barcode scanner hardware, ISBN lookup, public library portal, e-book lending, reservations, and advanced analytics remain deferred.
 
 ## Phase 10 snapshot
 

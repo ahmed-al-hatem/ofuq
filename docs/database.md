@@ -26,6 +26,8 @@ Phase 09 adds the finance basics foundation for fee structures, fee items, disco
 
 Phase 10 adds the communication and ready-made reports foundation for internal messages, announcements, in-app notification logs, school events, and server-rendered report pages.
 
+Phase 11 adds the library foundation for book catalog records, physical book copies, student loans, return handling, and overdue visibility.
+
 ## Core tables
 
 ### `tenants`
@@ -284,6 +286,30 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Finance balances report.
 - Timetable overview report.
 
+## Phase 11 tables
+
+### `book_catalog`
+
+- Stores bibliographic book records scoped by `tenant_id` and `school_id`.
+- Includes title, optional ISBN, author, publisher, publication year, category, language, description, cover URL, status, and creator metadata.
+- ISBN is unique per tenant and school when present.
+- Does not store e-book files or perform external ISBN lookups.
+
+### `book_copies`
+
+- Stores physical copies linked to `book_catalog`.
+- Includes optional barcode text, accession number, shelf location, copy condition, copy status, notes, and creator metadata.
+- Barcode and accession number are unique per tenant and school when present.
+- Copy status controls loan availability; barcode scanner hardware integration is not implemented.
+
+### `book_loans`
+
+- Tracks student borrowing and returning physical copies.
+- Links tenant, school, copy, catalog, student, issuing user, optional returning user, borrow/due/return timestamps, status, and notes.
+- A partial unique index prevents more than one active loan for the same copy.
+- Loan issue sets the copy to `loaned`; return sets the loan to `returned` and returns a `loaned` copy to `available`.
+- Overdue visibility is computed from active loans with `due_at < now()`; no fine billing or finance integration exists yet.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -301,6 +327,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Finance mutations derive tenant and school scope from authenticated membership, validate students, academic years, terms, fee structures, discounts, invoices, and payments server-side, and do not trust client-submitted totals.
 - Communication mutations derive tenant and school scope from authenticated membership, validate recipients, related students, announcement targets, and event targets server-side, and do not trust client-submitted tenant, school, or role values.
 - Ready-made reports derive tenant and school scope from authenticated membership and write minimal `reports.viewed` audit logs.
+- Library mutations derive tenant/school/user scope from authenticated membership, validate catalog, copy, student, and loan ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 
 ## Storage note
 
@@ -310,6 +337,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Report card snapshots store summary JSON only; generated PDF files and template assets remain deferred.
 - Finance receipt/payment detail views are application views only; invoice and receipt PDF generation remains deferred.
 - Phase 10 reports are application views only; PDF/Excel export and drag-and-drop report builder remain deferred.
+- Phase 11 library stores book metadata and physical copy records only. Public library portals, e-book lending, barcode hardware, and finance fine billing remain deferred.
 
 ## RLS later
 
