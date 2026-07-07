@@ -24,3 +24,19 @@ Creating turbopack project { dir: 'D:\\ofuq\\ofuq', testMode: true }
  GET /dashboard/grades/exams/new 404 in 262ms (next.js: -90806µs, proxy.ts: 179ms, application-code: 174ms)
  GET /dashboard/grades/entries 404 in 151ms (next.js: -31872µs, proxy.ts: 140ms, application-code: 43ms)
  GET /dashboard/grades/report-cards 404 in 100ms (next.js: -23414µs, proxy.ts: 91ms, application-code: 32ms)
+ GET / 404 in 1181ms (next.js: -109387µs, proxy.ts: 1165ms, application-code: 125ms)
+ GET / 404 in 284ms (next.js: -29068µs, proxy.ts: 279ms, application-code: 34ms)
+  Reload env: .env.local
+ GET / 404 in 1277ms (next.js: -177249µs, proxy.ts: 1235ms, application-code: 219ms)
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+  Reload env: .env.local
+[?25h

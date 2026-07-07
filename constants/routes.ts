@@ -27,4 +27,9 @@ export const appRoutes = {
   reportCards: "/dashboard/grades/report-cards",
   reportCardDetails: (reportCardId: string) =>
     `/dashboard/grades/report-cards/${reportCardId}`,
+  timetable: "/dashboard/timetable",
+  timetableRooms: "/dashboard/timetable/rooms",
+  timetableAssignments: "/dashboard/timetable/assignments",
+  timetableSlots: "/dashboard/timetable/slots",
+  newTimetableSlot: "/dashboard/timetable/slots/new",
 } as const

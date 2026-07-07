@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Ready for 08 Manual Timetable with Conflict Prevention Foundation
-- Last completed implementation phase: 07 Grades and Report Cards Foundation
+- Current phase: Ready for 09 Finance Basics Foundation
+- Last completed implementation phase: 08 Manual Timetable with Conflict Prevention Foundation
 - Last completed quality phase: 07.5 Local Smoke Seed + Grades/Attendance Workflow Verification
-- Next implementation phase: 08 Manual Timetable with Conflict Prevention Foundation
+- Next implementation phase: 09 Finance Basics Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -36,6 +36,7 @@
 | Phase 06 Attendance Manual + QR Foundation | Done | Attendance sessions, attendance records, absence excuses, manual attendance, QR-token attendance entry, and Arabic dashboard pages. |
 | Phase 07 Grades and Report Cards Foundation | Done | Exams, exam results, grade entries, basic report card snapshots, and Arabic dashboard pages. |
 | Phase 07.5 Local Smoke Seed + Grades/Attendance Workflow Verification | Done | Deterministic local smoke seed, SQL spot checks, technical verification, and honest browser workflow status. |
+| Phase 08 Manual Timetable with Conflict Prevention Foundation | Done | Rooms, teacher-subject assignments, timetable slots, overlap checks, and Arabic dashboard pages. |
 
 ## Current Implemented Modules
 
@@ -46,6 +47,7 @@
 - Academic structure foundation, including years, terms, grades, classes, subjects, subject assignments, and class enrollments.
 - Attendance foundation, including manual attendance, QR-token entry, session close flow, and absence excuse review.
 - Grades foundation, including exams, exam result entry, grade entries, and basic report-card snapshots/views.
+- Manual timetable foundation, including rooms, teacher-subject assignments, timetable slots, and class/teacher/room conflict prevention.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
 Finance, communication, library, and health are not implemented yet.
@@ -78,6 +80,11 @@ Finance, communication, library, and health are not implemented yet.
 | `/dashboard/grades/entries` | Active | Non-exam grade entry form and list. |
 | `/dashboard/grades/report-cards` | Active | Report card generation and list. |
 | `/dashboard/grades/report-cards/[reportCardId]` | Active | Basic report card snapshot view. |
+| `/dashboard/timetable` | Active | Timetable overview. |
+| `/dashboard/timetable/rooms` | Active | Room management. |
+| `/dashboard/timetable/assignments` | Active | Teacher-subject assignments. |
+| `/dashboard/timetable/slots` | Active | Timetable slot list and cancellation. |
+| `/dashboard/timetable/slots/new` | Active | Manual timetable slot creation with conflict checks. |
 
 Configured dynamic helpers also exist for admission and student detail URLs, but matching route files are not currently present.
 
@@ -88,6 +95,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Academic structure tables: `academic_years`, `terms`, `grade_levels`, `classes`, `subjects`, `grade_level_subjects`, `class_enrollments`.
 - Attendance tables: `attendance_sessions`, `attendance_records`, `absence_excuses`.
 - Grades tables: `exams`, `exam_results`, `grade_entries`, `report_cards`.
+- Timetable tables: `rooms`, `teacher_subject_assignments`, `timetable_slots`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -122,10 +130,10 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Current Known Limitations
 
-- No timetable logic yet.
 - No finance module yet.
 - No parent notifications or communication module yet.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
+- Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics are deferred.
 - No full RLS yet.
 - No full RBAC yet.
@@ -142,9 +150,9 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 Recommended next phase:
 
 ```txt
-08 - Manual Timetable with Conflict Prevention Foundation
+09 - Finance Basics Foundation
 ```
 
-Rationale: students, class enrollments, attendance, and grade/report-card foundations now exist, and reset now creates a repeatable local smoke dataset, so manual timetabling can be added as the next academic operations slice.
+Rationale: students, class enrollments, attendance, grades/report cards, and manual timetabling now exist, so basic fee structures, invoices, payments, discounts, and receipt foundations can be added as the next operational slice.
 
-Go/no-go status: Go with caution for Phase 08 after Phase 07.5 verification. The local smoke-data blocker is resolved, but authenticated attendance and grades browser smoke should still be run manually or in a session with an available browser backend.
+Go/no-go status: Go with caution for Phase 09 after Phase 08 verification. Database reset, type generation, lint, and build passed, but authenticated browser workflow smoke should still be run manually or in a session with an available browser backend.

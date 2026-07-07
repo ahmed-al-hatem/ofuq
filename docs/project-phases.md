@@ -22,8 +22,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, and grades/report-card foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, and manual timetable foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 08 snapshot
+
+- Manual timetable foundation is implemented with rooms, teacher-subject assignments, timetable slots, and Arabic dashboard pages.
+- Timetable management uses server-side membership context and fixed role checks. Admin roles can create rooms, assignments, and slots; teachers can read their own timetable-related data.
+- Slot creation validates academic year, term, class, subject, teacher membership, teacher assignment, optional room, and overlapping class/teacher/room conflicts server-side.
+- Automatic timetable generation, drag-and-drop scheduling, attendance integration, optimization, full RLS, and full RBAC remain deferred.
 
 ## Phase 07 snapshot
 
@@ -42,7 +49,7 @@ New business modules should continue to be added one vertical slice at a time so
 
 - Academic structure foundation is implemented for years, terms, grade levels, classes, subjects, grade-level subject assignments, and class enrollments.
 - Academic management uses server-side membership context and fixed role checks.
-- Grades, timetable logic, finance, and reports remain future slices.
+- Finance and reports remain future slices.
 
 ## Phase 04 snapshot
 

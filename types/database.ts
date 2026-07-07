@@ -1272,6 +1272,60 @@ export type Database = {
           },
         ]
       }
+      rooms: {
+        Row: {
+          capacity: number | null
+          code: string | null
+          created_at: string
+          id: string
+          location: string | null
+          name: string
+          school_id: string
+          status: Database["public"]["Enums"]["room_status"]
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number | null
+          code?: string | null
+          created_at?: string
+          id?: string
+          location?: string | null
+          name: string
+          school_id: string
+          status?: Database["public"]["Enums"]["room_status"]
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number | null
+          code?: string | null
+          created_at?: string
+          id?: string
+          location?: string | null
+          name?: string
+          school_id?: string
+          status?: Database["public"]["Enums"]["room_status"]
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rooms_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rooms_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       schools: {
         Row: {
           address: string | null
@@ -1797,6 +1851,108 @@ export type Database = {
           },
         ]
       }
+      teacher_subject_assignments: {
+        Row: {
+          academic_year_id: string
+          class_id: string | null
+          created_at: string
+          created_by_user_id: string | null
+          grade_level_id: string | null
+          id: string
+          school_id: string
+          status: Database["public"]["Enums"]["teacher_subject_assignment_status"]
+          subject_id: string
+          teacher_user_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          class_id?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          grade_level_id?: string | null
+          id?: string
+          school_id: string
+          status?: Database["public"]["Enums"]["teacher_subject_assignment_status"]
+          subject_id: string
+          teacher_user_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          class_id?: string | null
+          created_at?: string
+          created_by_user_id?: string | null
+          grade_level_id?: string | null
+          id?: string
+          school_id?: string
+          status?: Database["public"]["Enums"]["teacher_subject_assignment_status"]
+          subject_id?: string
+          teacher_user_id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teacher_subject_assignments_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_grade_level_id_fkey"
+            columns: ["grade_level_id"]
+            isOneToOne: false
+            referencedRelation: "grade_levels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_teacher_user_id_fkey"
+            columns: ["teacher_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "teacher_subject_assignments_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenants: {
         Row: {
           created_at: string
@@ -1893,6 +2049,140 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      timetable_slots: {
+        Row: {
+          academic_year_id: string
+          class_id: string
+          created_at: string
+          created_by_user_id: string | null
+          day_of_week: Database["public"]["Enums"]["timetable_day_of_week"]
+          ends_at: string
+          grade_level_id: string
+          id: string
+          notes: string | null
+          room_id: string | null
+          school_id: string
+          starts_at: string
+          status: Database["public"]["Enums"]["timetable_slot_status"]
+          subject_id: string
+          teacher_user_id: string
+          tenant_id: string
+          term_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          academic_year_id: string
+          class_id: string
+          created_at?: string
+          created_by_user_id?: string | null
+          day_of_week: Database["public"]["Enums"]["timetable_day_of_week"]
+          ends_at: string
+          grade_level_id: string
+          id?: string
+          notes?: string | null
+          room_id?: string | null
+          school_id: string
+          starts_at: string
+          status?: Database["public"]["Enums"]["timetable_slot_status"]
+          subject_id: string
+          teacher_user_id: string
+          tenant_id: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          academic_year_id?: string
+          class_id?: string
+          created_at?: string
+          created_by_user_id?: string | null
+          day_of_week?: Database["public"]["Enums"]["timetable_day_of_week"]
+          ends_at?: string
+          grade_level_id?: string
+          id?: string
+          notes?: string | null
+          room_id?: string | null
+          school_id?: string
+          starts_at?: string
+          status?: Database["public"]["Enums"]["timetable_slot_status"]
+          subject_id?: string
+          teacher_user_id?: string
+          tenant_id?: string
+          term_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "timetable_slots_academic_year_id_fkey"
+            columns: ["academic_year_id"]
+            isOneToOne: false
+            referencedRelation: "academic_years"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_grade_level_id_fkey"
+            columns: ["grade_level_id"]
+            isOneToOne: false
+            referencedRelation: "grade_levels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_room_id_fkey"
+            columns: ["room_id"]
+            isOneToOne: false
+            referencedRelation: "rooms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_teacher_user_id_fkey"
+            columns: ["teacher_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "timetable_slots_term_id_fkey"
+            columns: ["term_id"]
+            isOneToOne: false
+            referencedRelation: "terms"
             referencedColumns: ["id"]
           },
         ]
@@ -2055,6 +2345,7 @@ export type Database = {
       guardian_relation: "father" | "mother" | "guardian" | "other"
       membership_status: "active" | "invited" | "suspended" | "archived"
       report_card_status: "draft" | "published" | "archived"
+      room_status: "active" | "inactive" | "archived"
       school_status: "active" | "inactive" | "archived"
       student_document_type:
         | "birth_certificate"
@@ -2074,8 +2365,18 @@ export type Database = {
         | "archived"
       subject_status: "active" | "inactive" | "archived"
       subject_type: "core" | "elective" | "activity" | "other"
+      teacher_subject_assignment_status: "active" | "inactive" | "archived"
       tenant_status: "active" | "inactive" | "suspended"
       term_status: "draft" | "active" | "closed" | "archived"
+      timetable_day_of_week:
+        | "sunday"
+        | "monday"
+        | "tuesday"
+        | "wednesday"
+        | "thursday"
+        | "friday"
+        | "saturday"
+      timetable_slot_status: "active" | "cancelled" | "archived"
       user_role:
         | "system_admin"
         | "school_admin"
@@ -2264,6 +2565,7 @@ export const Constants = {
       guardian_relation: ["father", "mother", "guardian", "other"],
       membership_status: ["active", "invited", "suspended", "archived"],
       report_card_status: ["draft", "published", "archived"],
+      room_status: ["active", "inactive", "archived"],
       school_status: ["active", "inactive", "archived"],
       student_document_type: [
         "birth_certificate",
@@ -2285,8 +2587,19 @@ export const Constants = {
       ],
       subject_status: ["active", "inactive", "archived"],
       subject_type: ["core", "elective", "activity", "other"],
+      teacher_subject_assignment_status: ["active", "inactive", "archived"],
       tenant_status: ["active", "inactive", "suspended"],
       term_status: ["draft", "active", "closed", "archived"],
+      timetable_day_of_week: [
+        "sunday",
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+      ],
+      timetable_slot_status: ["active", "cancelled", "archived"],
       user_role: [
         "system_admin",
         "school_admin",

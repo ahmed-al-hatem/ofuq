@@ -10,7 +10,7 @@ Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumpin
 - `user_memberships`
 - `audit_logs`
 
-Attendance, grades, timetable, finance, communication, library, health, and reporting tables remain for later phases.
+Finance, communication, library, health, and reporting tables remain for later phases.
 
 Phase 04 extends this foundation with the first business-data slice for admissions and students.
 
@@ -19,6 +19,8 @@ Phase 05 adds the academic structure foundation required before attendance, grad
 Phase 06 adds the attendance foundation for manual attendance, QR-token attendance entry, attendance sessions, attendance records, and absence excuse review.
 
 Phase 07 adds the grades and report cards foundation for exams, exam results, grade entries, and basic report card snapshots.
+
+Phase 08 adds the manual timetable foundation for rooms, teacher-subject assignments, timetable slots, and server-side conflict prevention.
 
 ## Core tables
 
@@ -122,7 +124,7 @@ Phase 07 adds the grades and report cards foundation for exams, exam results, gr
 - Enforces one active enrollment per student per academic year through a partial unique index.
 - Application code verifies that the student, class, academic year, and derived grade level all belong to the authenticated user's tenant and school before insert.
 
-Timetable logic, finance, and reports remain later phases.
+Finance and reports remain later phases.
 
 ## Phase 06 tables
 
@@ -174,6 +176,28 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Uses a JSON `summary` for stable display of subject totals and overall percentage.
 - This phase does not generate PDFs, rankings, GPA scales, certificate designs, parent notifications, or advanced analytics.
 
+## Phase 08 tables
+
+### `rooms`
+
+- Stores school rooms for manual timetable slot placement.
+- Uses `tenant_id`, `school_id`, optional room code, capacity, location, and a simple active/inactive/archive status.
+- Keeps room conflicts optional because timetable slots can be created without a room.
+
+### `teacher_subject_assignments`
+
+- Stores which active teacher can teach a subject for a grade level or a specific class in an academic year.
+- Uses `tenant_id`, `school_id`, `academic_year_id`, `teacher_user_id`, `subject_id`, and optional `grade_level_id` or `class_id`.
+- Application code validates the teacher membership, academic year, subject, grade level, and class ownership before insert.
+
+### `timetable_slots`
+
+- Stores manual timetable entries for a class, subject, teacher, day, time range, academic year, optional term, and optional room.
+- Uses `tenant_id`, `school_id`, `academic_year_id`, `class_id`, derived `grade_level_id`, `subject_id`, `teacher_user_id`, and optional `room_id`.
+- Application code validates the class/year, term/year, subject, active teacher membership, active teacher-subject assignment, and active room before insert.
+- Server-side conflict checks prevent overlapping active slots for the same class, teacher, or room in the same school, year, day, and term context.
+- Automatic timetable generation, drag-and-drop editing, attendance integration, room resource calendars, and optimization algorithms remain deferred.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -187,6 +211,7 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Tenant and school context must be derived server-side from authenticated membership, never trusted from raw client input.
 - Attendance mutations verify session, class, academic year, term, student, and active enrollment ownership server-side before writes.
 - Grades mutations verify exam, class, academic year, term, subject, student, and active enrollment ownership server-side before writes.
+- Timetable mutations verify rooms, teacher assignments, classes, academic years, terms, subjects, and conflict checks server-side before writes.
 
 ## Storage note
 

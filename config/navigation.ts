@@ -69,7 +69,7 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "الجدول",
         icon: CalendarDays,
-        placeholder: true,
+        href: appRoutes.timetable,
       },
       {
         label: "المالية",

@@ -37,6 +37,9 @@
 - Exam creation validates year, class, term, subject, and class-derived grade level server-side.
 - Exam result, grade-entry, and report-card generation validates the student and active class enrollment server-side before writing.
 - Publishing exam results and report cards is limited to fixed admin roles in server-side code.
+- Timetable room, teacher-subject assignment, and slot mutations derive tenant and school scope from the active membership context.
+- Timetable slot creation validates the academic year, term, class, subject, active teacher membership, active teacher-subject assignment, optional active room, and class/teacher/room overlap conflicts server-side.
+- Timetable write actions are limited to fixed admin roles; teachers can only read the timetable data scoped to their assignment/user context.
 
 ## Session handling
 
@@ -57,6 +60,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - `metadata` should contain operational context only, never secrets or raw credentials.
 - Attendance audit metadata should use IDs such as session, class, year, and student IDs, not raw QR token values.
 - Grades audit metadata should use operational IDs such as exam, class, subject, student, and report-card IDs, not large grade payloads.
+- Timetable audit metadata should use operational IDs such as room, teacher, subject, class, year, term, and slot IDs.
 
 ## Student document handling
 

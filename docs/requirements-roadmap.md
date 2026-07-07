@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 07. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 08. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -27,7 +27,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - External integrations are UI/settings only for now.
 - AI Query and Chatbot are UI placeholders only until enough data exists.
 - Report Builder drag-and-drop is later; ready-made reports first.
-- Timetabling starts manual with conflict prevention later, algorithm later.
+- Timetabling starts manual with conflict prevention, algorithm later.
 - QR attendance starts with teacher scanning student QR or QR-token foundation; Beacon later.
 
 ## Roadmap Table
@@ -71,7 +71,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Attendance | Parent notifications later | Later | Later | Requires communication/notification foundation. |
 | Attendance | Beacon later | Later | Later | Explicitly deferred. |
 | Attendance | Advanced attendance reports later | Later | Later | Ready-made basic reports should come first. |
-| Timetable | Manual timetable with conflict prevention planned later | 08 | Planned | Not implemented. |
+| Timetable | Manual timetable with conflict prevention | 08 | Done | Rooms, teacher-subject assignments, slots, and class/teacher/room overlap checks are implemented. |
 | Timetable | Automatic generation algorithm later | Later | Later | Deferred until manual timetable is stable. |
 | Timetable | Beacon/timetable integration excluded from current phases | Later | Excluded | Not part of current MVP slices. |
 | Finance | Fee structures planned | 09 | Planned | Not implemented. |
@@ -117,11 +117,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Academic structure foundation
 - Attendance manual + QR foundation
 - Grades and report cards foundation
+- Manual timetable with conflict prevention foundation
 
 ## Planned Next
 
 ```txt
-08 - Manual Timetable with Conflict Prevention Foundation
+09 - Finance Basics Foundation
 ```
 
 ## Later / Placeholder Only
@@ -132,7 +133,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Student promotions, transfers, withdrawals, achievements, discipline, import/export, and risk indicators.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
-- Manual timetable and conflict prevention, then automatic generation later.
+- Automatic timetable generation later.
 - Finance module and finance reports.
 - Communication module, notifications, events, announcements, complaints, and surveys.
 - Ready-made reports, then report builder later.
