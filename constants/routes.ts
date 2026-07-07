@@ -32,4 +32,14 @@ export const appRoutes = {
   timetableAssignments: "/dashboard/timetable/assignments",
   timetableSlots: "/dashboard/timetable/slots",
   newTimetableSlot: "/dashboard/timetable/slots/new",
+  finance: "/dashboard/finance",
+  financeFees: "/dashboard/finance/fees",
+  financeDiscounts: "/dashboard/finance/discounts",
+  financeInvoices: "/dashboard/finance/invoices",
+  newFinanceInvoice: "/dashboard/finance/invoices/new",
+  financeInvoiceDetails: (invoiceId: string) =>
+    `/dashboard/finance/invoices/${invoiceId}`,
+  financePayments: "/dashboard/finance/payments",
+  financePaymentDetails: (paymentId: string) =>
+    `/dashboard/finance/payments/${paymentId}`,
 } as const

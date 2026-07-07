@@ -74,7 +74,7 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "المالية",
         icon: CircleDollarSign,
-        placeholder: true,
+        href: appRoutes.finance,
       },
       {
         label: "التواصل",
