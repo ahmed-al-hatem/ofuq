@@ -3,9 +3,29 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 09 Finance Closure Verification
+
+Phase 09 Finance Basics Foundation was verified after manual local Supabase recovery.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status before work | Passed | `git -c safe.directory=D:/ofuq/ofuq status --short` returned a clean working tree. |
+| Phase 09 files | Passed | Finance migration, `types/finance.ts`, `lib/finance`, `lib/actions/finance.ts`, finance dashboard routes, and finance navigation/routes existed. |
+| Supabase status | Passed | Local Supabase setup was running; Docker access required elevated permissions in this Windows environment. |
+| Supabase database reset | Passed | `supabase db reset` replayed all migrations through `20260707140000_finance_basics_foundation.sql` and applied both seed files after manual local Supabase recovery. |
+| Supabase type generation | Passed | `supabase gen types typescript --local > types/database.ts` completed and generated types include `fee_structures`, `fee_items`, `discount_types`, `student_discounts`, `invoices`, `invoice_items`, and `payments`. |
+| Finance SQL spot checks | Passed | All seven finance table count queries succeeded. Counts were `0` after reset, as no finance workflow seed data was added. |
+| Local Auth smoke seed sanity | Passed | `admin@ofuq.local` and `teacher@ofuq.local` exist; both are email-confirmed and token/default fields checked by the local troubleshooting guidance are non-null. |
+| Lint | Passed | `npm run lint` completed with exit code 0. |
+| Build | Passed | `npm run build` completed successfully and included finance dashboard routes. |
+| Whitespace diff check | Passed | `git diff --check` completed with exit code 0. |
+| Browser smoke | Not performed | Browser workflow smoke was not run in this closure session, so it is not claimed as passed. |
+
+Go/no-go after Phase 09: Go for `10 - Communication and Ready-Made Reports Foundation`.
+
 ## Scope
 
-This report covers the project state after Phase 05 Academic Structure Foundation and before Phase 06 Attendance Manual + QR Foundation.
+This report originally covered the project state after Phase 05 Academic Structure Foundation and before Phase 06 Attendance Manual + QR Foundation. Later verification entries append newer phase closure results.
 
 ## Environment Notes
 

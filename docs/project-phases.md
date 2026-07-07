@@ -22,8 +22,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, and manual timetable foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, and finance basics foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 09 snapshot
+
+- Finance basics foundation is implemented with fee structures, fee items, discount types, student discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
+- Finance management uses server-side membership context and fixed role checks for `system_admin`, `school_admin`, and `accountant`.
+- Invoice totals, discounts, paid amount, balance, and status are calculated server-side. Manual payment recording blocks overpayment.
+- Payment gateways, expenses, budgets, accounting ledger logic, tax/VAT, PDF invoice/receipt generation, parent payment portal, full RLS, and full RBAC remain deferred.
 
 ## Phase 08 snapshot
 
@@ -49,7 +56,7 @@ New business modules should continue to be added one vertical slice at a time so
 
 - Academic structure foundation is implemented for years, terms, grade levels, classes, subjects, grade-level subject assignments, and class enrollments.
 - Academic management uses server-side membership context and fixed role checks.
-- Finance and reports remain future slices.
+- Reports remain a future slice.
 
 ## Phase 04 snapshot
 

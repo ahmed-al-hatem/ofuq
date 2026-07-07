@@ -40,6 +40,9 @@
 - Timetable room, teacher-subject assignment, and slot mutations derive tenant and school scope from the active membership context.
 - Timetable slot creation validates the academic year, term, class, subject, active teacher membership, active teacher-subject assignment, optional active room, and class/teacher/room overlap conflicts server-side.
 - Timetable write actions are limited to fixed admin roles; teachers can only read the timetable data scoped to their assignment/user context.
+- Finance mutations derive tenant/school scope from authenticated membership and do not trust client-submitted totals or tenant/school fields.
+- Finance fee, discount, invoice, and payment writes validate related academic years, terms, students, fee structures, discounts, invoices, and payment balances server-side.
+- Finance management is limited to fixed `system_admin`, `school_admin`, and `accountant` roles in server-side code.
 
 ## Session handling
 
@@ -61,6 +64,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Attendance audit metadata should use IDs such as session, class, year, and student IDs, not raw QR token values.
 - Grades audit metadata should use operational IDs such as exam, class, subject, student, and report-card IDs, not large grade payloads.
 - Timetable audit metadata should use operational IDs such as room, teacher, subject, class, year, term, and slot IDs.
+- Finance audit metadata should use operational IDs such as fee structure, fee item, discount, invoice, payment, student, and amount summaries, not card data or external payment secrets.
 
 ## Student document handling
 

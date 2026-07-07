@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumping into business modules. The current foundation is intentionally limited to:
+Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumping into business modules. The initial foundation is intentionally limited to:
 
 - `tenants`
 - `schools`
@@ -10,7 +10,7 @@ Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumpin
 - `user_memberships`
 - `audit_logs`
 
-Finance, communication, library, health, and reporting tables remain for later phases.
+Communication, library, health, and reporting tables remain for later phases.
 
 Phase 04 extends this foundation with the first business-data slice for admissions and students.
 
@@ -21,6 +21,8 @@ Phase 06 adds the attendance foundation for manual attendance, QR-token attendan
 Phase 07 adds the grades and report cards foundation for exams, exam results, grade entries, and basic report card snapshots.
 
 Phase 08 adds the manual timetable foundation for rooms, teacher-subject assignments, timetable slots, and server-side conflict prevention.
+
+Phase 09 adds the finance basics foundation for fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 
 ## Core tables
 
@@ -124,7 +126,7 @@ Phase 08 adds the manual timetable foundation for rooms, teacher-subject assignm
 - Enforces one active enrollment per student per academic year through a partial unique index.
 - Application code verifies that the student, class, academic year, and derived grade level all belong to the authenticated user's tenant and school before insert.
 
-Finance and reports remain later phases.
+Reports remain a later phase.
 
 ## Phase 06 tables
 
@@ -198,6 +200,47 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Server-side conflict checks prevent overlapping active slots for the same class, teacher, or room in the same school, year, day, and term context.
 - Automatic timetable generation, drag-and-drop editing, attendance integration, room resource calendars, and optimization algorithms remain deferred.
 
+## Phase 09 tables
+
+### `fee_structures`
+
+- Stores school fee plans scoped by tenant, school, and academic year.
+- Can optionally target a grade level or class.
+- Uses `fee_structure_status` and a simple `currency_code`; exchange rates are not implemented.
+
+### `fee_items`
+
+- Stores line items inside a fee structure.
+- Uses `fee_item_type`, amount, optional due date, sort order, and status.
+- Amounts are validated as non-negative and are used server-side when generating invoice items.
+
+### `discount_types`
+
+- Stores reusable discount definitions for a school.
+- Supports `percentage` and `fixed_amount` values with database constraints for valid ranges.
+
+### `student_discounts`
+
+- Assigns active discount types to active students for an academic year and optional term.
+- Supports optional start/end dates and status tracking.
+
+### `invoices`
+
+- Stores student invoices with invoice number, issue/due dates, academic year, optional term, optional class enrollment, totals, status, and issuing metadata.
+- Invoice numbers are unique per tenant and school.
+- Subtotal, discount, total, paid, balance, and status are calculated by server-side finance services rather than trusted from client forms.
+
+### `invoice_items`
+
+- Stores invoice line details derived from active fee items.
+- Keeps quantity, unit amount, discount amount, total amount, and ordering fields.
+
+### `payments`
+
+- Stores manual payment and receipt records for invoices.
+- Receipt numbers are unique per tenant and school.
+- Payment amount must be positive; payment gateway data, card details, refunds, and reconciliation remain deferred.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -212,6 +255,7 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Attendance mutations verify session, class, academic year, term, student, and active enrollment ownership server-side before writes.
 - Grades mutations verify exam, class, academic year, term, subject, student, and active enrollment ownership server-side before writes.
 - Timetable mutations verify rooms, teacher assignments, classes, academic years, terms, subjects, and conflict checks server-side before writes.
+- Finance mutations derive tenant and school scope from authenticated membership, validate students, academic years, terms, fee structures, discounts, invoices, and payments server-side, and do not trust client-submitted totals.
 
 ## Storage note
 
@@ -219,6 +263,7 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 - Application code should store only file metadata and storage paths in `student_documents`.
 - Attendance absence excuses store text reasons only; document uploads can be added later if needed.
 - Report card snapshots store summary JSON only; generated PDF files and template assets remain deferred.
+- Finance receipt/payment detail views are application views only; invoice and receipt PDF generation remains deferred.
 
 ## RLS later
 

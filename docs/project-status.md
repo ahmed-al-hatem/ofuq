@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Ready for 09 Finance Basics Foundation
-- Last completed implementation phase: 08 Manual Timetable with Conflict Prevention Foundation
-- Last completed quality phase: 07.5 Local Smoke Seed + Grades/Attendance Workflow Verification
-- Next implementation phase: 09 Finance Basics Foundation
+- Current phase: Ready for 10 Communication and Ready-Made Reports Foundation
+- Last completed implementation phase: 09 Finance Basics Foundation
+- Last completed quality phase: 09.2 Finance Closure After Manual Supabase Recovery
+- Next implementation phase: 10 Communication and Ready-Made Reports Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -37,6 +37,8 @@
 | Phase 07 Grades and Report Cards Foundation | Done | Exams, exam results, grade entries, basic report card snapshots, and Arabic dashboard pages. |
 | Phase 07.5 Local Smoke Seed + Grades/Attendance Workflow Verification | Done | Deterministic local smoke seed, SQL spot checks, technical verification, and honest browser workflow status. |
 | Phase 08 Manual Timetable with Conflict Prevention Foundation | Done | Rooms, teacher-subject assignments, timetable slots, overlap checks, and Arabic dashboard pages. |
+| Phase 09 Finance Basics Foundation | Done | Fee structures, fee items, discounts, invoices, invoice items, manual payments, and basic receipt/payment detail views. |
+| Phase 09.2 Finance Closure After Manual Supabase Recovery | Done | Supabase reset, type generation, finance SQL spot checks, local Auth sanity, lint, build, diff check, and documentation closure. |
 
 ## Current Implemented Modules
 
@@ -48,9 +50,10 @@
 - Attendance foundation, including manual attendance, QR-token entry, session close flow, and absence excuse review.
 - Grades foundation, including exams, exam result entry, grade entries, and basic report-card snapshots/views.
 - Manual timetable foundation, including rooms, teacher-subject assignments, timetable slots, and class/teacher/room conflict prevention.
+- Finance basics foundation, including fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-Finance, communication, library, and health are not implemented yet.
+Communication, library, and health are not implemented yet.
 
 ## Current Routes
 
@@ -85,6 +88,14 @@ Finance, communication, library, and health are not implemented yet.
 | `/dashboard/timetable/assignments` | Active | Teacher-subject assignments. |
 | `/dashboard/timetable/slots` | Active | Timetable slot list and cancellation. |
 | `/dashboard/timetable/slots/new` | Active | Manual timetable slot creation with conflict checks. |
+| `/dashboard/finance` | Active | Finance overview. |
+| `/dashboard/finance/fees` | Active | Fee structures and fee items. |
+| `/dashboard/finance/discounts` | Active | Discount types and student discounts. |
+| `/dashboard/finance/invoices` | Active | Invoice list. |
+| `/dashboard/finance/invoices/new` | Active | Generate invoice from fee structure. |
+| `/dashboard/finance/invoices/[invoiceId]` | Active | Invoice detail, issue/cancel actions, and payment entry. |
+| `/dashboard/finance/payments` | Active | Payment list. |
+| `/dashboard/finance/payments/[paymentId]` | Active | Basic receipt/payment detail view. |
 
 Configured dynamic helpers also exist for admission and student detail URLs, but matching route files are not currently present.
 
@@ -96,6 +107,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Attendance tables: `attendance_sessions`, `attendance_records`, `absence_excuses`.
 - Grades tables: `exams`, `exam_results`, `grade_entries`, `report_cards`.
 - Timetable tables: `rooms`, `teacher_subject_assignments`, `timetable_slots`.
+- Finance tables: `fee_structures`, `fee_items`, `discount_types`, `student_discounts`, `invoices`, `invoice_items`, `payments`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -109,6 +121,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Server-side helpers resolve the authenticated user, primary active membership, role, tenant, and school.
 - Sensitive reads and mutations use Server Components, Server Actions, or server-side service modules.
 - Client-submitted `tenant_id`, `school_id`, and `role` are not trusted.
+- Finance mutations derive tenant/school/user scope from active membership and calculate financial totals server-side.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -130,7 +143,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Current Known Limitations
 
-- No finance module yet.
+- Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - No parent notifications or communication module yet.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
@@ -150,9 +163,9 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 Recommended next phase:
 
 ```txt
-09 - Finance Basics Foundation
+10 - Communication and Ready-Made Reports Foundation
 ```
 
-Rationale: students, class enrollments, attendance, grades/report cards, and manual timetabling now exist, so basic fee structures, invoices, payments, discounts, and receipt foundations can be added as the next operational slice.
+Rationale: students, academics, attendance, grades, timetabling, and finance basics now exist, so internal communication and ready-made reports can be added as the next operational slice.
 
-Go/no-go status: Go with caution for Phase 09 after Phase 08 verification. Database reset, type generation, lint, and build passed, but authenticated browser workflow smoke should still be run manually or in a session with an available browser backend.
+Go/no-go status: Go for Phase 10 after Phase 09 verification. Database reset, type generation, finance SQL spot checks, lint, build, and `git diff --check` passed. Authenticated browser workflow smoke was not performed in this closure session.

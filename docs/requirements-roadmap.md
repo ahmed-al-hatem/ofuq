@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 08. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 09. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -74,11 +74,11 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Timetable | Manual timetable with conflict prevention | 08 | Done | Rooms, teacher-subject assignments, slots, and class/teacher/room overlap checks are implemented. |
 | Timetable | Automatic generation algorithm later | Later | Later | Deferred until manual timetable is stable. |
 | Timetable | Beacon/timetable integration excluded from current phases | Later | Excluded | Not part of current MVP slices. |
-| Finance | Fee structures planned | 09 | Planned | Not implemented. |
-| Finance | Invoices planned | 09 | Planned | Not implemented. |
-| Finance | Payments planned | 09 | Planned | Not implemented. |
-| Finance | Discounts planned | 09 | Planned | Not implemented. |
-| Finance | Receipts planned | 09 | Planned | Not implemented. |
+| Finance | Fee structures | 09 | Done | Fee structures and fee items are implemented. |
+| Finance | Invoices | 09 | Done | Invoice generation, issue/cancel foundation, and server-calculated totals are implemented. |
+| Finance | Payments | 09 | Done | Manual completed payments are implemented with overpayment prevention. |
+| Finance | Discounts | 09 | Done | Discount types and student discounts are implemented. |
+| Finance | Receipts | 09 | Done | Basic receipt/payment detail views are implemented; PDF generation remains deferred. |
 | Finance | Expenses/budget later | Later | Later | Not implemented. |
 | Finance | Payment integrations later or UI/settings only | Later | UI / Settings Only | No real integration for now. |
 | Communication | Internal messages planned | 10 | Planned | Not implemented. |
@@ -118,11 +118,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Attendance manual + QR foundation
 - Grades and report cards foundation
 - Manual timetable with conflict prevention foundation
+- Finance basics foundation
 
 ## Planned Next
 
 ```txt
-09 - Finance Basics Foundation
+10 - Communication and Ready-Made Reports Foundation
 ```
 
 ## Later / Placeholder Only
@@ -134,7 +135,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Automatic timetable generation later.
-- Finance module and finance reports.
+- Finance reports.
 - Communication module, notifications, events, announcements, complaints, and surveys.
 - Ready-made reports, then report builder later.
 - AI Query and Chatbot UI placeholders only until enough stable data exists.
