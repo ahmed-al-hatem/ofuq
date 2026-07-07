@@ -111,6 +111,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - `docs/database.md`
 - `docs/security-model.md`
 - `docs/supabase-local.md`
+- `docs/local-auth-smoke-troubleshooting.md`
 - `docs/project-phases.md`
 - `docs/codex-workflow.md`
 - `docs/project-status.md`
@@ -133,6 +134,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, but authenticated browser workflow smoke remained blocked by unavailable browser automation in that session.
+- A local Auth smoke-login issue caused by `NULL` GoTrue token fields was fixed and documented in `docs/local-auth-smoke-troubleshooting.md`.
 - On Windows, Supabase local development may require Docker Desktop TCP daemon exposure for analytics/vector health.
 
 ## Recommended Next Phase
