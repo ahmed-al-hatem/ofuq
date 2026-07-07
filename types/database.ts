@@ -1174,6 +1174,180 @@ export type Database = {
           },
         ]
       }
+      complaint_updates: {
+        Row: {
+          author_user_id: string
+          body: string
+          complaint_id: string
+          created_at: string
+          id: string
+          new_status: Database["public"]["Enums"]["complaint_status"] | null
+          old_status: Database["public"]["Enums"]["complaint_status"] | null
+          school_id: string
+          tenant_id: string
+          update_type: Database["public"]["Enums"]["complaint_update_type"]
+          updated_at: string
+        }
+        Insert: {
+          author_user_id: string
+          body: string
+          complaint_id: string
+          created_at?: string
+          id?: string
+          new_status?: Database["public"]["Enums"]["complaint_status"] | null
+          old_status?: Database["public"]["Enums"]["complaint_status"] | null
+          school_id: string
+          tenant_id: string
+          update_type?: Database["public"]["Enums"]["complaint_update_type"]
+          updated_at?: string
+        }
+        Update: {
+          author_user_id?: string
+          body?: string
+          complaint_id?: string
+          created_at?: string
+          id?: string
+          new_status?: Database["public"]["Enums"]["complaint_status"] | null
+          old_status?: Database["public"]["Enums"]["complaint_status"] | null
+          school_id?: string
+          tenant_id?: string
+          update_type?: Database["public"]["Enums"]["complaint_update_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "complaint_updates_author_user_id_fkey"
+            columns: ["author_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaint_updates_complaint_id_fkey"
+            columns: ["complaint_id"]
+            isOneToOne: false
+            referencedRelation: "complaints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaint_updates_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaint_updates_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      complaints: {
+        Row: {
+          assigned_to_user_id: string | null
+          category: Database["public"]["Enums"]["complaint_category"]
+          created_at: string
+          description: string
+          id: string
+          priority: Database["public"]["Enums"]["complaint_priority"]
+          resolution_summary: string | null
+          resolved_at: string | null
+          resolved_by_user_id: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["complaint_status"]
+          student_id: string | null
+          submitted_at: string
+          submitted_by_user_id: string
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to_user_id?: string | null
+          category?: Database["public"]["Enums"]["complaint_category"]
+          created_at?: string
+          description: string
+          id?: string
+          priority?: Database["public"]["Enums"]["complaint_priority"]
+          resolution_summary?: string | null
+          resolved_at?: string | null
+          resolved_by_user_id?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["complaint_status"]
+          student_id?: string | null
+          submitted_at?: string
+          submitted_by_user_id: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to_user_id?: string | null
+          category?: Database["public"]["Enums"]["complaint_category"]
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: Database["public"]["Enums"]["complaint_priority"]
+          resolution_summary?: string | null
+          resolved_at?: string | null
+          resolved_by_user_id?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["complaint_status"]
+          student_id?: string | null
+          submitted_at?: string
+          submitted_by_user_id?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "complaints_assigned_to_user_id_fkey"
+            columns: ["assigned_to_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaints_resolved_by_user_id_fkey"
+            columns: ["resolved_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaints_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaints_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaints_submitted_by_user_id_fkey"
+            columns: ["submitted_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "complaints_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discipline_records: {
         Row: {
           action_taken: string | null
@@ -3506,6 +3680,241 @@ export type Database = {
           },
         ]
       }
+      survey_questions: {
+        Row: {
+          created_at: string
+          id: string
+          is_required: boolean
+          options: Json | null
+          question_text: string
+          question_type: Database["public"]["Enums"]["survey_question_type"]
+          school_id: string
+          sort_order: number
+          survey_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_required?: boolean
+          options?: Json | null
+          question_text: string
+          question_type?: Database["public"]["Enums"]["survey_question_type"]
+          school_id: string
+          sort_order?: number
+          survey_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_required?: boolean
+          options?: Json | null
+          question_text?: string
+          question_type?: Database["public"]["Enums"]["survey_question_type"]
+          school_id?: string
+          sort_order?: number
+          survey_id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_questions_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_questions_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_questions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      survey_responses: {
+        Row: {
+          answers: Json
+          created_at: string
+          id: string
+          respondent_user_id: string
+          school_id: string
+          student_id: string | null
+          submitted_at: string
+          survey_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          answers: Json
+          created_at?: string
+          id?: string
+          respondent_user_id: string
+          school_id: string
+          student_id?: string | null
+          submitted_at?: string
+          survey_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          id?: string
+          respondent_user_id?: string
+          school_id?: string
+          student_id?: string | null
+          submitted_at?: string
+          survey_id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "survey_responses_respondent_user_id_fkey"
+            columns: ["respondent_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_responses_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_responses_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_responses_survey_id_fkey"
+            columns: ["survey_id"]
+            isOneToOne: false
+            referencedRelation: "surveys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "survey_responses_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      surveys: {
+        Row: {
+          class_id: string | null
+          closed_at: string | null
+          closes_at: string | null
+          created_at: string
+          created_by_user_id: string
+          description: string | null
+          grade_level_id: string | null
+          id: string
+          opens_at: string | null
+          published_at: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["survey_status"]
+          target_role: Database["public"]["Enums"]["user_role"] | null
+          target_type: Database["public"]["Enums"]["survey_target_type"]
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          class_id?: string | null
+          closed_at?: string | null
+          closes_at?: string | null
+          created_at?: string
+          created_by_user_id: string
+          description?: string | null
+          grade_level_id?: string | null
+          id?: string
+          opens_at?: string | null
+          published_at?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["survey_status"]
+          target_role?: Database["public"]["Enums"]["user_role"] | null
+          target_type?: Database["public"]["Enums"]["survey_target_type"]
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          class_id?: string | null
+          closed_at?: string | null
+          closes_at?: string | null
+          created_at?: string
+          created_by_user_id?: string
+          description?: string | null
+          grade_level_id?: string | null
+          id?: string
+          opens_at?: string | null
+          published_at?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["survey_status"]
+          target_role?: Database["public"]["Enums"]["user_role"] | null
+          target_type?: Database["public"]["Enums"]["survey_target_type"]
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "surveys_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surveys_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surveys_grade_level_id_fkey"
+            columns: ["grade_level_id"]
+            isOneToOne: false
+            referencedRelation: "grade_levels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surveys_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "surveys_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       teacher_subject_assignments: {
         Row: {
           academic_year_id: string
@@ -4077,6 +4486,28 @@ export type Database = {
       class_status: "active" | "inactive" | "archived"
       clinic_visit_status: "open" | "closed" | "referred" | "cancelled"
       communication_message_status: "sent" | "archived"
+      complaint_category:
+        | "academic"
+        | "behavior"
+        | "finance"
+        | "transport"
+        | "facility"
+        | "communication"
+        | "staff"
+        | "other"
+      complaint_priority: "low" | "medium" | "high" | "urgent"
+      complaint_status:
+        | "submitted"
+        | "in_review"
+        | "resolved"
+        | "rejected"
+        | "cancelled"
+      complaint_update_type:
+        | "comment"
+        | "status_change"
+        | "assignment"
+        | "resolution"
+        | "internal_note"
       discipline_incident_type:
         | "behavior"
         | "attendance"
@@ -4182,6 +4613,15 @@ export type Database = {
         | "archived"
       subject_status: "active" | "inactive" | "archived"
       subject_type: "core" | "elective" | "activity" | "other"
+      survey_question_type:
+        | "short_text"
+        | "long_text"
+        | "single_choice"
+        | "multiple_choice"
+        | "rating"
+        | "yes_no"
+      survey_status: "draft" | "published" | "closed" | "archived"
+      survey_target_type: "school" | "role" | "grade_level" | "class"
       teacher_subject_assignment_status: "active" | "inactive" | "archived"
       tenant_status: "active" | "inactive" | "suspended"
       term_status: "draft" | "active" | "closed" | "archived"
@@ -4387,6 +4827,31 @@ export const Constants = {
       class_status: ["active", "inactive", "archived"],
       clinic_visit_status: ["open", "closed", "referred", "cancelled"],
       communication_message_status: ["sent", "archived"],
+      complaint_category: [
+        "academic",
+        "behavior",
+        "finance",
+        "transport",
+        "facility",
+        "communication",
+        "staff",
+        "other",
+      ],
+      complaint_priority: ["low", "medium", "high", "urgent"],
+      complaint_status: [
+        "submitted",
+        "in_review",
+        "resolved",
+        "rejected",
+        "cancelled",
+      ],
+      complaint_update_type: [
+        "comment",
+        "status_change",
+        "assignment",
+        "resolution",
+        "internal_note",
+      ],
       discipline_incident_type: [
         "behavior",
         "attendance",
@@ -4504,6 +4969,16 @@ export const Constants = {
       ],
       subject_status: ["active", "inactive", "archived"],
       subject_type: ["core", "elective", "activity", "other"],
+      survey_question_type: [
+        "short_text",
+        "long_text",
+        "single_choice",
+        "multiple_choice",
+        "rating",
+        "yes_no",
+      ],
+      survey_status: ["draft", "published", "closed", "archived"],
+      survey_target_type: ["school", "role", "grade_level", "class"],
       teacher_subject_assignment_status: ["active", "inactive", "archived"],
       tenant_status: ["active", "inactive", "suspended"],
       term_status: ["draft", "active", "closed", "archived"],

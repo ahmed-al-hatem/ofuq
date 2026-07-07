@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 12. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 13. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -85,8 +85,10 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Communication | Internal messages foundation | 10 | Done | Internal school messages and per-recipient read/archive state are implemented. |
 | Communication | Announcements foundation | 10 | Done | Draft/publish/archive announcements with simple target types are implemented. |
 | Communication | Events foundation | 10 | Done | Simple school events with cancellation are implemented. |
-| Communication | Complaints planned | 10 | Planned | Not implemented. |
-| Communication | Surveys later | Later | Later | Not implemented. |
+| Feedback | Complaints foundation | 13 | Done | Complaint submission, timeline updates, assignment, review, status changes, and resolution are implemented. |
+| Feedback | Surveys foundation | 13 | Done | Survey draft creation, question management, publish/close/archive, and staff response submission are implemented. |
+| Feedback | Anonymous/public complaint forms | Later | Later | Not implemented; authenticated internal workflow only. |
+| Feedback | Public survey links and anonymous responses | Later | Later | Not implemented; internal authenticated workflow only. |
 | Communication | Notifications foundation | 10 | Done | In-app notification logs only; no external sending providers. |
 | Reports | Ready-made reports foundation | 10 | Done | Student, attendance, grades, finance, and timetable report pages are implemented. |
 | Reports | Dashboard summaries planned | 10 | Done | Reports overview and communication overview pages are implemented. |
@@ -129,11 +131,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Communication and ready-made reports foundation
 - Library foundation
 - Student-care foundation
+- Feedback foundation
 
 ## Planned Next
 
 ```txt
-Next phase to be planned separately after Phase 12 closure.
+Next phase to be planned separately after Phase 13 closure.
 ```
 
 ## Later / Placeholder Only
@@ -145,7 +148,7 @@ Next phase to be planned separately after Phase 12 closure.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Automatic timetable generation later.
-- Complaints and surveys.
+- Advanced feedback workflows such as anonymous/public forms, attachments, branching logic, escalation, notifications, and analytics.
 - Advanced finance reports and exports.
 - Drag-and-drop report builder later.
 - AI Query and Chatbot UI placeholders only until enough stable data exists.

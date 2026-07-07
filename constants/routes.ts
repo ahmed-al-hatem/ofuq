@@ -52,6 +52,18 @@ export const appRoutes = {
   communicationEvents: "/dashboard/communication/events",
   newCommunicationEvent: "/dashboard/communication/events/new",
   communicationNotifications: "/dashboard/communication/notifications",
+  feedback: "/dashboard/feedback",
+  feedbackComplaints: "/dashboard/feedback/complaints",
+  newFeedbackComplaint: "/dashboard/feedback/complaints/new",
+  feedbackComplaintDetails: (complaintId: string) =>
+    `/dashboard/feedback/complaints/${complaintId}`,
+  feedbackSurveys: "/dashboard/feedback/surveys",
+  newFeedbackSurvey: "/dashboard/feedback/surveys/new",
+  feedbackSurveyDetails: (surveyId: string) => `/dashboard/feedback/surveys/${surveyId}`,
+  feedbackSurveyRespond: (surveyId: string) =>
+    `/dashboard/feedback/surveys/${surveyId}/respond`,
+  feedbackSurveyResponses: (surveyId: string) =>
+    `/dashboard/feedback/surveys/${surveyId}/responses`,
   reports: "/dashboard/reports",
   reportsStudents: "/dashboard/reports/students",
   reportsAttendance: "/dashboard/reports/attendance",

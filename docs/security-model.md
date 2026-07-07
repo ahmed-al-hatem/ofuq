@@ -54,6 +54,10 @@
 - Student-care reads derive tenant/school scope from authenticated membership. Health records, vaccinations, and clinic visits are limited to `system_admin` and `school_admin`.
 - Teachers may create discipline records and achievements, but discipline review/resolution and achievement publish/archive remain limited to fixed admin roles in server-side code.
 - Student-care forms do not expose tenant, school, role, creator, reviewer, handler, or publisher fields. Diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, and AI analysis are not implemented.
+- Feedback reads derive tenant/school scope from authenticated membership. Complaint submission and survey response are limited to authenticated operational school staff roles in this phase.
+- Full complaint management and all survey administration remain limited to `system_admin` and `school_admin` in server-side code.
+- Feedback mutations validate complaint ownership, related student ownership, assignee active membership, survey target relationships, publish/close workflow, response eligibility, and duplicate-response prevention on the server.
+- Feedback forms do not expose tenant, school, role, submitter, assignee, resolver, author, creator, or respondent identity fields. Anonymous/public complaint forms, public survey links, attachments, external notifications, and AI analysis are not implemented.
 
 ## Session handling
 
@@ -80,6 +84,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Ready-made reports write minimal `reports.viewed` audit events with the report key only.
 - Library audit metadata should use IDs such as catalog, copy, loan, and student IDs, not long descriptions, cover URLs, or external payloads.
 - Student-care audit metadata should use IDs and status only. Health notes, medications, chronic-condition text, and symptoms must not be written into audit logs.
+- Feedback audit metadata should use IDs and status transitions only. Complaint descriptions, internal-note text, resolution text, survey answers, and other large feedback payloads must not be written into audit logs.
 
 ## Student document handling
 

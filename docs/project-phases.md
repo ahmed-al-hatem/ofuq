@@ -12,7 +12,8 @@
 10. Communication and ready-made reports
 11. Library foundation
 12. Health, discipline, and achievements foundation
-13. Later modules and placeholders
+13. Complaints and surveys foundation
+14. Later modules and placeholders
 
 ## Later-phase items
 
@@ -25,8 +26,15 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, ready-made reports, library, and student-care foundations in place.
+The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, ready-made reports, library, student-care, and feedback foundations in place.
 New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+
+## Phase 13 snapshot
+
+- Feedback foundation is implemented with authenticated complaint submission, complaint timeline updates, assignment, review/status changes, resolution, surveys, survey questions, publishing/closing, and staff survey responses.
+- Full feedback management remains limited to `system_admin` and `school_admin` in server-side code. Complaint submission and survey response remain limited to operational school staff roles in this phase.
+- Complaint and survey forms do not trust client-submitted `tenant_id`, `school_id`, role, or actor identity fields. Scope is derived from the authenticated active membership.
+- Anonymous public complaints, public survey links, parent/student external workflows, attachments, AI analysis, advanced branching logic, and external notifications remain deferred.
 
 ## Phase 12 snapshot
 

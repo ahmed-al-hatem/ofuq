@@ -10,7 +10,7 @@ Phase 02 establishes the smallest useful Supabase schema for Ofuq without jumpin
 - `user_memberships`
 - `audit_logs`
 
-Library and health tables remain for later phases.
+Business tables are added one vertical slice at a time in the phase sections below.
 
 Phase 04 extends this foundation with the first business-data slice for admissions and students.
 
@@ -29,6 +29,8 @@ Phase 10 adds the communication and ready-made reports foundation for internal m
 Phase 11 adds the library foundation for book catalog records, physical book copies, student loans, return handling, and overdue visibility.
 
 Phase 12 adds the student-care foundation for basic health records, vaccinations, clinic visits, discipline records, and student achievements.
+
+Phase 13 adds the feedback foundation for complaints, complaint updates, surveys, survey questions, and survey responses.
 
 ## Core tables
 
@@ -349,6 +351,40 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - The table supports school-facing recognition tracking only.
 - PDF certificates, parent notifications, and advanced analytics are not implemented.
 
+## Phase 13 tables
+
+### `complaints`
+
+- Stores authenticated school-scoped complaint tickets submitted by internal staff users.
+- Uses `tenant_id`, `school_id`, `submitted_by_user_id`, optional `student_id`, optional `assigned_to_user_id`, priority, category, status, and optional resolution metadata.
+- Server-side code validates complaint/student ownership inside the active tenant and school before insert or update.
+- Anonymous/public complaints and file attachments are not implemented.
+
+### `complaint_updates`
+
+- Stores timeline updates for comments, internal notes, assignment changes, status changes, and resolution notes.
+- Uses `tenant_id`, `school_id`, `complaint_id`, `author_user_id`, `update_type`, and optional old/new status fields for workflow transitions.
+- Internal notes stay in the complaint timeline table, while audit logs store only minimal IDs and status metadata.
+
+### `surveys`
+
+- Stores school-scoped survey headers with simple target metadata for school, role, grade level, or class.
+- Uses `tenant_id`, `school_id`, `created_by_user_id`, optional schedule fields, and draft/published/closed/archived status.
+- Grade and class targets are validated server-side against the current school.
+- Public survey links and anonymous survey access are not implemented.
+
+### `survey_questions`
+
+- Stores ordered survey questions with simple answer types: short text, long text, single choice, multiple choice, rating, and yes/no.
+- Uses `options` JSON only where needed for choice/rating questions.
+- Drag-and-drop builders and branching logic are intentionally out of scope for this phase.
+
+### `survey_responses`
+
+- Stores one authenticated response per user per survey with JSON answer payloads.
+- Uses `tenant_id`, `school_id`, `survey_id`, `respondent_user_id`, optional `student_id`, and a unique `(survey_id, respondent_user_id)` constraint.
+- Server-side code prevents duplicate responses and blocks draft/closed/archived surveys from receiving answers.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -368,6 +404,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Ready-made reports derive tenant and school scope from authenticated membership and write minimal `reports.viewed` audit logs.
 - Library mutations derive tenant/school/user scope from authenticated membership, validate catalog, copy, student, and loan ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 - Student-care mutations derive tenant/school/user scope from authenticated membership, validate student ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
+- Feedback mutations derive tenant/school/user scope from authenticated membership, validate complaint ownership, related students, assignee memberships, survey targets, and survey response eligibility server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 
 ## Storage note
 
@@ -379,6 +416,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Phase 10 reports are application views only; PDF/Excel export and drag-and-drop report builder remain deferred.
 - Phase 11 library stores book metadata and physical copy records only. Public library portals, e-book lending, barcode hardware, and finance fine billing remain deferred.
 - Phase 12 student care stores text-first operational records only. Medical uploads, prescriptions, diagnosis workflows, parent alerts, and PDF certificates remain deferred.
+- Phase 13 feedback stores internal operational records only. Anonymous/public complaint forms, public survey links, file attachments, AI analysis, external notifications, and advanced survey branching remain deferred.
 
 ## RLS later
 

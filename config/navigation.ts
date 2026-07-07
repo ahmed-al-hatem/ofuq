@@ -6,6 +6,7 @@ import {
   CircleDollarSign,
   FileText,
   GraduationCap,
+  HandHelping,
   LayoutDashboard,
   LibraryBig,
   MessageSquareMore,
@@ -80,6 +81,11 @@ export const dashboardNavigation: NavigationGroup[] = [
         label: "التواصل",
         icon: MessageSquareMore,
         href: appRoutes.communication,
+      },
+      {
+        label: "الشكاوى والاستبيانات",
+        icon: HandHelping,
+        href: appRoutes.feedback,
       },
       {
         label: "التقارير",

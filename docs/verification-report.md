@@ -3,6 +3,31 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 13 Complaints and Surveys Foundation Verification
+
+Phase 13 Feedback Foundation was verified after implementation of complaints, complaint updates, surveys, survey questions, and survey responses.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Phase 12 precondition | Passed | `git -c safe.directory=D:/ofuq/ofuq status --porcelain -uno` returned a clean working tree before Phase 13 work started, so Phase 12 was not mixed into this slice. |
+| Supabase status | Passed after elevation | Local Supabase was running; Docker access required elevated permissions in this Windows environment. |
+| Supabase database reset | Passed | `supabase db reset` replayed all migrations through `20260708010000_feedback_foundation.sql` and applied existing seed files. |
+| Supabase type generation | Passed | `supabase gen types typescript --local > types/database.ts` completed and generated feedback enums/tables, including `complaints`, `complaint_updates`, `surveys`, `survey_questions`, and `survey_responses`. |
+| Feedback SQL spot checks | Passed | All five feedback table count queries succeeded and returned `0` after reset; the duplicate survey-response query returned `0 rows`. |
+| Lint | Passed | `npm run lint` completed with exit code 0. |
+| Build | Passed | `npm run build` completed successfully and included all feedback dashboard routes. |
+| Whitespace diff check | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` completed with exit code 0; Git reported Windows line-ending warnings only. |
+| Browser smoke | Not performed | Authenticated browser workflow smoke was not run in this session, so it is not claimed as passed. |
+
+Phase 13 scope notes:
+
+- Feedback is an internal operational foundation only.
+- Complaint submission, complaint timeline updates, assignment, status changes, rejection, and resolution are implemented with server-side tenant/school validation.
+- Survey draft creation, question management, publish/close/archive workflow, and authenticated staff response submission are implemented with duplicate-response prevention.
+- No seed, Supabase config, anonymous/public complaint forms, public survey links, attachments, external notifications, AI analysis, or advanced survey branching logic were added.
+
+Go/no-go after Phase 13: Go for planning the next phase separately, such as `14 - Settings and Integrations Placeholders Foundation`, `14 - Parent and Student Read-Only Portal Foundation`, or `14 - Automated Tests Foundation`.
+
 ## Phase 12 Health, Discipline, and Achievements Foundation Verification
 
 Phase 12 Student Care Foundation was verified after implementation of health records, vaccinations, clinic visits, discipline records, and achievements.

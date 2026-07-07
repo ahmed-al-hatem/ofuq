@@ -3,9 +3,9 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 12 Health, Discipline, and Achievements Foundation implemented
-- Last completed implementation phase: 12 Health, Discipline, and Achievements Foundation
-- Last completed quality phase: 12 Health, Discipline, and Achievements Foundation Verification
+- Current phase: Phase 13 Complaints and Surveys Foundation implemented
+- Last completed implementation phase: 13 Complaints and Surveys Foundation
+- Last completed quality phase: 13 Complaints and Surveys Foundation Verification
 - Next implementation phase: To be planned separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -42,6 +42,7 @@
 | Phase 10 Communication and Ready-Made Reports Foundation | Done | Internal messages, announcements, notification logs, school events, and ready-made report pages. |
 | Phase 11 Library Foundation | Done | Book catalog, physical copies, student loans, returns, overdue visibility, and Arabic dashboard pages. |
 | Phase 12 Health, Discipline, and Achievements Foundation | Done | Basic health records, vaccinations, clinic visits, discipline records, achievements, and Arabic dashboard pages. |
+| Phase 13 Complaints and Surveys Foundation | Done | Complaint submission/review workflow, surveys, survey questions, survey responses, and Arabic feedback dashboard pages. |
 
 ## Current Implemented Modules
 
@@ -58,9 +59,10 @@
 - Ready-made reports for students, attendance, grades, finance balances, and timetable overview.
 - Library foundation, including book catalog records, physical copies, loan issue/return flow, and overdue visibility.
 - Student-care foundation, including basic health records, vaccinations, clinic visits, discipline records, and achievements.
+- Feedback foundation, including complaints, complaint updates, surveys, survey questions, and survey responses.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-Health, complaints, AI Query, chatbot, external integrations, and report builder are not implemented yet.
+AI Query, chatbot, external integrations, and report builder are not implemented yet.
 
 ## Current Routes
 
@@ -112,6 +114,15 @@ Health, complaints, AI Query, chatbot, external integrations, and report builder
 | `/dashboard/communication/events` | Active | School event list and cancel action for admins. |
 | `/dashboard/communication/events/new` | Active | School event creation. |
 | `/dashboard/communication/notifications` | Active | In-app notification logs. |
+| `/dashboard/feedback` | Active | Feedback overview. |
+| `/dashboard/feedback/complaints` | Active | Complaint list and complaint workflow overview. |
+| `/dashboard/feedback/complaints/new` | Active | Complaint submission form. |
+| `/dashboard/feedback/complaints/[complaintId]` | Active | Complaint details, updates, assignment, and resolution actions. |
+| `/dashboard/feedback/surveys` | Active | Survey list and visibility by role. |
+| `/dashboard/feedback/surveys/new` | Active | Survey draft creation form for admins. |
+| `/dashboard/feedback/surveys/[surveyId]` | Active | Survey details, questions, and admin workflow actions. |
+| `/dashboard/feedback/surveys/[surveyId]/respond` | Active | Authenticated survey response form. |
+| `/dashboard/feedback/surveys/[surveyId]/responses` | Active | Admin-only survey response summaries. |
 | `/dashboard/reports` | Active | Ready-made reports overview. |
 | `/dashboard/reports/students` | Active | Student roster report. |
 | `/dashboard/reports/attendance` | Active | Attendance summary report. |
@@ -153,6 +164,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Communication tables: `messages`, `message_recipients`, `announcements`, `notification_logs`, `school_events`.
 - Library tables: `book_catalog`, `book_copies`, `book_loans`.
 - Student-care tables: `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, `achievements`.
+- Feedback tables: `complaints`, `complaint_updates`, `surveys`, `survey_questions`, `survey_responses`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
@@ -171,6 +183,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Ready-made report pages derive tenant/school scope from active membership and write minimal `reports.viewed` audit logs.
 - Library mutations derive tenant/school/user scope from active membership, validate catalog/copy/student/loan relationships server-side, and write minimal audit logs for catalog, copy, loan issue, loan return, lost, and damaged actions.
 - Student-care mutations derive tenant/school/user scope from active membership, validate student ownership server-side, and write minimal audit logs without sensitive medical payloads.
+- Feedback mutations derive tenant/school/user scope from active membership, validate complaint relationships, survey targets, and duplicate response prevention server-side, and write minimal audit logs without complaint text or survey answers.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -195,6 +208,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Communication is internal/in-app only; no real-time chat or external notification providers are implemented.
 - Library is an operational foundation only; no fine billing, finance integration, barcode hardware, ISBN lookup, reservations, public portal, e-book storage, or advanced analytics are implemented.
 - Student care is an operational foundation only; no diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, or behavior-risk scoring are implemented.
+- Feedback is an operational foundation only; no anonymous/public complaint forms, public survey links, attachments, external notifications, AI analysis, advanced branching, or escalation automation are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
@@ -212,6 +226,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: plan separately after Phase 12 closure.
+Recommended next phase: plan separately after Phase 13 closure.
 
-Go/no-go status: Go for planning the next phase after Phase 12 verification. Database reset, type generation, student-care SQL spot checks, lint, build, and diff check passed. Authenticated browser workflow smoke was not performed in this closure session.
+Go/no-go status: Go for planning the next phase after Phase 13 verification. Database reset, type generation, feedback SQL spot checks, lint, build, and diff check passed. Authenticated browser workflow smoke was not performed in this closure session.
