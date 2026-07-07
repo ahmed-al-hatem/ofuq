@@ -3,6 +3,39 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 14 Syrian Demo Dataset Foundation Verification
+
+Phase 14 local Syrian demo dataset implementation is partially verified in this
+session. The seed/config/docs work is in place, but the required `supabase db reset`
+and SQL spot checks could not be completed because elevated Docker-backed command
+execution hit an external session usage limit.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Phase 13 precondition | Passed | `git -c safe.directory=D:/ofuq/ofuq status --short` was clean before Phase 14 work started, so Phase 13 files were not mixed into this slice. |
+| Supabase status | Passed after elevation | Local Supabase is running; Docker/Supabase access required elevated permissions in this Windows environment. |
+| Supabase database reset | Blocked | `supabase db reset` could not be executed after elevation because the session hit an external elevated-command usage limit, so replay from scratch is still pending. |
+| SQL spot checks | Not run | Required auth/count/relationship spot checks remain pending until `supabase db reset` can run. |
+| Lint | Passed | `npm run lint` completed with exit code `0`. |
+| Build | Passed | `npm run build` completed successfully and included all active dashboard routes. |
+| Whitespace diff check | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` completed with exit code `0`; Git only reported LF/CRLF warnings in modified files. |
+| Browser smoke | Not performed | Authenticated browser workflow smoke was not run in this session, so it is not claimed as passed. |
+
+Phase 14 scope notes so far:
+
+- Added `supabase/seeds/local_syrian_demo_data.sql` with deterministic fictional
+  Syrian local data spanning roles, admissions, academic structure, attendance,
+  grades, timetable, finance, communication, library, student care, and feedback.
+- Updated `supabase/config.toml` so the new local demo seed runs before
+  `auth_smoke_token_defaults.sql`.
+- Updated `supabase/seeds/auth_smoke_token_defaults.sql` to cover all
+  local `@ofuq.local` Auth users while preserving the final token/default safety pass.
+- Updated local/docs snapshots to describe the Syrian demo accounts, seed order,
+  shared password, and local-only fictional data policy.
+
+Go/no-go after the current Phase 14 closure attempt: No-Go for `15 - Automated Tests Foundation`
+until `supabase db reset` and the required SQL spot checks are completed successfully.
+
 ## Phase 13 Complaints and Surveys Foundation Verification
 
 Phase 13 Feedback Foundation was verified after implementation of complaints, complaint updates, surveys, survey questions, and survey responses.

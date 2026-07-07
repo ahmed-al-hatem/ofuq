@@ -20,7 +20,7 @@ begin
         and column_name = token_column
     ) then
       execute format(
-        'update auth.users set %I = coalesce(%I, '''') where email in (''admin@ofuq.local'', ''teacher@ofuq.local'')',
+        'update auth.users set %I = coalesce(%I, '''') where email like ''%%@ofuq.local''',
         token_column,
         token_column
       );
@@ -29,7 +29,10 @@ begin
 
   update auth.users
   set
-    email_confirmed_at = coalesce(email_confirmed_at, now()),
+    email_confirmed_at = coalesce(
+      email_confirmed_at,
+      '2026-08-15 08:00:00+03'::timestamptz
+    ),
     updated_at = now()
-  where email in ('admin@ofuq.local', 'teacher@ofuq.local');
+  where email like '%@ofuq.local';
 end $$;

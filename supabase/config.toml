@@ -29,7 +29,11 @@ schema_paths = []
 
 [db.seed]
 enabled = true
-sql_paths = ["./seed.sql", "./seeds/auth_smoke_token_defaults.sql"]
+sql_paths = [
+  "./seed.sql",
+  "./seeds/local_syrian_demo_data.sql",
+  "./seeds/auth_smoke_token_defaults.sql"
+]
 
 [db.network_restrictions]
 enabled = false

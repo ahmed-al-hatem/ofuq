@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 13. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 14. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -42,6 +42,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Security/Auth | Multi-Tenant | 02+ | Done | Tenant/school context exists and is used by later slices. |
 | Security/Auth | Audit logs | 02+ | Done | Foundation table exists; key actions write logs where practical. |
 | Security/Auth | RLS later | Later | Later | Deferred until auth/membership flows stabilize. |
+| Quality/Data | Deterministic local Syrian demo dataset | 14 | In Progress | Local-only fictional Syrian data has been added across the implemented modules, but Phase 14 reset and SQL closure verification are still pending in the current session. |
 | Students | Admissions workflow | 04 | Done | Pending/approved/rejected/cancelled foundation. |
 | Students | Student profile foundation | 04 | Done | Official student records exist. |
 | Students | Guardian links | 04 | Done | Guardian table exists. |
@@ -122,6 +123,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Project setup
 - Core schema
 - Auth + fixed roles
+- Deterministic local Syrian demo dataset foundation
 - Students/admissions foundation
 - Academic structure foundation
 - Attendance manual + QR foundation
@@ -136,7 +138,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 ## Planned Next
 
 ```txt
-Next phase to be planned separately after Phase 13 closure.
+15 - Automated Tests Foundation (after Phase 14 closure)
 ```
 
 ## Later / Placeholder Only

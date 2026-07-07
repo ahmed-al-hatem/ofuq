@@ -23,36 +23,70 @@ supabase migration new <name>
 supabase gen types typescript --local > types/database.ts
 ```
 
-## Local smoke seed
+## Local seed data
 
-`supabase db reset` applies `supabase/seed.sql`, which creates a deterministic
-local-only smoke dataset for authenticated workflow checks.
+`supabase db reset` now applies local seed files in this order:
 
-Local-only users:
+```toml
+sql_paths = [
+  "./seed.sql",
+  "./seeds/local_syrian_demo_data.sql",
+  "./seeds/auth_smoke_token_defaults.sql"
+]
+```
 
-| Email | Password | Role |
-| --- | --- | --- |
-| `admin@ofuq.local` | `OfuqLocal123!` | `school_admin` |
-| `teacher@ofuq.local` | `OfuqLocal123!` | `teacher` |
+This preserves the original minimal smoke dataset and adds a deterministic
+local-only Syrian demo dataset with fictional Arabic names and cross-module data.
 
-These credentials are demo data for local smoke testing only. Do not use them in
-production, screenshots, shared environments, or hosted Supabase projects.
+All local demo Auth users share the same password:
 
-The reset seed also creates:
+| Password | Scope |
+| --- | --- |
+| `OfuqLocal123!` | Every local `@ofuq.local` account |
 
-- Tenant: `Ofuq Demo Tenant`
-- School: `مدرسة أفق التجريبية`
-- Academic year: `2026-2027`
-- Term: `الفصل الأول`
-- Grade level: `الصف الأول`
-- Class: `الصف الأول / أ`
-- Subject: `الرياضيات`
-- Student: `طالب تجريبي`
-- Active class enrollment for the smoke student
+Preserved smoke accounts:
 
-The smoke seed intentionally does not create attendance sessions, attendance
-records, exams, grade entries, or report cards. Those records should be created
-through the UI or Server Actions during workflow smoke testing.
+| Email | Role |
+| --- | --- |
+| `admin@ofuq.local` | `school_admin` |
+| `teacher@ofuq.local` | `teacher` |
+
+Syrian demo accounts:
+
+| Email | Role |
+| --- | --- |
+| `system.admin@ofuq.local` | `system_admin` |
+| `school.admin@ofuq.local` | `school_admin` |
+| `teacher.arabic@ofuq.local` | `teacher` |
+| `teacher.math@ofuq.local` | `teacher` |
+| `teacher.science@ofuq.local` | `teacher` |
+| `teacher.english@ofuq.local` | `teacher` |
+| `teacher.physics@ofuq.local` | `teacher` |
+| `teacher.social@ofuq.local` | `teacher` |
+| `accountant@ofuq.local` | `accountant` |
+| `librarian@ofuq.local` | `librarian` |
+| `parent.hassan@ofuq.local` | `parent` |
+| `parent.rana@ofuq.local` | `parent` |
+| `student.youssef@ofuq.local` | `student` |
+| `student.lana@ofuq.local` | `student` |
+
+The Syrian demo dataset is fictional and local-only. Do not use these records or
+credentials in production, hosted Supabase projects, screenshots, or shared
+environments.
+
+The richer local dataset adds:
+
+- Demo tenant: `Ofuq Syrian Demo Tenant`
+- Demo school: `مدرسة أفق النموذجية الخاصة`
+- Demo city context: `دمشق، سوريا`
+- Academic year `2026-2027` with `الفصل الأول` and `الفصل الثاني`
+- Grade levels `G01` through `G12`
+- Syrian-style classes, subjects, enrollments, attendance, grades, report cards,
+  timetable, finance, communication, library, student-care, and feedback data
+
+The final seed `auth_smoke_token_defaults.sql` still runs last so all local
+`@ofuq.local` Auth users keep non-null token/default fields where those local
+GoTrue columns exist, and all local emails remain email-confirmed.
 
 ## Local workflow
 
@@ -69,3 +103,5 @@ through the UI or Server Actions during workflow smoke testing.
 - `supabase/migrations/20260706183000_students_admissions_foundation.sql`
 - `supabase/migrations/20260706200000_academic_structure_foundation.sql`
 - `supabase/seed.sql`
+- `supabase/seeds/local_syrian_demo_data.sql`
+- `supabase/seeds/auth_smoke_token_defaults.sql`
