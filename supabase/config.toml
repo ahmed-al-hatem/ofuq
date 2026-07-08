@@ -31,7 +31,11 @@ schema_paths = []
 enabled = true
 sql_paths = [
   "./seed.sql",
-  "./seeds/local_syrian_demo_data.sql",
+  "./seeds/local_syrian_demo_00_helpers.sql",
+  "./seeds/local_syrian_demo_01_create_stage_tables.sql",
+  "./seeds/local_syrian_demo_02_stage_data.sql",
+  "./seeds/local_syrian_demo_03_apply.sql",
+  "./seeds/local_syrian_demo_04_cleanup.sql",
   "./seeds/auth_smoke_token_defaults.sql"
 ]
 
