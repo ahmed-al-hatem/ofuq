@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 16. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 17. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -44,7 +44,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Security/Auth | RLS later | Later | Later | Deferred until auth/membership flows stabilize. |
 | Quality/Data | Deterministic local Syrian demo dataset | 14 | Done | Local-only fictional Syrian data is verified with the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and `0` null token-field rows across checked local `@ofuq.local` users. |
 | Quality/Data | Automated test foundation | 15 | Done | Vitest, local unit tests for stable pure logic, `docs/testing.md`, and manual local DB smoke SQL checks are in place. |
-| Quality/Data | Browser smoke / E2E automation | Later | Later | Playwright and broader browser automation remain intentionally deferred. |
+| Quality/Data | Browser smoke / E2E automation | 17 | Done | Playwright now provides a small local-only Chromium browser smoke layer for login, dashboard access, and parent/student portal read-only coverage. |
 | Portal | Parent/student read-only portal foundation | 16 | Done | `/portal` pages are implemented with server-side membership and linked-student scoping for `parent` and `student` roles only. |
 | Portal | Parent/student linked identity mapping | 16 | Done | Parent access uses `student_guardians.guardian_user_id`; student self-access uses nullable `students.student_user_id`. |
 | Portal | Parent finance visibility | 16 | Done | Linked-student invoices, payments, discounts, and invoice items are visible to parents in read-only form. |
@@ -142,11 +142,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Feedback foundation
 - Automated tests foundation
 - Parent/student read-only portal foundation
+- Browser smoke / E2E foundation
 
 ## Planned Next
 
 ```txt
-17 - Choose the next implementation or quality slice separately
+18 - Choose the next implementation or quality slice separately
 ```
 
 ## Later / Placeholder Only

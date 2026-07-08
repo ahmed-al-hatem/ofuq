@@ -10,7 +10,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:unit": "vitest run tests/unit",
-    "test:all": "npm run lint && npm run test && npm run build"
+    "test:all": "npm run lint && npm run test && npm run build",
+    "test:e2e": "node scripts/run-playwright-e2e.mjs",
+    "test:e2e:ui": "node scripts/run-playwright-e2e.mjs --ui",
+    "test:e2e:headed": "node scripts/run-playwright-e2e.mjs --headed",
+    "test:quality": "npm run lint && npm run test && npm run build && npm run test:e2e"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -37,6 +41,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",

@@ -3,6 +3,42 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 17 Browser Smoke / E2E Tests Foundation Verification
+
+Phase 17 browser smoke foundation is now verified. Playwright is configured for
+small local Chromium smoke coverage, the demo-seeded Supabase stack was reset
+and rechecked, and the suite now passes without claiming full regression or
+hosted CI coverage.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status at start | Passed after safe-directory override | `git -c safe.directory=D:/ofuq/ofuq status --short` returned a clean working tree before Phase 17 changes started. |
+| Playwright dependency install | Passed after elevation | `@playwright/test` was added as a dev dependency for the local browser smoke foundation. |
+| Chromium browser install | Not needed in this environment | Playwright's Chromium executable was already available locally, so `npx playwright install chromium` was not required in this verification session. |
+| E2E scripts | Passed | `package.json` now includes `test:e2e`, `test:e2e:headed`, `test:e2e:ui`, and `test:quality`, while leaving `test:all` unchanged. |
+| Playwright config | Passed | `playwright.config.ts` adds a local-friendly single-worker Chromium setup with trace/video/screenshot failure artifacts and optional built-in web-server management. |
+| E2E helpers and specs | Passed | `tests/e2e` now covers login smoke, dashboard smoke, parent portal smoke, student portal smoke, runtime-error guards, and read-only/dashboard-nav assertions. |
+| Supabase status | Passed after elevation | Local Supabase was running and healthy in this Windows environment. |
+| Initial DB smoke attempt | Failed before local reset | The first manual smoke SQL run hit a stale local database state with missing project tables, so verification did not claim success prematurely. |
+| `supabase db reset` | Passed after elevation | Local migrations and the split Syrian demo seed replayed successfully through `20260708120000_parent_student_read_only_portal_foundation.sql`. |
+| DB smoke SQL | Passed after reset | `tests/db/local-demo-smoke.sql` passed with `16` local Auth users, token null-count `0`, expected seeded cross-module counts, `2` linked student accounts, and `4` linked parent/student relationships. |
+| `npm run test` | Passed | Vitest completed successfully after the Playwright additions. |
+| `npm run lint` | Passed | ESLint completed successfully after the new E2E files and runner script were added. |
+| `npm run build` | Passed | Next.js production build completed successfully and retained all dashboard and portal routes. |
+| `npm run test:all` | Passed | Lint, unit tests, and production build still pass without depending on Playwright. |
+| `npm run test:e2e` | Passed | The full local Playwright smoke suite passed with `6` tests in about `2.0m` using one worker. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git only warned that some files will normalize `LF` to `CRLF` on the next touch in this Windows workspace. |
+| Browser smoke status | Passed locally | Login, dashboard, parent portal, and student portal smoke are now automated locally and verified against the deterministic demo seed. |
+
+Phase 17 scope notes:
+
+- The browser suite is intentionally local-only, non-mutating, and Chromium-only.
+- Parent/student portal assertions focus on read-only behavior and dashboard-navigation absence rather than CRUD flows.
+- Playwright artifacts are ignored through `.gitignore` and are not meant to be committed.
+- `npm run test:e2e` now uses a small local runner script to start and stop `next dev` cleanly in this Windows environment.
+
+Go/no-go after Phase 17 closure: Go for planning Phase 18 separately.
+
 ## Phase 16 Parent and Student Read-Only Portal Foundation Verification
 
 Phase 16 parent/student read-only portal foundation is now verified. The new

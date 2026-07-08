@@ -16,6 +16,7 @@
 14. Syrian demo dataset foundation
 15. Automated tests foundation
 16. Parent and student read-only portal foundation
+17. Browser smoke / E2E tests foundation
 
 ## Later-phase items
 
@@ -31,10 +32,19 @@
 The project now has its auth, tenant, student/admission, academic-structure,
 attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
-seed, automated unit-test, and parent/student read-only portal foundations in
+seed, automated unit-test, parent/student read-only portal, and local browser
+smoke foundations in
 place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 17 snapshot
+
+- Playwright is now configured for a small local-only Chromium browser smoke suite under `tests/e2e`.
+- Browser smoke covers login, admin dashboard entry, parent portal access, student portal access, portal read-only cues, and dashboard-navigation absence inside portal pages.
+- The suite is intentionally single-worker and non-mutating to stay stable on local Windows + Supabase + Next.js development startup.
+- `npm run test:e2e`, `test:e2e:headed`, `test:e2e:ui`, and `test:quality` are now available without changing the faster `test:all` path.
+- Hosted CI E2E, CRUD regression flows, cross-browser coverage, and visual regression remain deferred.
 
 ## Phase 16 snapshot
 
@@ -49,7 +59,7 @@ schema, actions, UI, verification, and test coverage stay aligned.
 - Vitest is configured as the initial local test runner with `jsdom` and a shared setup file.
 - Unit tests cover route constants, dashboard navigation consistency, fixed-role sanity, and selected pure helper/validation logic.
 - Local seeded database smoke remains a manual SQL workflow documented in [testing.md](./testing.md).
-- Browser smoke and Playwright/E2E automation remain deferred.
+- Browser smoke and Playwright/E2E automation moved into Phase 17 as a separate local quality slice.
 
 ## Phase 13 snapshot
 

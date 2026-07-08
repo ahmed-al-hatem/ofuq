@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 16 Parent and Student Read-Only Portal Foundation closed
-- Last completed implementation phase: Phase 16 Parent and Student Read-Only Portal Foundation
-- Last completed quality phase: Phase 16 Parent and Student Read-Only Portal Foundation Verification
-- Next implementation phase: Phase 17 planning is open; choose the next slice separately
+- Current phase: Phase 17 Browser Smoke / E2E Tests Foundation closed
+- Last completed implementation phase: Phase 17 Browser Smoke / E2E Tests Foundation
+- Last completed quality phase: Phase 17 Browser Smoke / E2E Tests Foundation Verification
+- Next implementation phase: Phase 18 planning is open; choose the next slice separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -22,7 +22,7 @@
 | Motion | framer-motion 12.42.2 |
 | Validation/forms | Zod 4.4.3, React Hook Form 7.81.0, `@hookform/resolvers` 5.4.0 |
 | Utilities | `clsx`, `tailwind-merge`, `class-variance-authority`, `date-fns` |
-| Testing | Vitest 4, jsdom, Testing Library foundation |
+| Testing | Vitest 4, jsdom, Testing Library foundation, Playwright Chromium local browser smoke |
 
 ## Completed Phases
 
@@ -47,6 +47,7 @@
 | Phase 14 Syrian Demo Dataset Foundation | Done | Deterministic local-only Syrian demo tenant, users, and cross-module seed data are verified through the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and local Auth token/default safety checks. |
 | Phase 15 Automated Tests Foundation | Done | Vitest foundation, unit tests for routes/navigation/roles/helpers, manual DB smoke SQL checks, and local test documentation are in place. |
 | Phase 16 Parent and Student Read-Only Portal Foundation | Done | `/portal` overview, linked students, attendance, grades, timetable, finance, library, announcements, and profile pages now exist with server-side linked-student scoping and no portal mutations. |
+| Phase 17 Browser Smoke / E2E Tests Foundation | Done | Playwright-based local browser smoke now covers login, dashboard access, parent/student portal entry, portal read-only cues, dashboard-navigation absence in the portal, and honest local verification docs. |
 
 ## Current Implemented Modules
 
@@ -66,6 +67,7 @@
 - Feedback foundation, including complaints, complaint updates, surveys, survey questions, and survey responses.
 - Deterministic local Syrian demo dataset, including fixed-role demo Auth users and fictional cross-module school data for local smoke workflows.
 - Parent/student read-only portal foundation, including server-rendered `/portal` pages scoped to linked students for `parent` and `student` roles.
+- Local Playwright browser smoke foundation for authenticated login, dashboard access, and read-only portal route coverage.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
 AI Query, chatbot, external integrations, and report builder are not implemented yet.
@@ -239,15 +241,15 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No full RBAC yet.
 - No external integrations yet.
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
-- Automated unit-test coverage is intentionally small and focused on stable pure logic; browser smoke and full E2E automation are still deferred.
-- Browser/manual smoke testing was not performed in the Phase 16 closure session; see `docs/verification-report.md`.
+- Automated coverage remains intentionally small: Vitest targets stable pure logic and Playwright targets a small local-only browser smoke slice rather than full regression coverage.
+- Browser smoke is now covered locally through Playwright only. Hosted CI E2E, cross-browser matrices, CRUD flows, and visual regression remain deferred.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
-- Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, but authenticated browser workflow smoke remained blocked by unavailable browser automation in that session.
+- Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, and authenticated browser workflow smoke is now covered separately in the Phase 17 Playwright foundation.
 - A local Auth smoke-login issue caused by `NULL` GoTrue token fields was fixed and documented in `docs/local-auth-smoke-troubleshooting.md`.
 - On Windows, Supabase local development may require Docker Desktop TCP daemon exposure for analytics/vector health.
 
 ## Recommended Next Phase
 
-Recommended next phase: choose a Phase 17 slice separately, such as settings and integrations placeholders, browser smoke/E2E foundation, or selected parent/student self-service flows.
+Recommended next phase: choose a Phase 18 slice separately, such as settings and integrations placeholders, parent/student self-service flows, or CI quality workflow foundation.
 
-Go/no-go status: Go for separate Phase 17 planning. Phase 16 now provides a working read-only portal foundation with honest local verification status and without claiming browser automation coverage.
+Go/no-go status: Go for separate Phase 18 planning. Phase 17 now provides a working local browser smoke foundation with honest verification status and without claiming full regression coverage.

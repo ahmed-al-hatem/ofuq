@@ -2,8 +2,11 @@
 
 ## Purpose
 
-The project keeps a small automated test foundation for stable, pure project
-logic. It does not yet add browser E2E coverage.
+The project keeps a small automated quality foundation:
+
+- Vitest for stable, pure project logic.
+- Manual SQL smoke for the seeded local Supabase stack.
+- Playwright for a limited local browser smoke slice only.
 
 ## Automated commands
 
@@ -12,12 +15,20 @@ npm run test
 npm run test:watch
 npm run test:unit
 npm run test:all
+npm run test:e2e
+npm run test:e2e:headed
+npm run test:e2e:ui
+npm run test:quality
 ```
 
 - `npm run test`: runs the full Vitest suite once.
 - `npm run test:watch`: runs Vitest in watch mode for local iteration.
 - `npm run test:unit`: scopes execution to `tests/unit`.
 - `npm run test:all`: runs lint, unit tests, then the Next.js production build.
+- `npm run test:e2e`: runs the local Playwright Chromium browser smoke suite through the repo's local server runner.
+- `npm run test:e2e:headed`: runs the same browser smoke suite with a visible browser.
+- `npm run test:e2e:ui`: opens Playwright UI mode for local inspection.
+- `npm run test:quality`: runs lint, unit tests, build, then browser smoke.
 
 ## Current automated coverage
 
@@ -28,6 +39,12 @@ npm run test:all
 - Small pure helper and validation checks in `types/feedback.ts`,
   `lib/actions/require-tenant.ts`, and `lib/validation/common.ts`
 - Portal access helper checks in `lib/portal/access.ts`
+
+## Unit tests
+
+Vitest remains the fast default local safety net.
+It intentionally focuses on stable pure logic and configuration consistency, not
+full integration coverage.
 
 ## Database smoke checks
 
@@ -61,9 +78,52 @@ The SQL file lives at `tests/db/local-demo-smoke.sql` and checks:
 - linked guardian and linked student portal-account checks
 - basic orphan and duplicate relationship sanity
 
+## Browser smoke / E2E tests
+
+Browser smoke is now implemented with Playwright under `tests/e2e`.
+It is intentionally small, Chromium-only, and local-only.
+
+Coverage:
+
+- `/login` loads and authenticates demo users
+- admin dashboard opens after login
+- parent portal opens after login
+- student portal opens after login
+- portal pages show read-only cues
+- admin dashboard navigation is absent inside portal pages
+- obvious runtime error text is guarded against after route transitions
+
+Local demo accounts used by the suite:
+
+- `school.admin@ofuq.local`
+- `teacher.arabic@ofuq.local`
+- `parent.hassan@ofuq.local`
+- `student.youssef@ofuq.local`
+
+Password handling:
+
+- `E2E_PASSWORD` if set
+- fallback default in one helper only: `OfuqLocal123!`
+
+Helpful local notes:
+
+- The suite expects local Supabase to be running and seeded.
+- In this workspace the local verification used a Windows-friendly wrapper script,
+  `scripts/run-playwright-e2e.mjs`, to start and stop `next dev` cleanly around Playwright.
+- Chromium may require a one-time install on some machines:
+
+```bash
+npx playwright install chromium
+```
+
+- In the Phase 17 verification session, Chromium was already available locally,
+  so no additional browser install was required.
+
 ## Intentionally deferred
 
-- Browser smoke is not automated yet.
-- Playwright and broader E2E coverage are deferred to a later phase.
+- Hosted or CI browser smoke is deferred.
+- Cross-browser matrices are deferred.
+- CRUD and mutation-heavy end-to-end workflows are deferred.
+- Visual regression baselines are deferred.
 - Server Action integration tests with Supabase/session mocking are deferred.
 - Hosted Supabase, CI workflows, and production test infrastructure are out of scope here.
