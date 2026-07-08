@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 14. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 15. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -43,6 +43,8 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Security/Auth | Audit logs | 02+ | Done | Foundation table exists; key actions write logs where practical. |
 | Security/Auth | RLS later | Later | Later | Deferred until auth/membership flows stabilize. |
 | Quality/Data | Deterministic local Syrian demo dataset | 14 | Done | Local-only fictional Syrian data is verified with the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and `0` null token-field rows across checked local `@ofuq.local` users. |
+| Quality/Data | Automated test foundation | 15 | Done | Vitest, local unit tests for stable pure logic, `docs/testing.md`, and manual local DB smoke SQL checks are in place. |
+| Quality/Data | Browser smoke / E2E automation | Later | Later | Playwright and broader browser automation remain intentionally deferred. |
 | Students | Admissions workflow | 04 | Done | Pending/approved/rejected/cancelled foundation. |
 | Students | Student profile foundation | 04 | Done | Official student records exist. |
 | Students | Guardian links | 04 | Done | Guardian table exists. |
@@ -134,11 +136,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Library foundation
 - Student-care foundation
 - Feedback foundation
+- Automated tests foundation
 
 ## Planned Next
 
 ```txt
-15 - Automated Tests Foundation (after Phase 14 closure)
+16 - Choose the next implementation or quality slice separately
 ```
 
 ## Later / Placeholder Only

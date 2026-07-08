@@ -3,6 +3,41 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 15 Automated Tests Foundation Verification
+
+Phase 15 automated test foundation is now verified. Vitest is configured for
+local unit testing, route/navigation/role/helper coverage passes locally, and
+manual local DB smoke SQL checks are documented without claiming browser or E2E
+automation that was not performed.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status at closure start | Passed after safe-directory override | Direct `git status --short` hit Git's dubious-ownership protection in this workspace, so verification used `git -c safe.directory=D:/ofuq/ofuq status --short`. |
+| Test dependency install | Passed | Added `vitest`, `jsdom`, `@testing-library/react`, and `@testing-library/jest-dom` as dev dependencies. |
+| Test scripts | Passed | `package.json` now includes `test`, `test:watch`, `test:unit`, and `test:all`. |
+| Vitest config | Passed | `vitest.config.ts` and `tests/setup.ts` provide alias resolution, `jsdom`, and shared matcher setup. |
+| Unit tests | Passed | Unit coverage now checks `constants/routes.ts`, `config/navigation.ts`, `constants/roles.ts`, `lib/actions/require-role.ts`, `lib/actions/require-tenant.ts`, `types/feedback.ts`, and `lib/validation/common.ts`. |
+| DB smoke SQL | Passed | `tests/db/local-demo-smoke.sql` adds non-destructive manual SQL checks for the verified local Syrian demo seed. |
+| Testing docs | Passed | `docs/testing.md` documents unit commands, `test:all`, and PowerShell-friendly local DB smoke execution. |
+| `npm run test` | Passed | Vitest completed successfully against the new unit suite. |
+| `npm run lint` | Passed | ESLint completed with exit code `0`. |
+| `npm run build` | Passed | Next.js production build completed successfully. |
+| `git diff --check` | Passed | No whitespace or patch-format issues remained after the Phase 15 changes. |
+| `npm run test:all` | Passed | Combined lint, unit tests, and build completed successfully. |
+| Supabase status | Passed after elevation | Local Supabase is running in this Windows environment; the verification used elevated access without copying local keys into docs. |
+| Supabase reset + DB smoke | Passed | `supabase db reset` replayed all migrations through `20260708010000_feedback_foundation.sql`, reseeded the split Syrian demo dataset, and `tests/db/local-demo-smoke.sql` passed with `16` local Auth users, token null-count `0`, expected core/module counts, `0` orphan relationship counts, and `0` duplicate anomaly rows. |
+| Browser smoke | Not performed | Browser smoke and Playwright/E2E remain deferred and are not claimed as passed. |
+
+Phase 15 scope notes:
+
+- Added only test foundation files, scripts, and documentation.
+- No database schema, migrations, routes, or production behavior changed.
+- Kept DB smoke as a manual local workflow so it stays portable in this Windows environment.
+
+Go/no-go after Phase 15 closure: Go for planning Phase 16 separately.
+Browser smoke remains unclaimed because no browser automation or manual browser
+workflow was run in this session.
+
 ## Phase 14 Syrian Demo Dataset Foundation Verification
 
 Phase 14 local Syrian demo dataset implementation is now fully verified. The

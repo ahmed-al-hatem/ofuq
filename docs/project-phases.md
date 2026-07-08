@@ -1,19 +1,20 @@
 # Project Phases
 
 1. Project setup and architecture
-2. Core auth, tenant, school, and users
-3. Students and admissions
-4. Academic years, grades, classes, and enrollment
-5. Attendance manual + QR
-6. Grades and report cards
-7. Manual timetable with conflict prevention
-8. Finance basics
-9. Finance basics
-10. Communication and ready-made reports
+2. Supabase core schema foundation
+3. Auth + fixed roles + membership context
+4. Students and admissions foundation
+5. Academic structure foundation
+6. Attendance manual + QR foundation
+7. Grades and report cards foundation
+8. Manual timetable with conflict prevention foundation
+9. Finance basics foundation
+10. Communication and ready-made reports foundation
 11. Library foundation
 12. Health, discipline, and achievements foundation
 13. Complaints and surveys foundation
-14. Later modules and placeholders
+14. Syrian demo dataset foundation
+15. Automated tests foundation
 
 ## Later-phase items
 
@@ -26,8 +27,19 @@
 
 ## Current focus
 
-The project now has its auth, tenant, student/admission, academic-structure, attendance, grades/report-card, manual timetable, finance basics, communication, ready-made reports, library, student-care, and feedback foundations in place.
-New business modules should continue to be added one vertical slice at a time so schema, actions, UI, and verification stay aligned.
+The project now has its auth, tenant, student/admission, academic-structure,
+attendance, grades/report-card, manual timetable, finance basics,
+communication, ready-made reports, library, student-care, feedback, local demo
+seed, and automated unit-test foundations in place.
+New business modules should continue to be added one vertical slice at a time so
+schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 15 snapshot
+
+- Vitest is configured as the initial local test runner with `jsdom` and a shared setup file.
+- Unit tests cover route constants, dashboard navigation consistency, fixed-role sanity, and selected pure helper/validation logic.
+- Local seeded database smoke remains a manual SQL workflow documented in [testing.md](./testing.md).
+- Browser smoke and Playwright/E2E automation remain deferred.
 
 ## Phase 13 snapshot
 

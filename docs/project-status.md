@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 14 Syrian Demo Dataset Foundation closed; ready for Phase 15 Automated Tests Foundation
+- Current phase: Phase 15 Automated Tests Foundation closed; ready for Phase 16 planning
 - Last completed implementation phase: 14 Syrian Demo Dataset Foundation
-- Last completed quality phase: 14 Syrian Demo Dataset Foundation Verification
-- Next implementation phase: 15 Automated Tests Foundation
+- Last completed quality phase: 15 Automated Tests Foundation Verification
+- Next implementation phase: Phase 16 planning is open; choose the next slice separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -22,6 +22,7 @@
 | Motion | framer-motion 12.42.2 |
 | Validation/forms | Zod 4.4.3, React Hook Form 7.81.0, `@hookform/resolvers` 5.4.0 |
 | Utilities | `clsx`, `tailwind-merge`, `class-variance-authority`, `date-fns` |
+| Testing | Vitest 4, jsdom, Testing Library foundation |
 
 ## Completed Phases
 
@@ -44,6 +45,7 @@
 | Phase 12 Health, Discipline, and Achievements Foundation | Done | Basic health records, vaccinations, clinic visits, discipline records, achievements, and Arabic dashboard pages. |
 | Phase 13 Complaints and Surveys Foundation | Done | Complaint submission/review workflow, surveys, survey questions, survey responses, and Arabic feedback dashboard pages. |
 | Phase 14 Syrian Demo Dataset Foundation | Done | Deterministic local-only Syrian demo tenant, users, and cross-module seed data are verified through the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and local Auth token/default safety checks. |
+| Phase 15 Automated Tests Foundation | Done | Vitest foundation, unit tests for routes/navigation/roles/helpers, manual DB smoke SQL checks, and local test documentation are in place. |
 
 ## Current Implemented Modules
 
@@ -201,6 +203,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - `docs/project-phases.md`
 - `docs/codex-workflow.md`
 - `docs/project-status.md`
+- `docs/testing.md`
 - `docs/verification-report.md`
 - `docs/verification-phase-06.md`
 - `docs/verification-phase-07.md`
@@ -220,7 +223,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No full RBAC yet.
 - No external integrations yet.
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
-- No automated test suite beyond lint/build verification.
+- Automated unit-test coverage is intentionally small and focused on stable pure logic; browser smoke and full E2E automation are still deferred.
 - Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, but authenticated browser workflow smoke remained blocked by unavailable browser automation in that session.
@@ -229,6 +232,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: `15 - Automated Tests Foundation`.
+Recommended next phase: choose a Phase 16 slice separately, such as a parent/student read-only portal foundation, settings and integrations placeholders, or browser smoke/E2E foundation.
 
-Go/no-go status: Go for `15 - Automated Tests Foundation`. Phase 14 closure verification passed with the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and `0` local Auth token null rows across checked fields. Authenticated browser workflow smoke was not performed in this closure session and should only be marked passed when actually run.
+Go/no-go status: Go for separate Phase 16 planning. Phase 15 now provides a working Vitest unit-test baseline, documented local DB smoke SQL checks, and honest verification status without claiming browser automation coverage.
