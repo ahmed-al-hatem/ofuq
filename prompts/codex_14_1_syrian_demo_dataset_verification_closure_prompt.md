@@ -10,9 +10,9 @@ You are Codex acting as a senior database verification engineer and release-clos
 
 You are working on **Ofuq | أُفُق**, an Arabic-first multi-tenant school management system using Next.js, TypeScript, Supabase Auth, Supabase PostgreSQL, local Supabase CLI, fixed roles, and server-side tenant/school membership context.
 
-This task is a **verification closure** for Phase 14 only.
+This task is a **verification and documentation closure** for Phase 14 only.
 
-It is not a new feature phase.
+It is not a feature phase.
 
 Do not start automated tests.
 
@@ -20,52 +20,81 @@ Do not start automated tests.
 
 ## Current Context
 
-Phase 14 added a local Syrian demo dataset seed, but verification was not completed because the elevated `supabase db reset` command was blocked by an external session usage limit.
+Phase 14 added a deterministic local Syrian demo dataset.
 
-Reported current state:
+The original single-file seed approach was stabilized by splitting the demo seed into ordered helper, staging, apply, and cleanup files. The seed has been reported as working successfully after this split.
+
+The purpose of this prompt is now to **close Phase 14 cleanly**:
+
+1. Confirm the current split seed structure is in place.
+2. Confirm `supabase db reset` has passed or re-run it if needed.
+3. Confirm required SQL spot checks have passed or re-run them if needed.
+4. Confirm Auth token/default safety for all `@ofuq.local` users.
+5. Update documentation from `In Progress` / `Blocked` / `Pending` to `Done` / `Passed` if verification is already successful.
+6. Commit only the Phase 14 closure documentation or minimal seed/config fixes if needed.
+7. Report final Go/No-Go for `15 - Automated Tests Foundation`.
+
+---
+
+## Important Current Seed Architecture
+
+The final Phase 14 seed architecture must use this split-file structure:
 
 ```txt
-Phase 14 = implemented locally
-Phase 14 = not fully verified
-Phase 14 = not committed
-Phase 15 Automated Tests = No-Go until this closure passes
+supabase/seeds/local_syrian_demo_00_helpers.sql
+supabase/seeds/local_syrian_demo_01_create_stage_tables.sql
+supabase/seeds/local_syrian_demo_02_stage_data.sql
+supabase/seeds/local_syrian_demo_03_apply.sql
+supabase/seeds/local_syrian_demo_04_cleanup.sql
+supabase/seeds/auth_smoke_token_defaults.sql
 ```
 
-Known Phase 14 changes:
+Do **not** revert to the old single-file design.
+
+Do **not** reintroduce these old files into `sql_paths`:
 
 ```txt
-supabase/seeds/local_syrian_demo_data.sql
+./seeds/local_syrian_demo_data.sql
+./seeds/local_syrian_demo_01_stage.sql
+./seeds/local_syrian_demo_02_apply.sql
+./seeds/local_syrian_demo_03_cleanup.sql
+```
+
+The troubleshooting document explains why: Supabase CLI seed batching can fail when a large seed file creates a relation and uses it later inside the same seed file.
+
+Practical rule:
+
+```txt
+Do not create a relation and use it later inside the same large seed file.
+```
+
+---
+
+## Required Reading Before Editing
+
+Read these first:
+
+```txt
 supabase/config.toml
+supabase/seed.sql
+supabase/seeds/local_syrian_demo_00_helpers.sql
+supabase/seeds/local_syrian_demo_01_create_stage_tables.sql
+supabase/seeds/local_syrian_demo_02_stage_data.sql
+supabase/seeds/local_syrian_demo_03_apply.sql
+supabase/seeds/local_syrian_demo_04_cleanup.sql
 supabase/seeds/auth_smoke_token_defaults.sql
+docs/phase-14-demo-seed-troubleshooting.md
 docs/supabase-local.md
 docs/project-status.md
 docs/requirements-roadmap.md
 docs/verification-report.md
 ```
 
-Optional documentation change may include:
+Optional if already changed or useful for consistency:
 
 ```txt
 docs/database.md
 ```
-
----
-
-## Main Goal
-
-Complete verification for the local Syrian demo dataset.
-
-Specifically:
-
-1. Confirm the working tree contains only expected Phase 14 seed/docs changes.
-2. Run `supabase db reset` successfully.
-3. Run required SQL spot checks.
-4. Verify all `@ofuq.local` users have non-null token/default fields where checked.
-5. Verify the demo dataset covers implemented modules.
-6. Run lint, build, and diff checks.
-7. Update verification documentation from pending to passed.
-8. Commit Phase 14 only if verification succeeds.
-9. Report final Go/No-Go for Phase 15 Automated Tests Foundation.
 
 ---
 
@@ -76,30 +105,12 @@ Specifically:
 You may:
 
 ```txt
-inspect Phase 14 seed files
-run Supabase reset and SQL checks
-make minimal fixes to Phase 14 seed files if reset fails because of seed SQL/data issues
-make minimal fixes to auth token safety seed if token checks fail
-update Phase 14 verification documentation
-commit Phase 14 seed/docs changes after successful verification
-```
-
-Expected files that may be changed:
-
-```txt
-supabase/seeds/local_syrian_demo_data.sql
-supabase/seeds/auth_smoke_token_defaults.sql
-supabase/config.toml
-docs/supabase-local.md
-docs/project-status.md
-docs/requirements-roadmap.md
-docs/verification-report.md
-```
-
-Optional only if already changed or obviously needed:
-
-```txt
-docs/database.md
+inspect Phase 14 split seed files
+inspect docs for stale pending/blocked status
+run or confirm Supabase reset and SQL checks
+make minimal seed/config fixes only if verification proves they are still needed
+update Phase 14 documentation from pending to passed when justified
+commit the Phase 14 closure changes
 ```
 
 ### Out of Scope
@@ -113,38 +124,15 @@ modify application code
 modify UI
 modify routes/navigation
 modify services/actions
-modify generated types unless explicitly justified by a real schema-related issue
+modify generated types unless a real schema-related issue requires it
 start Phase 15 tests
 add automated tests
 add new features
 add RBAC
 add RLS
 change production behavior
+replace the split seed architecture with a single file
 commit unrelated files
-commit Phase 13 implementation files if somehow still present
-```
-
----
-
-## Required Reading Before Editing
-
-Read these first:
-
-```txt
-supabase/config.toml
-supabase/seed.sql
-supabase/seeds/local_syrian_demo_data.sql
-supabase/seeds/auth_smoke_token_defaults.sql
-docs/supabase-local.md
-docs/project-status.md
-docs/requirements-roadmap.md
-docs/verification-report.md
-```
-
-If present, also read:
-
-```txt
-docs/database.md
 ```
 
 ---
@@ -163,15 +151,18 @@ If Windows ownership requires a safe directory override, use:
 git -c safe.directory=D:/ofuq/ofuq status --short
 ```
 
-Expected uncommitted files should be limited to Phase 14 seed/docs files.
+Expected state:
+
+- Either clean working tree after the seed-stabilization commit.
+- Or only Phase 14 docs/seed/config closure files changed.
 
 If unrelated files are present, stop and report them.
 
-Do not stage or overwrite unrelated files.
+Do not stage unrelated files.
 
 ---
 
-## Step 2 — Verify Seed Order
+## Step 2 — Verify Current Seed Order
 
 Open:
 
@@ -182,9 +173,15 @@ supabase/config.toml
 Confirm seed order is exactly:
 
 ```toml
+[db.seed]
+enabled = true
 sql_paths = [
   "./seed.sql",
-  "./seeds/local_syrian_demo_data.sql",
+  "./seeds/local_syrian_demo_00_helpers.sql",
+  "./seeds/local_syrian_demo_01_create_stage_tables.sql",
+  "./seeds/local_syrian_demo_02_stage_data.sql",
+  "./seeds/local_syrian_demo_03_apply.sql",
+  "./seeds/local_syrian_demo_04_cleanup.sql",
   "./seeds/auth_smoke_token_defaults.sql"
 ]
 ```
@@ -195,7 +192,7 @@ Critical rule:
 auth_smoke_token_defaults.sql must remain the final seed file.
 ```
 
-If the order is wrong, fix it before reset.
+If the order is already correct, do not modify it.
 
 ---
 
@@ -207,7 +204,7 @@ Open:
 supabase/seeds/auth_smoke_token_defaults.sql
 ```
 
-Confirm it targets all local demo users, not only the original smoke users.
+Confirm it targets all local demo users, not only the original two smoke users.
 
 Preferred filter:
 
@@ -221,16 +218,18 @@ It must:
 set token/default fields to non-null values where those columns exist
 confirm local emails if needed
 preserve support for admin@ofuq.local and teacher@ofuq.local
-run safely after local_syrian_demo_data.sql
+run safely after all demo users are created
 ```
 
-Do not remove the dynamic column-existence checks.
+Do not remove dynamic column-existence checks.
 
 ---
 
-## Step 4 — Run Supabase Reset
+## Step 4 — Confirm or Run Supabase Reset
 
-Run:
+If `supabase db reset` has already been successfully run after the split seed fix, capture the exact reported result and continue to SQL checks.
+
+Otherwise run:
 
 ```bash
 supabase status
@@ -242,19 +241,19 @@ If Docker/Supabase needs elevated permissions, use the same elevated workflow us
 If `supabase db reset` fails:
 
 1. Capture the first meaningful SQL error.
-2. Identify whether the failure is caused by `local_syrian_demo_data.sql` or token-default seed logic.
-3. Make only minimal Phase 14 seed fixes.
+2. Identify whether the failure is caused by one of the split seed files or token-default seed logic.
+3. Make only minimal Phase 14 seed/config fixes.
 4. Re-run `supabase db reset`.
 5. Do not hide or skip errors.
-6. Do not commit until reset passes.
+6. Do not mark Phase 14 as closed until reset passes.
 
-If reset fails because of environment permissions or external usage limits, report No-Go and stop.
+If reset passes, proceed to SQL checks.
 
 ---
 
-## Step 5 — SQL Spot Checks
+## Step 5 — Required SQL Spot Checks
 
-After reset passes, run all checks below.
+After reset passes, run these checks.
 
 Use the local database connection method already used in this project.
 
@@ -267,13 +266,7 @@ where email like '%@ofuq.local'
 order by email;
 ```
 
-Expected:
-
-```txt
-All original and demo local accounts appear.
-```
-
-At minimum, confirm these exist:
+At minimum, confirm these accounts exist:
 
 ```txt
 admin@ofuq.local
@@ -322,7 +315,7 @@ Expected:
 
 If a column does not exist in the current local GoTrue schema, adapt the check safely and document which columns were checked.
 
-Do not mark auth token safety as passed unless the count is `0` for checked token fields.
+Do not mark auth token safety as passed unless the checked count is `0`.
 
 ### 5.3 Core counts
 
@@ -352,7 +345,7 @@ student_guardians >= 24
 class_enrollments >= 24
 ```
 
-If counts differ because existing smoke rows are also present, that is acceptable as long as they are not lower than the intended demo coverage.
+Higher counts are acceptable because the original smoke seed also runs.
 
 ### 5.4 Module coverage counts
 
@@ -510,9 +503,9 @@ Do not commit line-ending-only type changes.
 
 ---
 
-## Step 8 — Documentation Update
+## Step 8 — Documentation Closure
 
-Update verification docs from pending to passed only after reset and SQL checks pass.
+After reset and SQL checks pass, update docs from pending/in-progress to passed/done.
 
 Update:
 
@@ -523,16 +516,22 @@ docs/requirements-roadmap.md
 docs/supabase-local.md
 ```
 
-Optional:
+Optional if needed:
 
 ```txt
 docs/database.md
 ```
 
+Also preserve:
+
+```txt
+docs/phase-14-demo-seed-troubleshooting.md
+```
+
 Documentation must clearly mention:
 
 ```txt
-supabase db reset passed
+supabase db reset passed with the split seed architecture
 SQL spot checks passed
 auth token null check returned 0
 local Syrian demo dataset is verified
@@ -546,16 +545,21 @@ Do not claim browser smoke passed unless it was actually performed.
 
 ## Step 9 — Commit Rules
 
-Commit only after all required verification passes.
+Commit only after required verification passes.
 
-Stage only Phase 14 files.
+Stage only Phase 14 closure files.
 
-Expected files:
+Expected files may include:
 
 ```txt
-supabase/seeds/local_syrian_demo_data.sql
-supabase/seeds/auth_smoke_token_defaults.sql
 supabase/config.toml
+supabase/seeds/local_syrian_demo_00_helpers.sql
+supabase/seeds/local_syrian_demo_01_create_stage_tables.sql
+supabase/seeds/local_syrian_demo_02_stage_data.sql
+supabase/seeds/local_syrian_demo_03_apply.sql
+supabase/seeds/local_syrian_demo_04_cleanup.sql
+supabase/seeds/auth_smoke_token_defaults.sql
+docs/phase-14-demo-seed-troubleshooting.md
 docs/supabase-local.md
 docs/project-status.md
 docs/requirements-roadmap.md
@@ -582,10 +586,16 @@ If using safe-directory override:
 git -c safe.directory=D:/ofuq/ofuq diff --check --cached
 ```
 
-Suggested commit message:
+Suggested commit message if only docs are updated:
 
 ```txt
-chore: add verified syrian demo dataset seed
+docs: close syrian demo dataset verification
+```
+
+Suggested commit message if seed stabilization files are included:
+
+```txt
+chore: stabilize syrian demo seed dataset
 ```
 
 Do not commit if:
@@ -595,7 +605,7 @@ supabase db reset failed
 SQL spot checks were not run
 auth token null check was not run or did not return 0
 unrelated files are staged
-Phase 13 implementation files are staged
+Phase 15 test files are staged
 ```
 
 ---
@@ -622,7 +632,7 @@ Shared password:
 OfuqLocal123!
 ```
 
-Open major dashboards where role access allows:
+Open major dashboards where role access allows it:
 
 ```txt
 /dashboard
@@ -639,35 +649,28 @@ Open major dashboards where role access allows:
 /dashboard/feedback
 ```
 
-If browser smoke is not performed, document:
-
-```txt
-Browser smoke: not performed, not claimed as passed.
-```
+If browser smoke is not performed, document it honestly as not performed.
 
 ---
 
-## Expected Final Response
+## Final Response Requirements
 
 Report:
 
-1. Initial git status.
-2. Seed order status.
-3. Auth token safety seed status.
-4. `supabase status` result.
-5. `supabase db reset` result.
-6. Any seed fixes made, if any.
-7. Auth users list summary.
-8. Auth token null check result.
-9. Core count results.
-10. Module coverage count results.
-11. Relationship sanity check results.
-12. Lint/build/diff-check results.
-13. Browser smoke status.
-14. Documentation updates.
-15. Files staged and committed.
-16. Commit hash if committed.
-17. Final Go/No-Go for Phase 15 Automated Tests Foundation.
+1. Git status at start.
+2. Seed order confirmation.
+3. Confirmation that the split seed architecture is preserved.
+4. Whether `supabase db reset` passed.
+5. Auth user/account check results.
+6. Auth token null check result.
+7. Core count results.
+8. Module coverage count results.
+9. Relationship sanity check results.
+10. Lint/build/diff results.
+11. Browser smoke status.
+12. Docs updated.
+13. Commit hash if committed.
+14. Final Go/No-Go for `15 - Automated Tests Foundation`.
 
 ---
 
@@ -675,34 +678,28 @@ Report:
 
 Phase 14.1 succeeds only when:
 
-```txt
-supabase db reset passes
-all required SQL spot checks pass
-auth token null check returns 0 for checked columns
-local demo users exist
-module coverage counts are non-zero where expected
-relationship sanity checks return 0 or 0 rows as expected
-lint passes
-build passes
-diff check passes
-docs are updated
-Phase 14 is committed cleanly
-browser smoke is not falsely claimed
-```
+- The split seed architecture is preserved.
+- `auth_smoke_token_defaults.sql` remains the final seed file.
+- `supabase db reset` passes.
+- All required SQL spot checks pass.
+- Auth token null check returns `0` for checked fields.
+- Core demo data counts meet minimum expected coverage.
+- Module coverage counts are greater than `0`.
+- Relationship sanity checks pass.
+- `npm run lint` passes.
+- `npm run build` passes.
+- `git diff --check` passes.
+- Docs are updated from Phase 14 pending/in-progress to done/passed.
+- Browser smoke is not falsely claimed.
 
-Final state after success:
+---
 
-```txt
-Phase 14 = Done
-Syrian Demo Dataset = Verified + Committed
-Phase 15 Automated Tests Foundation = Go
-```
+## Suggested Next Phase After Successful Completion
 
-If any required verification remains blocked:
+After Phase 14.1 is verified and committed, the next phase is:
 
 ```txt
-Phase 14 = No-Go
-Phase 15 = No-Go
+15 - Automated Tests Foundation
 ```
 
-Report the exact blocker.
+Do not start tests in this prompt.
