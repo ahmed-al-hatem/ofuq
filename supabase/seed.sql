@@ -1,5 +1,7 @@
 create extension if not exists "pgcrypto";
 
+set search_path = public, auth, extensions;
+
 with smoke_values as (
   select
     '00000000-0000-4000-8000-000000000001'::uuid as tenant_id,
@@ -101,7 +103,7 @@ upsert_auth_users as (
     'authenticated',
     'authenticated',
     email,
-    crypt('OfuqLocal123!', gen_salt('bf')),
+    extensions.crypt('OfuqLocal123!', extensions.gen_salt('bf')),
     now(),
     '{"provider":"email","providers":["email"]}'::jsonb,
     jsonb_build_object('full_name', full_name),

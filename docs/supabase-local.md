@@ -79,10 +79,11 @@ The Syrian demo dataset is fictional and local-only. Do not use these records or
 credentials in production, hosted Supabase projects, screenshots, or shared
 environments.
 
-Phase 14 closure verification passed on `2026-07-08`: `supabase db reset`
-completed with the split seed architecture, the local `@ofuq.local` token null
-check returned `0`, required SQL spot checks passed, and browser smoke was not
-performed in this closure session.
+Phase 16 closure verification on `2026-07-08` confirmed the local seed and
+portal identity links through `supabase start`, `supabase status`, local type
+generation, and `tests/db/local-demo-smoke.sql`. Direct `supabase db reset`
+exit was still intermittently unstable on this Windows Docker setup after local
+container restarts, so browser smoke remains unclaimed.
 
 The richer local dataset adds:
 
@@ -93,6 +94,8 @@ The richer local dataset adds:
 - Grade levels `G01` through `G12`
 - Syrian-style classes, subjects, enrollments, attendance, grades, report cards,
   timetable, finance, communication, library, student-care, and feedback data
+- Parent demo links through `student_guardians.guardian_user_id`
+- Student demo links through `students.student_user_id`
 
 The final seed `auth_smoke_token_defaults.sql` still runs last so all local
 `@ofuq.local` Auth users keep non-null token/default fields where those local
@@ -102,8 +105,9 @@ GoTrue columns exist, and all local emails remain email-confirmed.
 
 1. Start Supabase locally with `supabase start`.
 2. Add incremental migrations under `supabase/migrations/`.
-3. Reset the local database with `supabase db reset` when you need a clean replay.
-4. Regenerate `types/database.ts` after schema changes when the local stack is available.
+3. Reset the local database with `supabase db reset` when you need a clean replay and the local Docker/Supabase stack is healthy.
+4. If `supabase db reset` is unstable in this Windows environment, recover the stack with `supabase start`, confirm `supabase status`, then run local smoke SQL and regenerate types.
+5. Regenerate `types/database.ts` after schema changes when the local stack is available.
 
 ## Current schema files
 
@@ -120,6 +124,7 @@ GoTrue columns exist, and all local emails remain email-confirmed.
 - `supabase/migrations/20260707180000_library_foundation.sql`
 - `supabase/migrations/20260707200000_student_care_foundation.sql`
 - `supabase/migrations/20260708010000_feedback_foundation.sql`
+- `supabase/migrations/20260708120000_parent_student_read_only_portal_foundation.sql`
 - `supabase/seed.sql`
 - `supabase/seeds/local_syrian_demo_00_helpers.sql`
 - `supabase/seeds/local_syrian_demo_01_create_stage_tables.sql`

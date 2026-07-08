@@ -15,6 +15,7 @@
 - Client Components must not be trusted for tenant or role enforcement.
 - Dashboard protection happens server-side in the route layout, not from client-only guards.
 - Tenant and school context should come from the current membership, never from submitted form values.
+- Parent/student portal protection also happens server-side and is limited to fixed `parent` and `student` roles.
 
 ## Service role key rules
 
@@ -48,6 +49,9 @@
 - Announcement and school event writes are limited to `system_admin` and `school_admin`, with grade/class targets validated inside the current school.
 - Notification logs are in-app only. No external provider secrets, payloads, email, SMS, WhatsApp, or push integrations are stored or sent.
 - Ready-made reports derive tenant and school scope server-side and are limited by fixed role checks per report area.
+- Portal reads derive tenant/school scope from authenticated membership, then resolve linked students server-side only. Parent access uses `student_guardians.guardian_user_id = current user profile id`; student self-access uses `students.student_user_id = current user profile id`.
+- Portal student detail pages must validate that the requested student ID belongs to the current linked-student set before returning data.
+- Portal finance visibility is intentionally narrower: parent users may view linked-student finance records read-only, while student users do not receive detailed finance data in this phase.
 - Library reads derive tenant/school scope from authenticated membership. Library mutations are limited to `system_admin`, `school_admin`, and `librarian`.
 - Library catalog, copy, student, and loan relationships are validated server-side before writes. Loan issue verifies copy availability and blocks duplicate active copy loans; return verifies the loan is active before updating loan and copy state.
 - Library forms do not expose tenant, school, role, creator, issuer, or return actor fields. Fine billing, public library portals, barcode hardware integration, and e-book lending are not implemented.
@@ -58,6 +62,7 @@
 - Full complaint management and all survey administration remain limited to `system_admin` and `school_admin` in server-side code.
 - Feedback mutations validate complaint ownership, related student ownership, assignee active membership, survey target relationships, publish/close workflow, response eligibility, and duplicate-response prevention on the server.
 - Feedback forms do not expose tenant, school, role, submitter, assignee, resolver, author, creator, or respondent identity fields. Anonymous/public complaint forms, public survey links, attachments, external notifications, and AI analysis are not implemented.
+- Portal routes are read-only in this phase. They do not allow payment submission, absence excuse submission, complaint creation, survey participation, profile editing, or health/discipline detail access.
 
 ## Session handling
 

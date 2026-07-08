@@ -3559,6 +3559,7 @@ export type Database = {
           school_id: string
           status: Database["public"]["Enums"]["student_status"]
           student_number: string
+          student_user_id: string | null
           tenant_id: string
           updated_at: string
         }
@@ -3579,6 +3580,7 @@ export type Database = {
           school_id: string
           status?: Database["public"]["Enums"]["student_status"]
           student_number?: string
+          student_user_id?: string | null
           tenant_id: string
           updated_at?: string
         }
@@ -3599,6 +3601,7 @@ export type Database = {
           school_id?: string
           status?: Database["public"]["Enums"]["student_status"]
           student_number?: string
+          student_user_id?: string | null
           tenant_id?: string
           updated_at?: string
         }
@@ -3615,6 +3618,13 @@ export type Database = {
             columns: ["school_id"]
             isOneToOne: false
             referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "students_student_user_id_fkey"
+            columns: ["student_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
           {

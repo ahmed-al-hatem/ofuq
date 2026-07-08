@@ -15,6 +15,7 @@
 13. Complaints and surveys foundation
 14. Syrian demo dataset foundation
 15. Automated tests foundation
+16. Parent and student read-only portal foundation
 
 ## Later-phase items
 
@@ -30,9 +31,18 @@
 The project now has its auth, tenant, student/admission, academic-structure,
 attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
-seed, and automated unit-test foundations in place.
+seed, automated unit-test, and parent/student read-only portal foundations in
+place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 16 snapshot
+
+- A separate `/portal` route group now provides Arabic-first, RTL-first, read-only pages for `parent` and `student` roles.
+- Portal access is resolved server-side from the authenticated active membership, current role, tenant, school, and linked student records only.
+- Parent-linked students are resolved through `student_guardians.guardian_user_id`; student self-access is resolved through the new nullable `students.student_user_id` identity link.
+- The portal currently covers overview, linked students, attendance, grades, timetable, announcements, library loans, finance visibility for parents, and a read-only profile summary.
+- No portal mutations are implemented in this phase. Payment submission, absence excuse submission, complaints/surveys, health/discipline details, and profile editing remain deferred.
 
 ## Phase 15 snapshot
 

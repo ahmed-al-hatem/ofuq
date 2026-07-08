@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 15 Automated Tests Foundation closed; ready for Phase 16 planning
-- Last completed implementation phase: 14 Syrian Demo Dataset Foundation
-- Last completed quality phase: 15 Automated Tests Foundation Verification
-- Next implementation phase: Phase 16 planning is open; choose the next slice separately
+- Current phase: Phase 16 Parent and Student Read-Only Portal Foundation closed
+- Last completed implementation phase: Phase 16 Parent and Student Read-Only Portal Foundation
+- Last completed quality phase: Phase 16 Parent and Student Read-Only Portal Foundation Verification
+- Next implementation phase: Phase 17 planning is open; choose the next slice separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -46,6 +46,7 @@
 | Phase 13 Complaints and Surveys Foundation | Done | Complaint submission/review workflow, surveys, survey questions, survey responses, and Arabic feedback dashboard pages. |
 | Phase 14 Syrian Demo Dataset Foundation | Done | Deterministic local-only Syrian demo tenant, users, and cross-module seed data are verified through the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and local Auth token/default safety checks. |
 | Phase 15 Automated Tests Foundation | Done | Vitest foundation, unit tests for routes/navigation/roles/helpers, manual DB smoke SQL checks, and local test documentation are in place. |
+| Phase 16 Parent and Student Read-Only Portal Foundation | Done | `/portal` overview, linked students, attendance, grades, timetable, finance, library, announcements, and profile pages now exist with server-side linked-student scoping and no portal mutations. |
 
 ## Current Implemented Modules
 
@@ -64,6 +65,7 @@
 - Student-care foundation, including basic health records, vaccinations, clinic visits, discipline records, and achievements.
 - Feedback foundation, including complaints, complaint updates, surveys, survey questions, and survey responses.
 - Deterministic local Syrian demo dataset, including fixed-role demo Auth users and fictional cross-module school data for local smoke workflows.
+- Parent/student read-only portal foundation, including server-rendered `/portal` pages scoped to linked students for `parent` and `student` roles.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
 AI Query, chatbot, external integrations, and report builder are not implemented yet.
@@ -74,6 +76,16 @@ AI Query, chatbot, external integrations, and report builder are not implemented
 | --- | --- | --- |
 | `/` | Active | Public home route. |
 | `/login` | Active | Supabase email/password login. |
+| `/portal` | Active | Read-only parent/student portal overview. |
+| `/portal/students` | Active | Linked student list for the signed-in parent or student. |
+| `/portal/students/[studentId]` | Active | Read-only linked student details. |
+| `/portal/attendance` | Active | Read-only attendance view for linked students. |
+| `/portal/grades` | Active | Read-only grades, exam results, and report-card snapshots for linked students. |
+| `/portal/timetable` | Active | Read-only timetable view for linked students' active classes. |
+| `/portal/finance` | Active | Parent-facing linked-student finance visibility; student role sees a restricted read-only note. |
+| `/portal/library` | Active | Read-only active and historical book-loan view for linked students. |
+| `/portal/announcements` | Active | Read-only published announcements and school events relevant to linked students. |
+| `/portal/profile` | Active | Read-only membership/profile summary for the signed-in portal user. |
 | `/dashboard` | Active | Protected dashboard overview. |
 | `/dashboard/admissions` | Active | Admissions list and management actions. |
 | `/dashboard/admissions/new` | Active | Admission creation form. |
@@ -170,7 +182,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Student-care tables: `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, `achievements`.
 - Feedback tables: `complaints`, `complaint_updates`, `surveys`, `survey_questions`, `survey_responses`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
-- Local Supabase schema replay is currently verified with `supabase db reset`.
+- Portal identity link: `students.student_user_id` now supports direct student-to-user linking for the read-only portal.
+- Local Supabase replay for the Phase 16 schema slice was revalidated with `supabase start`, local type generation, and manual DB smoke SQL. Direct `supabase db reset` exit is still intermittently unstable on this Windows Docker setup.
 - Local seed order now applies `supabase/seed.sql`, `supabase/seeds/local_syrian_demo_00_helpers.sql`, `supabase/seeds/local_syrian_demo_01_create_stage_tables.sql`, `supabase/seeds/local_syrian_demo_02_stage_data.sql`, `supabase/seeds/local_syrian_demo_03_apply.sql`, `supabase/seeds/local_syrian_demo_04_cleanup.sql`, then `supabase/seeds/auth_smoke_token_defaults.sql`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
 - RLS remains deferred by design; tenant/school isolation is currently enforced in server-side code and schema constraints.
@@ -186,6 +199,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Finance mutations derive tenant/school/user scope from active membership and calculate financial totals server-side.
 - Communication mutations derive tenant/school scope from active membership and validate recipients, related students, announcement targets, and event targets server-side.
 - Ready-made report pages derive tenant/school scope from active membership and write minimal `reports.viewed` audit logs.
+- Portal reads derive tenant/school/user scope from the active membership and linked student relationships only. `parent` access uses `student_guardians.guardian_user_id`; `student` access uses `students.student_user_id`.
+- Portal routes are read-only in this phase and do not allow payments, absence excuses, complaints, surveys, profile edits, or health/discipline detail access.
 - Library mutations derive tenant/school/user scope from active membership, validate catalog/copy/student/loan relationships server-side, and write minimal audit logs for catalog, copy, loan issue, loan return, lost, and damaged actions.
 - Student-care mutations derive tenant/school/user scope from active membership, validate student ownership server-side, and write minimal audit logs without sensitive medical payloads.
 - Feedback mutations derive tenant/school/user scope from active membership, validate complaint relationships, survey targets, and duplicate response prevention server-side, and write minimal audit logs without complaint text or survey answers.
@@ -216,15 +231,16 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Student care is an operational foundation only; no diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, or behavior-risk scoring are implemented.
 - Feedback is an operational foundation only; no anonymous/public complaint forms, public survey links, attachments, external notifications, AI analysis, advanced branching, or escalation automation are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
+- Parent/student portal is currently read-only. It does not support payment submission, absence excuse submission, complaint/survey participation, profile editing, health/discipline visibility, or other self-service mutations.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
-- Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics are deferred.
+- Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent notifications, and advanced analytics are deferred.
 - No full RLS yet.
 - No full RBAC yet.
 - No external integrations yet.
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - Automated unit-test coverage is intentionally small and focused on stable pure logic; browser smoke and full E2E automation are still deferred.
-- Browser/manual smoke testing was not performed in Phase 05.5; see `docs/verification-report.md`.
+- Browser/manual smoke testing was not performed in the Phase 16 closure session; see `docs/verification-report.md`.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, but authenticated browser workflow smoke remained blocked by unavailable browser automation in that session.
 - A local Auth smoke-login issue caused by `NULL` GoTrue token fields was fixed and documented in `docs/local-auth-smoke-troubleshooting.md`.
@@ -232,6 +248,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: choose a Phase 16 slice separately, such as a parent/student read-only portal foundation, settings and integrations placeholders, or browser smoke/E2E foundation.
+Recommended next phase: choose a Phase 17 slice separately, such as settings and integrations placeholders, browser smoke/E2E foundation, or selected parent/student self-service flows.
 
-Go/no-go status: Go for separate Phase 16 planning. Phase 15 now provides a working Vitest unit-test baseline, documented local DB smoke SQL checks, and honest verification status without claiming browser automation coverage.
+Go/no-go status: Go for separate Phase 17 planning. Phase 16 now provides a working read-only portal foundation with honest local verification status and without claiming browser automation coverage.

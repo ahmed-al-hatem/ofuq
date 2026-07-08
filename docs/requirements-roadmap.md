@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 15. It is a planning snapshot, not a feature specification for the next phase.
+This roadmap maps Ofuq MVP and later requirements to implementation phases and current status after Phase 16. It is a planning snapshot, not a feature specification for the next phase.
 
 ## Status Legend
 
@@ -45,6 +45,10 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Quality/Data | Deterministic local Syrian demo dataset | 14 | Done | Local-only fictional Syrian data is verified with the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and `0` null token-field rows across checked local `@ofuq.local` users. |
 | Quality/Data | Automated test foundation | 15 | Done | Vitest, local unit tests for stable pure logic, `docs/testing.md`, and manual local DB smoke SQL checks are in place. |
 | Quality/Data | Browser smoke / E2E automation | Later | Later | Playwright and broader browser automation remain intentionally deferred. |
+| Portal | Parent/student read-only portal foundation | 16 | Done | `/portal` pages are implemented with server-side membership and linked-student scoping for `parent` and `student` roles only. |
+| Portal | Parent/student linked identity mapping | 16 | Done | Parent access uses `student_guardians.guardian_user_id`; student self-access uses nullable `students.student_user_id`. |
+| Portal | Parent finance visibility | 16 | Done | Linked-student invoices, payments, discounts, and invoice items are visible to parents in read-only form. |
+| Portal | Student self-service mutations | Later | Later | Payments, excuse submission, complaints, surveys, and profile updates are not implemented in the portal. |
 | Students | Admissions workflow | 04 | Done | Pending/approved/rejected/cancelled foundation. |
 | Students | Student profile foundation | 04 | Done | Official student records exist. |
 | Students | Guardian links | 04 | Done | Guardian table exists. |
@@ -137,11 +141,12 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Student-care foundation
 - Feedback foundation
 - Automated tests foundation
+- Parent/student read-only portal foundation
 
 ## Planned Next
 
 ```txt
-16 - Choose the next implementation or quality slice separately
+17 - Choose the next implementation or quality slice separately
 ```
 
 ## Later / Placeholder Only
@@ -150,7 +155,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - Mobile OTP.
 - Expanded permissions/capability layer.
 - Student promotions, transfers, withdrawals, import/export, and risk indicators.
-- Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent/student grade portal, parent notifications, and advanced analytics.
+- Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent notifications, and advanced analytics.
 - Camera QR scanner, Beacon, parent notifications, timetable integration, and advanced attendance reports.
 - Automatic timetable generation later.
 - Advanced feedback workflows such as anonymous/public forms, attachments, branching logic, escalation, notifications, and analytics.

@@ -91,3 +91,29 @@ from public.health_records
 where status = 'active'
 group by student_id
 having count(*) > 1;
+
+-- Phase 16 parent/student portal foundation checks
+-- Expected: students_linked_to_user_accounts >= 2
+select count(*) as students_linked_to_user_accounts
+from public.students
+where student_user_id is not null;
+
+-- Expected: guardians_linked_to_user_accounts >= 2
+select count(*) as guardians_linked_to_user_accounts
+from public.student_guardians
+where guardian_user_id is not null;
+
+-- Expected: zero rows returned.
+select student_user_id, count(*)
+from public.students
+where student_user_id is not null
+group by student_user_id
+having count(*) > 1;
+
+-- Expected: linked_parent_students >= 2
+select count(*) as linked_parent_students
+from public.student_guardians sg
+join public.students s on s.id = sg.student_id
+where sg.guardian_user_id is not null
+  and sg.tenant_id = s.tenant_id
+  and sg.school_id = s.school_id;

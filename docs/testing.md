@@ -2,8 +2,8 @@
 
 ## Purpose
 
-Phase 15 adds a small automated test foundation for stable, pure project logic.
-It does not add browser E2E coverage or production behavior changes.
+The project keeps a small automated test foundation for stable, pure project
+logic. It does not yet add browser E2E coverage.
 
 ## Automated commands
 
@@ -23,21 +23,27 @@ npm run test:all
 
 - Route constant stability in `constants/routes.ts`
 - Dashboard navigation consistency in `config/navigation.ts`
+- Portal navigation and route consistency in `config/portal-navigation.ts` and `constants/routes.ts`
 - Fixed-role sanity checks in `constants/roles.ts` and `lib/actions/require-role.ts`
 - Small pure helper and validation checks in `types/feedback.ts`,
   `lib/actions/require-tenant.ts`, and `lib/validation/common.ts`
+- Portal access helper checks in `lib/portal/access.ts`
 
 ## Database smoke checks
 
-Database smoke remains a manual local verification step in this phase.
+Database smoke remains a manual local verification step.
 It assumes local Supabase is running and seeded.
 
 Core commands:
 
 ```bash
-supabase db reset
 supabase status
+supabase db reset
 ```
+
+- `supabase status`: confirm the local stack is healthy before running smoke SQL.
+- `supabase db reset`: preferred when you need a clean replay and the local Docker/Supabase stack is behaving normally.
+- In the Phase 16 closure session on Windows, direct `supabase db reset` exit remained intermittently unstable after replay, so verification used `supabase start`, local type generation, and the smoke SQL against the running stack.
 
 Then run the SQL smoke file:
 
@@ -52,6 +58,7 @@ The SQL file lives at `tests/db/local-demo-smoke.sql` and checks:
 - local Auth token/default null safety
 - seeded core demo counts
 - seeded module coverage counts
+- linked guardian and linked student portal-account checks
 - basic orphan and duplicate relationship sanity
 
 ## Intentionally deferred

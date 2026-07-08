@@ -3,6 +3,37 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 16 Parent and Student Read-Only Portal Foundation Verification
+
+Phase 16 parent/student read-only portal foundation is now verified. The new
+`/portal` route group, linked-student access helpers, read-only portal pages,
+and nullable `students.student_user_id` identity link are implemented and
+verified without claiming browser workflow coverage that was not performed.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status at closure review | Passed after safe-directory override | Verification continued with `git -c safe.directory=D:/ofuq/ofuq status --short` in this workspace ownership context. |
+| Portal routes and navigation | Passed | Portal route constants and the dedicated portal navigation config are covered by unit tests. |
+| Portal access helper tests | Passed | `lib/portal/access.ts` pure helper coverage confirms portal-role and linked-student access logic. |
+| `npm run test` | Passed | Vitest completed successfully, including the new portal-focused unit tests. |
+| `npm run lint` | Passed | ESLint completed with exit code `0`. |
+| `npm run build` | Passed | Next.js production build completed successfully and included all `/portal` routes. |
+| `git diff --check` | Passed | No whitespace or patch-format issues remained after the Phase 16 changes. |
+| `npm run test:all` | Passed | Combined lint, unit tests, and build completed successfully. |
+| Supabase status | Passed after elevation | Local Supabase was reachable in this Windows environment with elevated Docker/Supabase access. |
+| Supabase type generation | Passed after elevation | `supabase gen types typescript --local > types/database.ts` completed successfully after the portal migration was applied locally. |
+| Supabase replay path + DB smoke | Passed with local reset caveat | Direct `supabase db reset` exit remained intermittently unstable on this Windows Docker setup after local container restarts, but `supabase start` completed with the Phase 16 migration and `tests/db/local-demo-smoke.sql` passed, including `16` local Auth users, token null-count `0`, `2` students linked to user accounts, `4` guardians linked to user accounts, `0` duplicate `student_user_id` rows, and `4` linked parent/student relationships. |
+| Browser smoke | Not performed | Browser smoke and Playwright/E2E remain deferred and are not claimed as passed. |
+
+Phase 16 scope notes:
+
+- Added only read-only portal pages and supporting server-side read helpers; no portal mutations were introduced.
+- Parent access is derived server-side through `student_guardians.guardian_user_id`; student self-access is derived through nullable `students.student_user_id`.
+- Parent finance visibility is read-only in this phase; student finance detail access remains intentionally restricted.
+- Browser/manual smoke remains unclaimed because no browser automation or manual browser workflow was run in this session.
+
+Go/no-go after Phase 16 closure: Go for planning Phase 17 separately.
+
 ## Phase 15 Automated Tests Foundation Verification
 
 Phase 15 automated test foundation is now verified. Vitest is configured for

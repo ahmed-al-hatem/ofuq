@@ -32,6 +32,8 @@ Phase 12 adds the student-care foundation for basic health records, vaccinations
 
 Phase 13 adds the feedback foundation for complaints, complaint updates, surveys, survey questions, and survey responses.
 
+Phase 16 adds the parent/student read-only portal foundation by introducing a direct `students.student_user_id` link and server-side read scope over existing attendance, grades, timetable, finance, library, and communication data.
+
 ## Core tables
 
 ### `tenants`
@@ -78,11 +80,12 @@ Phase 13 adds the feedback foundation for complaints, complaint updates, surveys
 - Stores the official student record created after admission approval.
 - Includes `student_number` and `qr_token` foundations without implementing attendance yet.
 - Links back to the originating admission through `admission_id` when applicable.
+- Includes nullable `student_user_id` so a signed-in `student` user can be linked directly to exactly one student record for the read-only portal foundation.
 
 ### `student_guardians`
 
 - Stores guardian contact data independently from Auth users.
-- Allows future linking to a `guardian_user_id` without requiring a guardian account today.
+- Supports optional `guardian_user_id` linking to `public.user_profiles.id`, which now powers parent portal access for linked students.
 - Supports one primary guardian per student.
 
 ### `student_documents`
@@ -402,6 +405,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Finance mutations derive tenant and school scope from authenticated membership, validate students, academic years, terms, fee structures, discounts, invoices, and payments server-side, and do not trust client-submitted totals.
 - Communication mutations derive tenant and school scope from authenticated membership, validate recipients, related students, announcement targets, and event targets server-side, and do not trust client-submitted tenant, school, or role values.
 - Ready-made reports derive tenant and school scope from authenticated membership and write minimal `reports.viewed` audit logs.
+- Portal reads derive tenant and school scope from authenticated membership, then intersect that scope with linked students only. Parent links come from `student_guardians.guardian_user_id`; student self-links come from `students.student_user_id`.
 - Library mutations derive tenant/school/user scope from authenticated membership, validate catalog, copy, student, and loan ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 - Student-care mutations derive tenant/school/user scope from authenticated membership, validate student ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 - Feedback mutations derive tenant/school/user scope from authenticated membership, validate complaint ownership, related students, assignee memberships, survey targets, and survey response eligibility server-side, and do not trust client-submitted tenant, school, role, or actor fields.
@@ -417,6 +421,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Phase 11 library stores book metadata and physical copy records only. Public library portals, e-book lending, barcode hardware, and finance fine billing remain deferred.
 - Phase 12 student care stores text-first operational records only. Medical uploads, prescriptions, diagnosis workflows, parent alerts, and PDF certificates remain deferred.
 - Phase 13 feedback stores internal operational records only. Anonymous/public complaint forms, public survey links, file attachments, AI analysis, external notifications, and advanced survey branching remain deferred.
+- Phase 16 parent/student portal is read-only. It does not add payment uploads, excuse attachments, complaints, surveys, profile edits, or health/discipline document access.
 
 ## RLS later
 

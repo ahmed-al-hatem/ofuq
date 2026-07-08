@@ -93,7 +93,7 @@ select
   'authenticated',
   'authenticated',
   demo_users.email,
-  crypt('OfuqLocal123!', gen_salt('bf')),
+  extensions.crypt('OfuqLocal123!', extensions.gen_salt('bf')),
   ctx.seed_created_at,
   jsonb_build_object(
     'provider',
@@ -579,6 +579,7 @@ insert into public.students (
   tenant_id,
   school_id,
   admission_id,
+  student_user_id,
   student_number,
   qr_token,
   first_name,
@@ -598,6 +599,7 @@ select
   ctx.tenant_id,
   ctx.school_id,
   admissions.admission_id,
+  student_users.user_id,
   students.student_number,
   students.qr_token,
   students.first_name,
@@ -614,12 +616,19 @@ select
 from public.temp_demo_students students
 left join public.temp_demo_admissions admissions
   on admissions.admission_key = students.admission_key
+left join public.temp_demo_users student_users
+  on student_users.email = case students.student_number
+    when 'SYR-2026-001' then 'student.youssef@ofuq.local'
+    when 'SYR-2026-003' then 'student.lana@ofuq.local'
+    else null
+  end
 cross join public.temp_demo_context ctx
 on conflict (id) do update
 set
   tenant_id = excluded.tenant_id,
   school_id = excluded.school_id,
   admission_id = excluded.admission_id,
+  student_user_id = excluded.student_user_id,
   student_number = excluded.student_number,
   qr_token = excluded.qr_token,
   first_name = excluded.first_name,
