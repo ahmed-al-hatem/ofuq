@@ -112,17 +112,17 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 | Health | Vaccination tracking foundation | 12 | Done | Vaccination name, dose, dates, and status are implemented without reminders. |
 | Health | Clinic visits foundation | 12 | Done | School clinic visits can be created, listed, and closed or referred in a simple workflow. |
 | Health | Diagnosis and prescriptions | Later | Later | Explicitly not implemented in this phase. |
-| Settings | School identity/white-label later | Later | Later | Not implemented. |
-| Settings | Template management later | Later | Later | Not implemented. |
-| Settings | Plugin/module toggles later | Later | Later | Not implemented. |
+| Settings | School identity/white-label foundation | 18 | Done | Admin-only school display, branding placeholders, and local persistence are implemented without asset uploads. |
+| Settings | Template management foundation | 18 | Done | Admin-only local message-template editing is implemented without external delivery. |
+| Settings | Plugin/module toggles foundation | 18 | Done | Admin-only module flags are saved per school as a settings foundation only; they do not disable real modules yet. |
 | Settings | Backup/Restore excluded | None | Excluded | Explicitly out of scope. |
 | Settings | Sandbox excluded | None | Excluded | Explicitly out of scope. |
-| Integrations | WhatsApp Business UI/settings only later | Later | UI / Settings Only | No real integration now. |
-| Integrations | Webhooks UI/settings only later | Later | UI / Settings Only | No real integration now. |
-| Integrations | MoE UI/settings only later | Later | UI / Settings Only | No real integration now. |
-| Integrations | Google/Microsoft Calendar UI/settings only later | Later | UI / Settings Only | No real integration now. |
-| Integrations | Power BI/Looker UI/settings only later | Later | UI / Settings Only | No real integration now. |
-| Integrations | Zapier/Make UI/settings only later | Later | UI / Settings Only | No real integration now. |
+| Integrations | WhatsApp Business UI/settings only | 18 | UI / Settings Only | Placeholder page is implemented; no sending, secret storage, or external connection exists. |
+| Integrations | Webhooks UI/settings only | 18 | UI / Settings Only | Placeholder page is implemented; no delivery, retry, or worker exists. |
+| Integrations | MoE UI/settings only | 18 | UI / Settings Only | Placeholder page is implemented; no API calls exist. |
+| Integrations | Google/Microsoft Calendar UI/settings only | 18 | UI / Settings Only | Placeholder page is implemented; no OAuth or sync exists. |
+| Integrations | Power BI/Looker UI/settings only | 18 | UI / Settings Only | Placeholder page is implemented; no embed or external connection exists. |
+| Integrations | Zapier/Make UI/settings only | 18 | UI / Settings Only | Placeholder page is implemented; no automation execution exists. |
 
 ## Implemented Now
 
@@ -147,7 +147,7 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 ## Planned Next
 
 ```txt
-18 - Choose the next implementation or quality slice separately
+19 - Choose the next implementation or quality slice separately
 ```
 
 ## Later / Placeholder Only
@@ -165,8 +165,8 @@ This roadmap maps Ofuq MVP and later requirements to implementation phases and c
 - AI Query and Chatbot UI placeholders only until enough stable data exists.
 - Advanced library workflows such as reservations, public portal, e-book lending, ISBN lookup, barcode hardware, fines, and advanced analytics.
 - Advanced health workflows such as diagnosis, prescriptions, uploads, parent alerts, and external care integrations.
-- School identity, templates, plugin toggles, and integration settings.
-- External integration settings placeholders.
+- Real provider connections, webhook execution, calendar sync, BI embedding, and external secret storage.
+- Real external integration logic and secret storage.
 
 ## Explicitly Excluded
 

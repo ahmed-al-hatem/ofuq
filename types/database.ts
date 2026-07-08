@@ -2275,6 +2275,73 @@ export type Database = {
           },
         ]
       }
+      integration_settings: {
+        Row: {
+          created_at: string
+          display_name: string
+          enabled: boolean
+          id: string
+          last_checked_at: string | null
+          provider: Database["public"]["Enums"]["integration_provider"]
+          school_id: string
+          settings: Json
+          status: Database["public"]["Enums"]["integration_status"]
+          tenant_id: string
+          updated_at: string
+          updated_by_user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_name: string
+          enabled?: boolean
+          id?: string
+          last_checked_at?: string | null
+          provider: Database["public"]["Enums"]["integration_provider"]
+          school_id: string
+          settings?: Json
+          status?: Database["public"]["Enums"]["integration_status"]
+          tenant_id: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          enabled?: boolean
+          id?: string
+          last_checked_at?: string | null
+          provider?: Database["public"]["Enums"]["integration_provider"]
+          school_id?: string
+          settings?: Json
+          status?: Database["public"]["Enums"]["integration_status"]
+          tenant_id?: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_settings_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "integration_settings_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "integration_settings_updated_by_user_id_fkey"
+            columns: ["updated_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_items: {
         Row: {
           created_at: string
@@ -2545,6 +2612,70 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_templates: {
+        Row: {
+          body: string
+          channel: Database["public"]["Enums"]["message_template_channel"]
+          created_at: string
+          id: string
+          school_id: string
+          status: Database["public"]["Enums"]["message_template_status"]
+          template_key: string
+          tenant_id: string
+          title: string
+          updated_at: string
+          updated_by_user_id: string | null
+        }
+        Insert: {
+          body: string
+          channel: Database["public"]["Enums"]["message_template_channel"]
+          created_at?: string
+          id?: string
+          school_id: string
+          status?: Database["public"]["Enums"]["message_template_status"]
+          template_key: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Update: {
+          body?: string
+          channel?: Database["public"]["Enums"]["message_template_channel"]
+          created_at?: string
+          id?: string
+          school_id?: string
+          status?: Database["public"]["Enums"]["message_template_status"]
+          template_key?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_templates_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_templates_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_templates_updated_by_user_id_fkey"
+            columns: ["updated_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -3050,6 +3181,76 @@ export type Database = {
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_settings: {
+        Row: {
+          academic_week_start: number
+          branding: Json
+          created_at: string
+          direction: string
+          id: string
+          locale: string
+          module_flags: Json
+          school_display_name: string | null
+          school_id: string
+          tenant_id: string
+          timezone: string
+          updated_at: string
+          updated_by_user_id: string | null
+        }
+        Insert: {
+          academic_week_start?: number
+          branding?: Json
+          created_at?: string
+          direction?: string
+          id?: string
+          locale?: string
+          module_flags?: Json
+          school_display_name?: string | null
+          school_id: string
+          tenant_id: string
+          timezone?: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Update: {
+          academic_week_start?: number
+          branding?: Json
+          created_at?: string
+          direction?: string
+          id?: string
+          locale?: string
+          module_flags?: Json
+          school_display_name?: string | null
+          school_id?: string
+          tenant_id?: string
+          timezone?: string
+          updated_at?: string
+          updated_by_user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_settings_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "school_settings_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "school_settings_updated_by_user_id_fkey"
+            columns: ["updated_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -4576,6 +4777,17 @@ export type Database = {
       grade_level_status: "active" | "inactive" | "archived"
       guardian_relation: "father" | "mother" | "guardian" | "other"
       health_record_status: "active" | "archived"
+      integration_provider:
+        | "whatsapp"
+        | "webhooks"
+        | "moe"
+        | "google_calendar"
+        | "microsoft_calendar"
+        | "power_bi"
+        | "looker"
+        | "zapier"
+        | "make"
+      integration_status: "placeholder" | "disabled" | "configured" | "error"
       invoice_status:
         | "draft"
         | "issued"
@@ -4584,6 +4796,8 @@ export type Database = {
         | "cancelled"
         | "void"
       membership_status: "active" | "invited" | "suspended" | "archived"
+      message_template_channel: "in_app" | "email" | "sms" | "whatsapp"
+      message_template_status: "draft" | "active" | "archived"
       notification_channel: "in_app"
       notification_status: "created" | "read" | "archived" | "failed"
       payment_method:
@@ -4927,6 +5141,18 @@ export const Constants = {
       grade_level_status: ["active", "inactive", "archived"],
       guardian_relation: ["father", "mother", "guardian", "other"],
       health_record_status: ["active", "archived"],
+      integration_provider: [
+        "whatsapp",
+        "webhooks",
+        "moe",
+        "google_calendar",
+        "microsoft_calendar",
+        "power_bi",
+        "looker",
+        "zapier",
+        "make",
+      ],
+      integration_status: ["placeholder", "disabled", "configured", "error"],
       invoice_status: [
         "draft",
         "issued",
@@ -4936,6 +5162,8 @@ export const Constants = {
         "void",
       ],
       membership_status: ["active", "invited", "suspended", "archived"],
+      message_template_channel: ["in_app", "email", "sms", "whatsapp"],
+      message_template_status: ["draft", "active", "archived"],
       notification_channel: ["in_app"],
       notification_status: ["created", "read", "archived", "failed"],
       payment_method: [

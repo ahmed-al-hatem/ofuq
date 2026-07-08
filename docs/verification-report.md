@@ -3,6 +3,36 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 18 Settings and Integrations Placeholders Foundation Verification
+
+Phase 18 settings and integrations placeholders foundation is now verified. The
+admin-only settings routes, integration placeholder routes, school-scoped seed
+records, type generation, DB smoke, and Playwright smoke all pass locally
+without claiming any real external provider support.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status at start | Passed after safe-directory override | `git -c safe.directory=D:/ofuq/ofuq status --short` returned a clean working tree before Phase 18 changes started. |
+| Supabase status | Passed after elevation | Local Supabase was running and healthy in this Windows environment. |
+| `supabase db reset` | Passed after elevation | Local migrations replayed through `20260709120000_settings_integrations_placeholders_foundation.sql` and the split seed inserted settings/integration/template demo rows. |
+| Supabase type generation | Passed after elevation | `supabase gen types typescript --local > types/database.ts` completed successfully after the new schema slice. |
+| DB smoke SQL | Passed after reset | `tests/db/local-demo-smoke.sql` passed with `school_settings 1`, `integration_settings 9`, `message_templates 3`, and `0` duplicate scope anomalies. |
+| `npm run test` | Passed | Vitest completed successfully, including the new settings/integrations unit tests. |
+| `npm run lint` | Passed | ESLint completed successfully after the new settings pages, services, and tests. |
+| `npm run build` | Passed | Next.js production build completed successfully and included all `/dashboard/settings*` and `/dashboard/integrations*` routes. |
+| `npm run test:all` | Passed | Combined lint, unit tests, and production build completed successfully. |
+| `npm run test:e2e` | Passed | The local Playwright smoke suite passed with the new settings/integrations assertions included. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git only warned about `LF` to `CRLF` normalization in this Windows workspace. |
+| Browser smoke status | Passed locally | Playwright now covers `/dashboard/settings`, selected subpages, `/dashboard/integrations`, and placeholder warnings for provider pages. |
+
+Phase 18 scope notes:
+
+- Settings writes stay limited to `system_admin` and `school_admin`.
+- Integration routes remain placeholder/settings-only and do not store real API secrets or make external calls.
+- Module flags are saved as local settings only and do not disable existing modules in this phase.
+
+Go/no-go after Phase 18 closure: Go for planning Phase 19 separately.
+
 ## Phase 17 Browser Smoke / E2E Tests Foundation Verification
 
 Phase 17 browser smoke foundation is now verified. Playwright is configured for

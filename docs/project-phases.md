@@ -17,6 +17,7 @@
 15. Automated tests foundation
 16. Parent and student read-only portal foundation
 17. Browser smoke / E2E tests foundation
+18. Settings and integrations placeholders foundation
 
 ## Later-phase items
 
@@ -32,11 +33,19 @@
 The project now has its auth, tenant, student/admission, academic-structure,
 attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
-seed, automated unit-test, parent/student read-only portal, and local browser
-smoke foundations in
+seed, automated unit-test, parent/student read-only portal, local browser
+smoke, and settings/integrations placeholders foundations in
 place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 18 snapshot
+
+- Admin-only `/dashboard/settings` and `/dashboard/integrations` routes are now implemented.
+- Settings now include school display identity, branding placeholder values, localization, module flags, and local message-template editing.
+- Integration pages now exist for WhatsApp, webhooks, MoE, calendar, BI, and automation, but they remain explicit placeholder/settings-only surfaces with no external API calls or secret storage.
+- The local Syrian demo seed now inserts `school_settings`, `integration_settings`, and `message_templates`.
+- Unit tests, DB smoke SQL, and Playwright smoke now cover the new settings/integrations foundation.
 
 ## Phase 17 snapshot
 

@@ -85,6 +85,11 @@ generation, and `tests/db/local-demo-smoke.sql`. Direct `supabase db reset`
 exit was still intermittently unstable on this Windows Docker setup after local
 container restarts, so browser smoke remains unclaimed.
 
+Phase 18 closure verification on `2026-07-09` confirmed the new settings seed
+records through `supabase status`, successful `supabase db reset`, local type
+generation, `tests/db/local-demo-smoke.sql`, and Playwright browser smoke for
+the settings/integrations placeholder routes.
+
 The richer local dataset adds:
 
 - Demo tenant: `Ofuq Syrian Demo Tenant`
@@ -96,6 +101,8 @@ The richer local dataset adds:
   timetable, finance, communication, library, student-care, and feedback data
 - Parent demo links through `student_guardians.guardian_user_id`
 - Student demo links through `students.student_user_id`
+- One `school_settings` row, nine `integration_settings` rows, and seeded
+  `message_templates` for the demo school
 
 The final seed `auth_smoke_token_defaults.sql` still runs last so all local
 `@ofuq.local` Auth users keep non-null token/default fields where those local
@@ -125,6 +132,7 @@ GoTrue columns exist, and all local emails remain email-confirmed.
 - `supabase/migrations/20260707200000_student_care_foundation.sql`
 - `supabase/migrations/20260708010000_feedback_foundation.sql`
 - `supabase/migrations/20260708120000_parent_student_read_only_portal_foundation.sql`
+- `supabase/migrations/20260709120000_settings_integrations_placeholders_foundation.sql`
 - `supabase/seed.sql`
 - `supabase/seeds/local_syrian_demo_00_helpers.sql`
 - `supabase/seeds/local_syrian_demo_01_create_stage_tables.sql`

@@ -35,6 +35,7 @@ npm run test:quality
 - Route constant stability in `constants/routes.ts`
 - Dashboard navigation consistency in `config/navigation.ts`
 - Portal navigation and route consistency in `config/portal-navigation.ts` and `constants/routes.ts`
+- Settings and integrations route/navigation consistency in `constants/routes.ts`, `config/navigation.ts`, and `lib/settings/constants.ts`
 - Fixed-role sanity checks in `constants/roles.ts` and `lib/actions/require-role.ts`
 - Small pure helper and validation checks in `types/feedback.ts`,
   `lib/actions/require-tenant.ts`, and `lib/validation/common.ts`
@@ -77,6 +78,7 @@ The SQL file lives at `tests/db/local-demo-smoke.sql` and checks:
 - seeded module coverage counts
 - linked guardian and linked student portal-account checks
 - basic orphan and duplicate relationship sanity
+- seeded settings/integrations/template counts and duplicate-scope anomalies
 
 ## Browser smoke / E2E tests
 
@@ -92,6 +94,7 @@ Coverage:
 - portal pages show read-only cues
 - admin dashboard navigation is absent inside portal pages
 - obvious runtime error text is guarded against after route transitions
+- admin settings and integrations placeholder routes load and show explicit non-connected warnings
 
 Local demo accounts used by the suite:
 

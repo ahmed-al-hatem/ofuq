@@ -38,6 +38,8 @@ describe("dashboardNavigation", () => {
         appRoutes.reports,
         appRoutes.library,
         appRoutes.studentCare,
+        appRoutes.settings,
+        appRoutes.integrations,
       ])
     )
   })

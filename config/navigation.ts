@@ -110,12 +110,12 @@ export const dashboardNavigation: NavigationGroup[] = [
       {
         label: "الإعدادات",
         icon: Settings2,
-        placeholder: true,
+        href: appRoutes.settings,
       },
       {
         label: "التكاملات",
         icon: PlugZap,
-        placeholder: true,
+        href: appRoutes.integrations,
       },
       {
         label: "التقويم المدرسي",

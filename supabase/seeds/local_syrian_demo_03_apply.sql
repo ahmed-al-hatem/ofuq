@@ -3005,7 +3005,222 @@ set
   created_at = excluded.created_at,
   updated_at = excluded.updated_at;
 
--- 13 Summary
+-- 13 Settings and integrations placeholders
+
+insert into public.school_settings (
+  id,
+  tenant_id,
+  school_id,
+  school_display_name,
+  timezone,
+  locale,
+  direction,
+  academic_week_start,
+  branding,
+  module_flags,
+  updated_by_user_id,
+  created_at,
+  updated_at
+)
+select
+  public.demo_seed_uuid('ofuq-syrian-demo:school-settings'),
+  ctx.tenant_id,
+  ctx.school_id,
+  'مدرسة أفق النموذجية الخاصة',
+  'Asia/Damascus',
+  'ar',
+  'rtl',
+  0,
+  jsonb_build_object(
+    'interface_name', 'منصة أفق المدرسية',
+    'logo_hint', 'placeholder-only',
+    'primary_color', '#0D1B3D',
+    'secondary_color', '#0D7A7B',
+    'accent_color', '#C9A24B'
+  ),
+  jsonb_build_object(
+    'students', true,
+    'academic', true,
+    'attendance', true,
+    'grades', true,
+    'timetable', true,
+    'finance', true,
+    'communication', true,
+    'reports', true,
+    'library', true,
+    'student_care', true,
+    'feedback', true,
+    'portal', true
+  ),
+  admins.user_id,
+  ctx.seed_created_at,
+  ctx.seed_updated_at
+from public.temp_demo_context ctx
+join public.temp_demo_users admins
+  on admins.email = 'school.admin@ofuq.local'
+on conflict (tenant_id, school_id) do update
+set
+  school_display_name = excluded.school_display_name,
+  timezone = excluded.timezone,
+  locale = excluded.locale,
+  direction = excluded.direction,
+  academic_week_start = excluded.academic_week_start,
+  branding = excluded.branding,
+  module_flags = excluded.module_flags,
+  updated_by_user_id = excluded.updated_by_user_id,
+  created_at = excluded.created_at,
+  updated_at = excluded.updated_at;
+
+insert into public.integration_settings (
+  id,
+  tenant_id,
+  school_id,
+  provider,
+  display_name,
+  status,
+  enabled,
+  settings,
+  updated_by_user_id,
+  created_at,
+  updated_at
+)
+select
+  public.demo_seed_uuid('ofuq-syrian-demo:integration:' || provider_rows.provider::text),
+  ctx.tenant_id,
+  ctx.school_id,
+  provider_rows.provider,
+  provider_rows.display_name,
+  'placeholder',
+  false,
+  provider_rows.settings,
+  admins.user_id,
+  ctx.seed_created_at,
+  ctx.seed_updated_at
+from public.temp_demo_context ctx
+join public.temp_demo_users admins
+  on admins.email = 'school.admin@ofuq.local'
+cross join (
+  values
+    (
+      'whatsapp'::public.integration_provider,
+      'WhatsApp Business'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'webhooks'::public.integration_provider,
+      'Webhooks'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'moe'::public.integration_provider,
+      'وزارة التربية'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'google_calendar'::public.integration_provider,
+      'Google Calendar'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'microsoft_calendar'::public.integration_provider,
+      'Microsoft Calendar'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'power_bi'::public.integration_provider,
+      'Power BI'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'looker'::public.integration_provider,
+      'Looker'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'zapier'::public.integration_provider,
+      'Zapier'::text,
+      jsonb_build_object('mode', 'settings_only')
+    ),
+    (
+      'make'::public.integration_provider,
+      'Make'::text,
+      jsonb_build_object('mode', 'settings_only')
+    )
+) as provider_rows(provider, display_name, settings)
+on conflict (tenant_id, school_id, provider) do update
+set
+  display_name = excluded.display_name,
+  status = excluded.status,
+  enabled = excluded.enabled,
+  settings = excluded.settings,
+  updated_by_user_id = excluded.updated_by_user_id,
+  created_at = excluded.created_at,
+  updated_at = excluded.updated_at;
+
+insert into public.message_templates (
+  id,
+  tenant_id,
+  school_id,
+  template_key,
+  channel,
+  title,
+  body,
+  status,
+  updated_by_user_id,
+  created_at,
+  updated_at
+)
+select
+  public.demo_seed_uuid(
+    'ofuq-syrian-demo:message-template:' || template_rows.template_key || ':' || template_rows.channel::text
+  ),
+  ctx.tenant_id,
+  ctx.school_id,
+  template_rows.template_key,
+  template_rows.channel,
+  template_rows.title,
+  template_rows.body,
+  template_rows.status,
+  admins.user_id,
+  ctx.seed_created_at,
+  ctx.seed_updated_at
+from public.temp_demo_context ctx
+join public.temp_demo_users admins
+  on admins.email = 'school.admin@ofuq.local'
+cross join (
+  values
+    (
+      'attendance_absence_notice'::text,
+      'in_app'::public.message_template_channel,
+      'إشعار غياب الطالب'::text,
+      'تم تسجيل غياب الطالب اليوم. يرجى متابعة السبب مع إدارة المدرسة.'::text,
+      'active'::public.message_template_status
+    ),
+    (
+      'invoice_reminder'::text,
+      'in_app'::public.message_template_channel,
+      'تذكير فاتورة مدرسية'::text,
+      'يوجد رصيد مستحق على الفاتورة. هذه الرسالة قالب داخلي فقط ولا يتم إرسالها خارجيًا في هذه المرحلة.'::text,
+      'active'::public.message_template_status
+    ),
+    (
+      'general_announcement'::text,
+      'in_app'::public.message_template_channel,
+      'إعلان عام'::text,
+      'هذا قالب داخلي لاستخدام الإعلانات العامة داخل النظام.'::text,
+      'draft'::public.message_template_status
+    )
+) as template_rows(template_key, channel, title, body, status)
+on conflict (tenant_id, school_id, template_key, channel) do update
+set
+  title = excluded.title,
+  body = excluded.body,
+  status = excluded.status,
+  updated_by_user_id = excluded.updated_by_user_id,
+  created_at = excluded.created_at,
+  updated_at = excluded.updated_at;
+
+-- 14 Summary
 
 select
   'local syrian demo seed applied' as message,
@@ -3032,4 +3247,7 @@ select
   (select count(*) from public.health_records where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as health_records,
   (select count(*) from public.complaints where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as complaints,
   (select count(*) from public.surveys where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as surveys,
-  (select count(*) from public.survey_responses where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as survey_responses;
+  (select count(*) from public.survey_responses where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as survey_responses,
+  (select count(*) from public.school_settings where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as school_settings,
+  (select count(*) from public.integration_settings where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as integration_settings,
+  (select count(*) from public.message_templates where tenant_id = (select tenant_id from public.temp_demo_context) and school_id = (select school_id from public.temp_demo_context)) as message_templates;

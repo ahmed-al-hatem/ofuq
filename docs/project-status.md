@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 17 Browser Smoke / E2E Tests Foundation closed
-- Last completed implementation phase: Phase 17 Browser Smoke / E2E Tests Foundation
-- Last completed quality phase: Phase 17 Browser Smoke / E2E Tests Foundation Verification
-- Next implementation phase: Phase 18 planning is open; choose the next slice separately
+- Current phase: Phase 18 Settings and Integrations Placeholders Foundation closed
+- Last completed implementation phase: Phase 18 Settings and Integrations Placeholders Foundation
+- Last completed quality phase: Phase 18 Settings and Integrations Placeholders Foundation Verification
+- Next implementation phase: choose the next Phase 19 slice separately
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -48,6 +48,7 @@
 | Phase 15 Automated Tests Foundation | Done | Vitest foundation, unit tests for routes/navigation/roles/helpers, manual DB smoke SQL checks, and local test documentation are in place. |
 | Phase 16 Parent and Student Read-Only Portal Foundation | Done | `/portal` overview, linked students, attendance, grades, timetable, finance, library, announcements, and profile pages now exist with server-side linked-student scoping and no portal mutations. |
 | Phase 17 Browser Smoke / E2E Tests Foundation | Done | Playwright-based local browser smoke now covers login, dashboard access, parent/student portal entry, portal read-only cues, dashboard-navigation absence in the portal, and honest local verification docs. |
+| Phase 18 Settings and Integrations Placeholders Foundation | Done | Admin-only `/dashboard/settings` and `/dashboard/integrations` now exist with school-scoped settings persistence, message-template editing, integration placeholder pages, local seed data, unit coverage, DB smoke updates, and Playwright smoke coverage without real external connections. |
 
 ## Current Implemented Modules
 
@@ -68,9 +69,11 @@
 - Deterministic local Syrian demo dataset, including fixed-role demo Auth users and fictional cross-module school data for local smoke workflows.
 - Parent/student read-only portal foundation, including server-rendered `/portal` pages scoped to linked students for `parent` and `student` roles.
 - Local Playwright browser smoke foundation for authenticated login, dashboard access, and read-only portal route coverage.
+- Settings foundation, including school display settings, branding placeholders, localization settings, module flags, and editable local message templates.
+- Integration placeholders foundation, including admin-only overview and provider pages for WhatsApp, webhooks, MoE, calendar, BI, and automation without real external API calls or secret storage.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
-AI Query, chatbot, external integrations, and report builder are not implemented yet.
+AI Query, chatbot, real external integrations, and report builder are not implemented yet.
 
 ## Current Routes
 
@@ -147,6 +150,19 @@ AI Query, chatbot, external integrations, and report builder are not implemented
 | `/dashboard/reports/grades` | Active | Grades summary report. |
 | `/dashboard/reports/finance` | Active | Finance balances report. |
 | `/dashboard/reports/timetable` | Active | Timetable overview report. |
+| `/dashboard/settings` | Active | Admin-only settings overview for school identity, branding, localization, module flags, and templates. |
+| `/dashboard/settings/school` | Active | Admin-only school display-name settings. |
+| `/dashboard/settings/branding` | Active | Admin-only branding and white-label placeholder settings. |
+| `/dashboard/settings/localization` | Active | Admin-only locale, direction, timezone, and academic-week settings. |
+| `/dashboard/settings/modules` | Active | Admin-only module-flag foundation page that does not disable real modules yet. |
+| `/dashboard/settings/templates` | Active | Admin-only local message-template management without external delivery. |
+| `/dashboard/integrations` | Active | Admin-only integration placeholder overview with explicit non-connected status. |
+| `/dashboard/integrations/whatsapp` | Active | Placeholder-only WhatsApp Business settings page. |
+| `/dashboard/integrations/webhooks` | Active | Placeholder-only webhooks settings page. |
+| `/dashboard/integrations/moe` | Active | Placeholder-only Ministry of Education settings page. |
+| `/dashboard/integrations/calendar` | Active | Placeholder-only Google/Microsoft Calendar settings page. |
+| `/dashboard/integrations/bi` | Active | Placeholder-only Power BI/Looker settings page. |
+| `/dashboard/integrations/automation` | Active | Placeholder-only Zapier/Make settings page. |
 | `/dashboard/student-care` | Active | Student-care overview. |
 | `/dashboard/student-care/health` | Active | Health record list. |
 | `/dashboard/student-care/health/[studentId]` | Active | Per-student health record upsert view. |
@@ -183,6 +199,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Library tables: `book_catalog`, `book_copies`, `book_loans`.
 - Student-care tables: `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, `achievements`.
 - Feedback tables: `complaints`, `complaint_updates`, `surveys`, `survey_questions`, `survey_responses`.
+- Settings tables: `school_settings`, `integration_settings`, `message_templates`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Portal identity link: `students.student_user_id` now supports direct student-to-user linking for the read-only portal.
 - Local Supabase replay for the Phase 16 schema slice was revalidated with `supabase start`, local type generation, and manual DB smoke SQL. Direct `supabase db reset` exit is still intermittently unstable on this Windows Docker setup.
@@ -206,6 +223,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Library mutations derive tenant/school/user scope from active membership, validate catalog/copy/student/loan relationships server-side, and write minimal audit logs for catalog, copy, loan issue, loan return, lost, and damaged actions.
 - Student-care mutations derive tenant/school/user scope from active membership, validate student ownership server-side, and write minimal audit logs without sensitive medical payloads.
 - Feedback mutations derive tenant/school/user scope from active membership, validate complaint relationships, survey targets, and duplicate response prevention server-side, and write minimal audit logs without complaint text or survey answers.
+- Settings reads and writes derive tenant/school/user scope from the active membership and remain limited to `system_admin` and `school_admin`.
+- Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth, webhook delivery, provider sync, or real API secret storage.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -239,7 +258,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent notifications, and advanced analytics are deferred.
 - No full RLS yet.
 - No full RBAC yet.
-- No external integrations yet.
+- External integrations remain placeholder-only. No provider connection, delivery, sync, or secret storage is implemented.
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - Automated coverage remains intentionally small: Vitest targets stable pure logic and Playwright targets a small local-only browser smoke slice rather than full regression coverage.
 - Browser smoke is now covered locally through Playwright only. Hosted CI E2E, cross-browser matrices, CRUD flows, and visual regression remain deferred.
@@ -250,6 +269,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: choose a Phase 18 slice separately, such as settings and integrations placeholders, parent/student self-service flows, or CI quality workflow foundation.
+Recommended next phase: choose a Phase 19 slice separately, such as parent/student interaction foundations, CI quality workflow foundation, or ready-made reports polish and export preparation.
 
-Go/no-go status: Go for separate Phase 18 planning. Phase 17 now provides a working local browser smoke foundation with honest verification status and without claiming full regression coverage.
+Go/no-go status: Go for separate Phase 19 planning. Phase 18 is now verified locally with honest placeholder-only integration claims and passing browser smoke.

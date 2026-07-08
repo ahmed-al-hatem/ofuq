@@ -34,6 +34,8 @@ Phase 13 adds the feedback foundation for complaints, complaint updates, surveys
 
 Phase 16 adds the parent/student read-only portal foundation by introducing a direct `students.student_user_id` link and server-side read scope over existing attendance, grades, timetable, finance, library, and communication data.
 
+Phase 18 adds the settings and integrations placeholders foundation with school-scoped settings persistence, placeholder integration records, and local message templates.
+
 ## Core tables
 
 ### `tenants`
@@ -388,6 +390,26 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Uses `tenant_id`, `school_id`, `survey_id`, `respondent_user_id`, optional `student_id`, and a unique `(survey_id, respondent_user_id)` constraint.
 - Server-side code prevents duplicate responses and blocks draft/closed/archived surveys from receiving answers.
 
+## Phase 18 tables
+
+### `school_settings`
+
+- Stores one school-scoped settings record per `(tenant_id, school_id)`.
+- Includes local display name, timezone, locale, direction, academic-week start, branding JSON, and module-flag JSON.
+- Branding and module flags are validated as JSON objects and are used as UI/settings foundations only in this phase.
+
+### `integration_settings`
+
+- Stores one school-scoped placeholder record per provider such as WhatsApp, webhooks, MoE, calendar, BI, and automation tools.
+- Includes provider, display name, placeholder/configured status, enabled flag, and settings JSON.
+- No real API secrets, tokens, delivery payloads, OAuth refresh data, or external sync state are stored in this phase.
+
+### `message_templates`
+
+- Stores school-scoped local message-template records keyed by `template_key` and `channel`.
+- Supports `in_app`, `email`, `sms`, and `whatsapp` channel labels for future growth, but no sending occurs in this phase.
+- Templates are editable foundations only and do not imply delivery-provider support.
+
 ## Role model
 
 - The MVP uses fixed roles, not `permissions` or `role_permissions` tables.
@@ -409,6 +431,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Library mutations derive tenant/school/user scope from authenticated membership, validate catalog, copy, student, and loan ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 - Student-care mutations derive tenant/school/user scope from authenticated membership, validate student ownership server-side, and do not trust client-submitted tenant, school, role, or actor fields.
 - Feedback mutations derive tenant/school/user scope from authenticated membership, validate complaint ownership, related students, assignee memberships, survey targets, and survey response eligibility server-side, and do not trust client-submitted tenant, school, role, or actor fields.
+- Settings mutations derive tenant/school/user scope from authenticated membership, validate fixed admin roles server-side, and do not trust submitted tenant, school, role, or actor fields.
 
 ## Storage note
 
@@ -422,6 +445,7 @@ Ready-made reports are implemented as server-side query services and dashboard p
 - Phase 12 student care stores text-first operational records only. Medical uploads, prescriptions, diagnosis workflows, parent alerts, and PDF certificates remain deferred.
 - Phase 13 feedback stores internal operational records only. Anonymous/public complaint forms, public survey links, file attachments, AI analysis, external notifications, and advanced survey branching remain deferred.
 - Phase 16 parent/student portal is read-only. It does not add payment uploads, excuse attachments, complaints, surveys, profile edits, or health/discipline document access.
+- Phase 18 settings and integrations are local-only foundations. They do not add external provider secrets, WhatsApp/SMS/email sending, webhook delivery, calendar sync, BI embedding, Zapier/Make execution, backup/restore, or sandbox features.
 
 ## RLS later
 

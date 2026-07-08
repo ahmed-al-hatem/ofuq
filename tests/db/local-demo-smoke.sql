@@ -53,7 +53,10 @@ union all select 'book_loans', count(*) from public.book_loans
 union all select 'health_records', count(*) from public.health_records
 union all select 'complaints', count(*) from public.complaints
 union all select 'surveys', count(*) from public.surveys
-union all select 'survey_responses', count(*) from public.survey_responses;
+union all select 'survey_responses', count(*) from public.survey_responses
+union all select 'school_settings', count(*) from public.school_settings
+union all select 'integration_settings', count(*) from public.integration_settings
+union all select 'message_templates', count(*) from public.message_templates;
 
 -- Relationship sanity checks
 -- Expected: every count query below returns 0.
@@ -90,6 +93,31 @@ select student_id, count(*)
 from public.health_records
 where status = 'active'
 group by student_id
+having count(*) > 1;
+
+-- Phase 18 settings and integrations foundation checks
+-- Expected: school_settings_count >= 1
+select count(*) as school_settings_count
+from public.school_settings;
+
+-- Expected: integration_settings_count >= 9
+select count(*) as integration_settings_count
+from public.integration_settings;
+
+-- Expected: message_templates_count >= 1
+select count(*) as message_templates_count
+from public.message_templates;
+
+-- Expected: zero rows returned.
+select tenant_id, school_id, count(*)
+from public.school_settings
+group by tenant_id, school_id
+having count(*) > 1;
+
+-- Expected: zero rows returned for a single seeded school.
+select tenant_id, school_id, provider, count(*)
+from public.integration_settings
+group by tenant_id, school_id, provider
 having count(*) > 1;
 
 -- Phase 16 parent/student portal foundation checks

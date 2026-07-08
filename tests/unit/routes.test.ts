@@ -14,6 +14,8 @@ describe("appRoutes", () => {
     expect(appRoutes.library).toBe("/dashboard/library")
     expect(appRoutes.studentCare).toBe("/dashboard/student-care")
     expect(appRoutes.feedback).toBe("/dashboard/feedback")
+    expect(appRoutes.settings).toBe("/dashboard/settings")
+    expect(appRoutes.integrations).toBe("/dashboard/integrations")
   })
 
   it("keeps important static routes non-empty", () => {
@@ -30,6 +32,8 @@ describe("appRoutes", () => {
       appRoutes.library,
       appRoutes.studentCare,
       appRoutes.feedback,
+      appRoutes.settings,
+      appRoutes.integrations,
     ]
 
     expect(routes.every((route) => route.startsWith("/dashboard"))).toBe(true)
@@ -55,6 +59,9 @@ describe("appRoutes", () => {
     )
     expect(appRoutes.libraryLoanDetails("loan_123")).toBe(
       "/dashboard/library/loans/loan_123"
+    )
+    expect(appRoutes.integrationsAutomation).toBe(
+      "/dashboard/integrations/automation"
     )
   })
 })
