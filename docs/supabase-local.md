@@ -30,13 +30,18 @@ supabase gen types typescript --local > types/database.ts
 ```toml
 sql_paths = [
   "./seed.sql",
-  "./seeds/local_syrian_demo_data.sql",
+  "./seeds/local_syrian_demo_00_helpers.sql",
+  "./seeds/local_syrian_demo_01_create_stage_tables.sql",
+  "./seeds/local_syrian_demo_02_stage_data.sql",
+  "./seeds/local_syrian_demo_03_apply.sql",
+  "./seeds/local_syrian_demo_04_cleanup.sql",
   "./seeds/auth_smoke_token_defaults.sql"
 ]
 ```
 
 This preserves the original minimal smoke dataset and adds a deterministic
-local-only Syrian demo dataset with fictional Arabic names and cross-module data.
+local-only Syrian demo dataset with fictional Arabic names and cross-module data
+through a split seed pipeline that avoids Supabase CLI batch-order failures.
 
 All local demo Auth users share the same password:
 
@@ -74,6 +79,11 @@ The Syrian demo dataset is fictional and local-only. Do not use these records or
 credentials in production, hosted Supabase projects, screenshots, or shared
 environments.
 
+Phase 14 closure verification passed on `2026-07-08`: `supabase db reset`
+completed with the split seed architecture, the local `@ofuq.local` token null
+check returned `0`, required SQL spot checks passed, and browser smoke was not
+performed in this closure session.
+
 The richer local dataset adds:
 
 - Demo tenant: `Ofuq Syrian Demo Tenant`
@@ -102,6 +112,18 @@ GoTrue columns exist, and all local emails remain email-confirmed.
 - `supabase/migrations/20260706143000_core_schema_refinement.sql`
 - `supabase/migrations/20260706183000_students_admissions_foundation.sql`
 - `supabase/migrations/20260706200000_academic_structure_foundation.sql`
+- `supabase/migrations/20260706213000_attendance_manual_qr_foundation.sql`
+- `supabase/migrations/20260707010000_grades_report_cards_foundation.sql`
+- `supabase/migrations/20260707120000_manual_timetable_conflict_prevention.sql`
+- `supabase/migrations/20260707140000_finance_basics_foundation.sql`
+- `supabase/migrations/20260707160000_communication_ready_made_reports_foundation.sql`
+- `supabase/migrations/20260707180000_library_foundation.sql`
+- `supabase/migrations/20260707200000_student_care_foundation.sql`
+- `supabase/migrations/20260708010000_feedback_foundation.sql`
 - `supabase/seed.sql`
-- `supabase/seeds/local_syrian_demo_data.sql`
+- `supabase/seeds/local_syrian_demo_00_helpers.sql`
+- `supabase/seeds/local_syrian_demo_01_create_stage_tables.sql`
+- `supabase/seeds/local_syrian_demo_02_stage_data.sql`
+- `supabase/seeds/local_syrian_demo_03_apply.sql`
+- `supabase/seeds/local_syrian_demo_04_cleanup.sql`
 - `supabase/seeds/auth_smoke_token_defaults.sql`

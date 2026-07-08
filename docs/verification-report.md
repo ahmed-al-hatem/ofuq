@@ -5,36 +5,42 @@
 
 ## Phase 14 Syrian Demo Dataset Foundation Verification
 
-Phase 14 local Syrian demo dataset implementation is partially verified in this
-session. The seed/config/docs work is in place, but the required `supabase db reset`
-and SQL spot checks could not be completed because elevated Docker-backed command
-execution hit an external session usage limit.
+Phase 14 local Syrian demo dataset implementation is now fully verified. The
+split seed architecture is preserved, `supabase db reset` replayed successfully,
+required SQL spot checks passed, and the final Auth token/default safety check
+returned `0` local users with null values across the checked fields.
 
 | Check | Result | Notes |
 | --- | --- | --- |
-| Phase 13 precondition | Passed | `git -c safe.directory=D:/ofuq/ofuq status --short` was clean before Phase 14 work started, so Phase 13 files were not mixed into this slice. |
+| Git status at closure start | Passed with Phase 14-scoped change | `git -c safe.directory=D:/ofuq/ofuq status --short` showed only `D supabase/seeds/local_syrian_demo_data.sql`, the obsolete single-file demo seed replaced by the split Phase 14 seed pipeline. |
+| Seed order | Passed | `supabase/config.toml` keeps `./seed.sql`, the five split `local_syrian_demo_0x_*.sql` files, then `./seeds/auth_smoke_token_defaults.sql` last. |
 | Supabase status | Passed after elevation | Local Supabase is running; Docker/Supabase access required elevated permissions in this Windows environment. |
-| Supabase database reset | Blocked | `supabase db reset` could not be executed after elevation because the session hit an external elevated-command usage limit, so replay from scratch is still pending. |
-| SQL spot checks | Not run | Required auth/count/relationship spot checks remain pending until `supabase db reset` can run. |
+| Supabase database reset | Passed | `supabase db reset` replayed all migrations through `20260708010000_feedback_foundation.sql` and seeded `supabase/seed.sql`, the five split Syrian demo seed files, and `auth_smoke_token_defaults.sql` successfully. |
+| Auth users list | Passed | The local Auth query returned all 16 expected `@ofuq.local` accounts, including the preserved smoke users and the full Syrian demo role set. |
+| Auth token null safety | Passed | The local GoTrue schema contained `confirmation_token`, `recovery_token`, `email_change_token_new`, `email_change_token_current`, `email_change`, `phone_change_token`, `phone_change`, and `reauthentication_token`; the null-count query returned `0`. |
+| Core counts | Passed | Counts met or exceeded the closure minimums: `user_profiles 16`, `user_memberships 16`, `grade_levels 13`, `classes 19`, `subjects 17`, `students 25`, `student_guardians 25`, `class_enrollments 25`. |
+| Module coverage counts | Passed | Cross-module demo coverage is present with non-zero rows: `attendance_sessions 3`, `attendance_records 6`, `exams 4`, `exam_results 8`, `timetable_slots 20`, `invoices 3`, `payments 2`, `messages 3`, `book_loans 3`, `health_records 3`, `complaints 2`, `surveys 1`, `survey_responses 3`. |
+| Relationship sanity checks | Passed | Orphan counts for `class_enrollments`, `attendance_records`, and `exam_results` all returned `0`; duplicate active `book_loans`, duplicate `survey_responses`, and duplicate active `health_records` checks all returned `0`. |
 | Lint | Passed | `npm run lint` completed with exit code `0`. |
 | Build | Passed | `npm run build` completed successfully and included all active dashboard routes. |
-| Whitespace diff check | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` completed with exit code `0`; Git only reported LF/CRLF warnings in modified files. |
+| Whitespace diff check | Passed | `git -c safe.directory=D:/ofuq/ofuq diff --check` completed with exit code `0`. |
 | Browser smoke | Not performed | Authenticated browser workflow smoke was not run in this session, so it is not claimed as passed. |
 
-Phase 14 scope notes so far:
+Phase 14 scope notes:
 
-- Added `supabase/seeds/local_syrian_demo_data.sql` with deterministic fictional
-  Syrian local data spanning roles, admissions, academic structure, attendance,
-  grades, timetable, finance, communication, library, student care, and feedback.
-- Updated `supabase/config.toml` so the new local demo seed runs before
-  `auth_smoke_token_defaults.sql`.
-- Updated `supabase/seeds/auth_smoke_token_defaults.sql` to cover all
-  local `@ofuq.local` Auth users while preserving the final token/default safety pass.
-- Updated local/docs snapshots to describe the Syrian demo accounts, seed order,
-  shared password, and local-only fictional data policy.
+- Preserved the split Phase 14 seed architecture:
+  `local_syrian_demo_00_helpers.sql`,
+  `local_syrian_demo_01_create_stage_tables.sql`,
+  `local_syrian_demo_02_stage_data.sql`,
+  `local_syrian_demo_03_apply.sql`,
+  `local_syrian_demo_04_cleanup.sql`,
+  followed by `auth_smoke_token_defaults.sql`.
+- Removed the obsolete tracked single-file seed `supabase/seeds/local_syrian_demo_data.sql` from the active Phase 14 seed set.
+- Confirmed `auth_smoke_token_defaults.sql` still runs last and safely updates all local `@ofuq.local` users through dynamic column-existence checks.
+- Updated local/docs snapshots to reflect the verified split seed order, shared local password, local-only fictional data policy, and honest browser-smoke status.
 
-Go/no-go after the current Phase 14 closure attempt: No-Go for `15 - Automated Tests Foundation`
-until `supabase db reset` and the required SQL spot checks are completed successfully.
+Go/no-go after Phase 14 closure: Go for `15 - Automated Tests Foundation`.
+Browser smoke remains not performed and is not claimed as passed.
 
 ## Phase 13 Complaints and Surveys Foundation Verification
 

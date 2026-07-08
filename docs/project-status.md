@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 14 Syrian Demo Dataset Foundation in progress
-- Last completed implementation phase: 13 Complaints and Surveys Foundation
-- Last completed quality phase: 13 Complaints and Surveys Foundation Verification
-- Next implementation phase: 15 Automated Tests Foundation after Phase 14 closure
+- Current phase: Phase 14 Syrian Demo Dataset Foundation closed; ready for Phase 15 Automated Tests Foundation
+- Last completed implementation phase: 14 Syrian Demo Dataset Foundation
+- Last completed quality phase: 14 Syrian Demo Dataset Foundation Verification
+- Next implementation phase: 15 Automated Tests Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -43,7 +43,7 @@
 | Phase 11 Library Foundation | Done | Book catalog, physical copies, student loans, returns, overdue visibility, and Arabic dashboard pages. |
 | Phase 12 Health, Discipline, and Achievements Foundation | Done | Basic health records, vaccinations, clinic visits, discipline records, achievements, and Arabic dashboard pages. |
 | Phase 13 Complaints and Surveys Foundation | Done | Complaint submission/review workflow, surveys, survey questions, survey responses, and Arabic feedback dashboard pages. |
-| Phase 14 Syrian Demo Dataset Foundation | In Progress | Deterministic local-only Syrian demo tenant, users, and cross-module seed data are added; final reset/SQL verification is still pending in the current closure session. |
+| Phase 14 Syrian Demo Dataset Foundation | Done | Deterministic local-only Syrian demo tenant, users, and cross-module seed data are verified through the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and local Auth token/default safety checks. |
 
 ## Current Implemented Modules
 
@@ -169,7 +169,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Feedback tables: `complaints`, `complaint_updates`, `surveys`, `survey_questions`, `survey_responses`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Local Supabase schema replay is currently verified with `supabase db reset`.
-- Local seed order now applies `supabase/seed.sql`, `supabase/seeds/local_syrian_demo_data.sql`, then `supabase/seeds/auth_smoke_token_defaults.sql`.
+- Local seed order now applies `supabase/seed.sql`, `supabase/seeds/local_syrian_demo_00_helpers.sql`, `supabase/seeds/local_syrian_demo_01_create_stage_tables.sql`, `supabase/seeds/local_syrian_demo_02_stage_data.sql`, `supabase/seeds/local_syrian_demo_03_apply.sql`, `supabase/seeds/local_syrian_demo_04_cleanup.sql`, then `supabase/seeds/auth_smoke_token_defaults.sql`.
 - Local type generation is currently verified with `supabase gen types typescript --local > types/database.ts`.
 - RLS remains deferred by design; tenant/school isolation is currently enforced in server-side code and schema constraints.
 
@@ -229,6 +229,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: `15 - Automated Tests Foundation` after Phase 14 closure.
+Recommended next phase: `15 - Automated Tests Foundation`.
 
-Go/no-go status: No-Go for `15 - Automated Tests Foundation` until Phase 14 `supabase db reset`, SQL spot checks, and closure verification are completed. Authenticated browser workflow smoke should only be marked passed when actually run.
+Go/no-go status: Go for `15 - Automated Tests Foundation`. Phase 14 closure verification passed with the split seed architecture, successful `supabase db reset`, passing SQL spot checks, and `0` local Auth token null rows across checked fields. Authenticated browser workflow smoke was not performed in this closure session and should only be marked passed when actually run.
