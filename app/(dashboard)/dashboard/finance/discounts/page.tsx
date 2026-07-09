@@ -1,8 +1,10 @@
 import { Percent, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormDialog } from "@/components/shared/form-dialog"
 import { PageHeader } from "@/components/shared/page-header"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DialogClose } from "@/components/ui/dialog"
 import { USER_ROLES } from "@/constants/roles"
 import { listAcademicYears, listTerms } from "@/lib/academic/academic-structure"
 import { requireFinanceContext } from "@/lib/finance/context"
@@ -67,10 +70,27 @@ export default async function FinanceDiscountsPage() {
       <PageHeader
         title="الخصومات"
         description="تعريف أنواع الخصومات وتعيينها للطلاب حتى تحتسب عند توليد الفواتير."
+        actions={
+          <FormDialog
+            trigger={<Button size="lg" />}
+            triggerLabel="نوع خصم جديد"
+            title="إضافة نوع خصم"
+            description="نموذج سريع لتعريف نوع خصم جديد من دون مغادرة صفحة الخصومات."
+            size="md"
+          >
+            <DiscountTypeForm
+              surface="plain"
+              cancelSlot={
+                <DialogClose render={<Button variant="outline" type="button" />}>
+                  إلغاء
+                </DialogClose>
+              }
+            />
+          </FormDialog>
+        }
       />
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        <DiscountTypeForm />
+      <section className="grid gap-6 xl:max-w-4xl">
         <StudentDiscountForm
           students={students}
           discountTypes={discountTypes}

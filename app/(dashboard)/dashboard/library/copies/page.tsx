@@ -2,9 +2,10 @@ import Link from "next/link"
 import { BookCopy, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormDialog } from "@/components/shared/form-dialog"
 import { PageHeader } from "@/components/shared/page-header"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,8 +13,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DialogClose } from "@/components/ui/dialog"
 import { USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
+import { listBookCatalogOptions } from "@/lib/library/catalog"
 import { listBookCopies } from "@/lib/library/copies"
 import { requireLibraryContext } from "@/lib/library/context"
 import {
@@ -22,7 +25,7 @@ import {
   BOOK_COPY_STATUS_LABELS_AR,
   BOOK_COPY_STATUS_TONES,
 } from "@/types/library"
-import { BookCopyStatusActions } from "../_components/library-forms"
+import { BookCopyForm, BookCopyStatusActions } from "../_components/library-forms"
 
 const libraryReadRoles = [
   USER_ROLES.SYSTEM_ADMIN,
@@ -56,8 +59,11 @@ export default async function LibraryCopiesPage() {
     )
   }
 
-  const copies = await listBookCopies(contextResult.data)
   const canManage = canManageLibrary(contextResult.data.role)
+  const [copies, catalogOptions] = await Promise.all([
+    listBookCopies(contextResult.data),
+    canManage ? listBookCatalogOptions(contextResult.data) : Promise.resolve([]),
+  ])
 
   return (
     <div className="flex flex-col gap-6">
@@ -66,12 +72,31 @@ export default async function LibraryCopiesPage() {
         description="كل نسخة تمثل كتابًا فعليًا يمكن إعارته أو تعليمه كمفقود أو تالف."
         actions={
           canManage ? (
-            <Link
-              href={appRoutes.newLibraryCopy}
-              className={buttonVariants({ size: "lg" })}
-            >
-              إضافة نسخة
-            </Link>
+            <>
+              <FormDialog
+                trigger={<Button size="lg" />}
+                triggerLabel="إضافة نسخة"
+                title="إضافة نسخة كتاب"
+                description="نموذج سريع لإضافة نسخة فعلية جديدة من كتاب موجود في الفهرس."
+                size="lg"
+              >
+                <BookCopyForm
+                  catalogOptions={catalogOptions}
+                  surface="plain"
+                  cancelSlot={
+                    <DialogClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </DialogClose>
+                  }
+                />
+              </FormDialog>
+              <Link
+                href={appRoutes.newLibraryCopy}
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                فتح الصفحة الكاملة
+              </Link>
+            </>
           ) : null
         }
       />

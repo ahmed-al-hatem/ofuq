@@ -21,6 +21,7 @@
 19. Role-aware UX routing and navigation foundation
 20. Role-specific dashboards foundation
 21. Professional UI polish and design system pass
+21.5. Modal form UX foundation
 
 ## Later-phase items
 
@@ -37,11 +38,18 @@ The project now has its auth, tenant, student/admission, academic-structure,
 attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
-smoke, settings/integrations placeholders, role-aware routing/navigation, and
-role-specific dashboard and UI-polish foundations in
-place.
+smoke, settings/integrations placeholders, role-aware routing/navigation,
+role-specific dashboard, UI-polish, and modal-form UX foundations in place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 21.5 snapshot
+
+- Quick create/edit forms now prefer `Dialog` or `Sheet` from `components/ui`, while complex details, reports, and multi-step flows remain full route pages.
+- Shared `FormDialog`, `FormSheet`, and `FormActions` wrappers now provide a reusable Arabic-first modal-form pattern without introducing custom modal primitives or overlays.
+- Phase 21.5 converted four low-risk examples: announcement creation, library copy creation, finance discount-type creation, and manual payment recording from invoice details.
+- Existing full-page routes such as `/dashboard/communication/announcements/new` and `/dashboard/library/copies/new` remain available for direct access and safer fallback.
+- No schema changes, seed changes, or Supabase config changes were introduced in this phase.
 
 ## Phase 21 snapshot
 

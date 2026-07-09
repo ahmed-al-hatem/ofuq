@@ -4,12 +4,12 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
-## Status Update After Phase 21
+## Status Update After Phase 21.5
 
-- Phase 19, Phase 20, and Phase 21 are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, and the shared dashboard/portal presentation now has a more professional Arabic-first polish pass.
+- Phase 19, Phase 20, Phase 21, and Phase 21.5 are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, and selected quick forms now use reusable `Dialog`/`Sheet` patterns instead of relying only on full-page flows.
 - `/portal` overview is now more useful for `parent` and `student` without adding mutations or widening authorization scope.
 - These phases did not add RBAC, RLS, schema changes, or workflow redesign.
-- The next recommended UI/UX slice is Phase 22 Module UX Cleanup by Domain.
+- The next recommended UI/UX slice is Phase 22A Module UX Cleanup by Domain.
 
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 
@@ -52,7 +52,8 @@ The recommended plan is:
 1. Phase 19 — Role-Aware UX Routing and Navigation Foundation
 2. Phase 20 — Role-Specific Dashboards Foundation
 3. Phase 21 — Professional UI Polish and Design System Pass
-4. Phase 22 — Module UX Cleanup by Domain
+4. Phase 21.5 — Modal Form UX Foundation
+5. Phase 22 — Module UX Cleanup by Domain
 
 This order is recommended because the first visible problem is not only visual quality. It is role experience. Parent, student, teacher, accountant, librarian, and admin users need different entry points and different navigation.
 
@@ -451,6 +452,40 @@ Integrations pages are the only exception where placeholder wording is intention
 
 ---
 
+# Phase 21.5 — Modal Form UX Foundation
+
+## Goal
+
+Establish a reusable, professional pattern for quick create/edit forms using
+the existing `components/ui` `Dialog`, `Sheet`, and `Drawer` surfaces, while
+preserving server actions and route-based detail flows.
+
+## In Scope
+
+- Shared modal-form wrappers around existing UI primitives.
+- Shared save/cancel action pattern for Arabic-first forms.
+- Limited conversion of low-risk quick forms only.
+- A clear decision rule: quick create/edit stays in `Dialog`/`Sheet`, while
+  complex details and multi-step flows remain route pages.
+
+## Out of Scope
+
+- No broad module cleanup.
+- No route deletion by default.
+- No schema, seed, or Supabase config changes.
+- No new UI library or custom modal primitive.
+
+## Phase 21.5 outcome
+
+- Quick actions now feel more professional in selected finance, communication,
+  and library flows.
+- Existing full-page create routes remain available as fallback and direct-entry
+  surfaces.
+- This phase is intentionally a UX foundation bridge into Phase 22, not a full
+  domain cleanup.
+
+---
+
 # Phase 22 — Module UX Cleanup by Domain
 
 ## Suggested prompt files
@@ -601,10 +636,12 @@ This plan is useful after Phase 19, not before it.
 Proceed with:
 
 ```text
-prompts/codex_20_role_specific_dashboards_foundation_prompt.md
+prompts/codex_22_academic_attendance_grades_ui_cleanup_prompt.md
 ```
 
-The next phase should not add a new business module. It should replace the remaining generic staff landing experience with meaningful role-specific summaries.
+The next phase should not add a new business module. It should apply the new
+shared polish and modal-form rules consistently to deeper module pages by
+domain.
 
 ## Phase 19 Done Criteria
 
@@ -649,14 +686,14 @@ Then rerun DB smoke and E2E checks.
 Proceed with:
 
 ```text
-20 - Role-Specific Dashboards Foundation
+22A - Module UX Cleanup by Domain
 ```
 
 Then continue with:
 
 ```text
-21 - Professional UI Polish and Design System Pass
-22 - Module UX Cleanup by Domain
+22B - Finance, Library, Communication cleanup
+22C - Portal polish
 ```
 
 This sequence gives Ofuq the best path from the new role-aware foundation into a polished, role-specific SaaS product suitable for a final presentation.

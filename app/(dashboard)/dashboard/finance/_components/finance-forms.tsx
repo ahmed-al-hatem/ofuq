@@ -2,7 +2,9 @@
 
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
+import type { ReactNode } from "react"
 
+import { FormActions } from "@/components/shared/form-actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -45,6 +47,7 @@ import {
 } from "@/types/finance"
 
 const initialState: FinanceActionState = null
+type FormSurface = "card" | "plain"
 
 const feeItemTypeOptions = [
   "tuition",
@@ -285,12 +288,60 @@ export function FeeItemForm({
   )
 }
 
-export function DiscountTypeForm() {
+export function DiscountTypeForm({
+  surface = "card",
+  cancelSlot,
+}: {
+  surface?: FormSurface
+  cancelSlot?: ReactNode
+}) {
   const [state, formAction] = useActionState(
     createDiscountTypeAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.name?.length)}>
+          <FieldLabel htmlFor="discount-type-name">اسم الخصم</FieldLabel>
+          <Input id="discount-type-name" name="name" required />
+          <FieldError>{fieldErrors.name?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.value_type?.length)}>
+          <FieldLabel htmlFor="discount-value-type">طريقة الخصم</FieldLabel>
+          <NativeSelect id="discount-value-type" name="value_type" className="w-full" required>
+            {discountValueTypeOptions.map((valueType) => (
+              <NativeSelectOption key={valueType} value={valueType}>
+                {DISCOUNT_VALUE_TYPE_LABELS_AR[valueType]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.value_type?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.value?.length)}>
+          <FieldLabel htmlFor="discount-value">القيمة</FieldLabel>
+          <Input id="discount-value" name="value" type="number" min="0" step="0.01" dir="ltr" required />
+          <FieldError>{fieldErrors.value?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
+          <FieldLabel htmlFor="discount-description">الوصف</FieldLabel>
+          <Textarea id="discount-description" name="description" />
+          <FieldError>{fieldErrors.description?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ نوع الخصم"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -300,42 +351,7 @@ export function DiscountTypeForm() {
           الخصم قد يكون نسبة مئوية أو مبلغًا ثابتًا، ويتم احتسابه عند توليد الفاتورة.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.name?.length)}>
-              <FieldLabel htmlFor="discount-type-name">اسم الخصم</FieldLabel>
-              <Input id="discount-type-name" name="name" required />
-              <FieldError>{fieldErrors.name?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.value_type?.length)}>
-              <FieldLabel htmlFor="discount-value-type">طريقة الخصم</FieldLabel>
-              <NativeSelect id="discount-value-type" name="value_type" className="w-full" required>
-                {discountValueTypeOptions.map((valueType) => (
-                  <NativeSelectOption key={valueType} value={valueType}>
-                    {DISCOUNT_VALUE_TYPE_LABELS_AR[valueType]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.value_type?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.value?.length)}>
-              <FieldLabel htmlFor="discount-value">القيمة</FieldLabel>
-              <Input id="discount-value" name="value" type="number" min="0" step="0.01" dir="ltr" required />
-              <FieldError>{fieldErrors.value?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
-              <FieldLabel htmlFor="discount-description">الوصف</FieldLabel>
-              <Textarea id="discount-description" name="description" />
-              <FieldError>{fieldErrors.description?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ نوع الخصم" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
@@ -540,13 +556,74 @@ export function RecordPaymentForm({
   invoiceId,
   balanceAmount,
   defaultPaidAt,
+  surface = "card",
+  cancelSlot,
 }: {
   invoiceId: string
   balanceAmount: number
   defaultPaidAt: string
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(recordPaymentAction, initialState)
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <input type="hidden" name="invoice_id" value={invoiceId} />
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.amount?.length)}>
+          <FieldLabel htmlFor="payment-amount">المبلغ</FieldLabel>
+          <Input
+            id="payment-amount"
+            name="amount"
+            type="number"
+            min="0.01"
+            max={balanceAmount}
+            step="0.01"
+            dir="ltr"
+            required
+          />
+          <FieldError>{fieldErrors.amount?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.payment_method?.length)}>
+          <FieldLabel htmlFor="payment-method">طريقة الدفع</FieldLabel>
+          <NativeSelect id="payment-method" name="payment_method" className="w-full" required>
+            {paymentMethodOptions.map((paymentMethod) => (
+              <NativeSelectOption key={paymentMethod} value={paymentMethod}>
+                {PAYMENT_METHOD_LABELS_AR[paymentMethod]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.payment_method?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.paid_at?.length)}>
+          <FieldLabel htmlFor="payment-paid-at">وقت الدفع</FieldLabel>
+          <Input id="payment-paid-at" name="paid_at" type="datetime-local" defaultValue={defaultPaidAt} dir="ltr" required />
+          <FieldError>{fieldErrors.paid_at?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.reference_number?.length)}>
+          <FieldLabel htmlFor="payment-reference">رقم المرجع</FieldLabel>
+          <Input id="payment-reference" name="reference_number" dir="ltr" />
+          <FieldError>{fieldErrors.reference_number?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
+          <FieldLabel htmlFor="payment-notes">ملاحظات</FieldLabel>
+          <Textarea id="payment-notes" name="notes" />
+          <FieldError>{fieldErrors.notes?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="تسجيل الدفعة"
+        pendingLabel="جاري التسجيل..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -556,57 +633,7 @@ export function RecordPaymentForm({
           لا يسمح النظام بدفعة أكبر من الرصيد المتبقي لهذه الفاتورة.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <input type="hidden" name="invoice_id" value={invoiceId} />
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.amount?.length)}>
-              <FieldLabel htmlFor="payment-amount">المبلغ</FieldLabel>
-              <Input
-                id="payment-amount"
-                name="amount"
-                type="number"
-                min="0.01"
-                max={balanceAmount}
-                step="0.01"
-                dir="ltr"
-                required
-              />
-              <FieldError>{fieldErrors.amount?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.payment_method?.length)}>
-              <FieldLabel htmlFor="payment-method">طريقة الدفع</FieldLabel>
-              <NativeSelect id="payment-method" name="payment_method" className="w-full" required>
-                {paymentMethodOptions.map((paymentMethod) => (
-                  <NativeSelectOption key={paymentMethod} value={paymentMethod}>
-                    {PAYMENT_METHOD_LABELS_AR[paymentMethod]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.payment_method?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.paid_at?.length)}>
-              <FieldLabel htmlFor="payment-paid-at">وقت الدفع</FieldLabel>
-              <Input id="payment-paid-at" name="paid_at" type="datetime-local" defaultValue={defaultPaidAt} dir="ltr" required />
-              <FieldError>{fieldErrors.paid_at?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.reference_number?.length)}>
-              <FieldLabel htmlFor="payment-reference">رقم المرجع</FieldLabel>
-              <Input id="payment-reference" name="reference_number" dir="ltr" />
-              <FieldError>{fieldErrors.reference_number?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
-              <FieldLabel htmlFor="payment-notes">ملاحظات</FieldLabel>
-              <Textarea id="payment-notes" name="notes" />
-              <FieldError>{fieldErrors.notes?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="تسجيل الدفعة" pendingLabel="جاري التسجيل..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

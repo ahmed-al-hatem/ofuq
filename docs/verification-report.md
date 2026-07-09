@@ -3,6 +3,40 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 21.5 Modal Form UX Foundation Verification
+
+Phase 21.5 modal form UX foundation is implemented and verified with the
+requested minimal/high-value budget. The work introduced reusable wrappers over
+existing `components/ui` modal primitives, converted four low-risk quick forms,
+and kept server actions, validation, and legacy full-page routes intact.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Not run | Skipped because this phase does not change domain services, schema, or server-action business rules beyond UI composition. |
+| `npm run lint` | Failed for unrelated workspace files | Global ESLint still reports pre-existing issues in `.codex/skills/**/*.cjs`, `components/ui/carousel.tsx`, and `hooks/use-mobile.ts`; these are outside the Phase 21.5 change surface. |
+| Targeted ESLint on touched files | Passed | `npx eslint` succeeded on the touched dashboard form/page files plus the new shared modal components and the small `spinner` type fix. |
+| `npm run build` | Passed | Next.js production build completed successfully after the modal wrappers, selected page conversions, and a small build-unblocking type fix in `components/ui/spinner.tsx`. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Targeted browser smoke | Not run | Skipped because this phase keeps the verification budget intentionally minimal and does not require full local browser coverage. |
+| Schema / seed / Supabase config review | Passed by scope inspection | No schema files, seed files, or Supabase config files were changed in this phase. |
+
+Phase 21.5 scope notes:
+
+- Added reusable `FormDialog`, `FormSheet`, and `FormActions` wrappers using existing `components/ui` primitives only.
+- No custom modal primitive, custom overlay, or custom backdrop was introduced; dialog dimming continues to use the existing `DialogOverlay` behavior from `components/ui/dialog.tsx`.
+- Converted four low-risk examples:
+  - finance manual payment entry on invoice details
+  - finance discount-type creation
+  - communication announcement creation
+  - library physical-copy creation
+- Existing route pages for direct access were intentionally retained where already present.
+
+Skills used:
+
+- `shadcn`: used for `Dialog`/`Sheet`/`Button`/`Input`/`Select`/`Textarea` composition patterns and Base UI trigger behavior.
+- `ui-ux-pro-max`: used to validate dense operational form behavior, loading feedback, and modal/sheet interaction guidance.
+- `migrate-radix-to-base`: not needed because no Radix imports were found.
+
 ## Phase 21 Professional UI Polish and Design System Pass Verification
 
 Phase 21 professional UI polish is implemented and verified with the requested

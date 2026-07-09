@@ -12,6 +12,18 @@ For UI-only polish phases, the default verification budget stays intentionally
 small: prefer `npm run lint`, `npm run build`, and `git diff --check`, and only
 expand into unit or browser coverage when logic or route behavior changes.
 
+For modal-form foundation work such as Phase 21.5, the minimum high-value
+verification budget is:
+
+- `npm run build`
+- `git diff --check`
+- `npm run lint` when several TS/TSX files were touched
+
+If global ESLint is blocked by unrelated workspace files, run targeted ESLint on
+the touched application and shared UI files and document the blocker honestly.
+A tiny targeted browser smoke for modal open/close behavior is optional, not
+mandatory, for this phase type.
+
 ## Automated commands
 
 ```bash

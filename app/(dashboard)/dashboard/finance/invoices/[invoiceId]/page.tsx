@@ -2,9 +2,10 @@ import Link from "next/link"
 import { FileText, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormDialog } from "@/components/shared/form-dialog"
 import { PageHeader } from "@/components/shared/page-header"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DialogClose } from "@/components/ui/dialog"
 import { USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
 import { requireFinanceContext } from "@/lib/finance/context"
@@ -196,18 +198,30 @@ export default async function FinanceInvoiceDetailsPage({
               <p className="text-sm text-muted-foreground">
                 لا توجد دفعة متاحة لهذه الفاتورة حاليًا.
               </p>
-            ) : null}
+            ) : (
+              <FormDialog
+                trigger={<Button size="lg" />}
+                triggerLabel="تسجيل دفعة"
+                title="تسجيل دفعة يدوية"
+                description="سجّل دفعة جديدة مع بقاءك في سياق الفاتورة الحالية."
+                size="lg"
+              >
+                <RecordPaymentForm
+                  invoiceId={detail.invoice.id}
+                  balanceAmount={Number(detail.invoice.balance_amount)}
+                  defaultPaidAt={defaultDateTimeLocal()}
+                  surface="plain"
+                  cancelSlot={
+                    <DialogClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </DialogClose>
+                  }
+                />
+              </FormDialog>
+            )}
           </CardContent>
         </Card>
       </section>
-
-      {canRecordPayment ? (
-        <RecordPaymentForm
-          invoiceId={detail.invoice.id}
-          balanceAmount={Number(detail.invoice.balance_amount)}
-          defaultPaidAt={defaultDateTimeLocal()}
-        />
-      ) : null}
 
       <Card className="border-border/70 shadow-sm">
         <CardHeader>

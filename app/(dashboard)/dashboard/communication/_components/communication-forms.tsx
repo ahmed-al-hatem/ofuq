@@ -2,7 +2,9 @@
 
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
+import type { ReactNode } from "react"
 
+import { FormActions } from "@/components/shared/form-actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -48,6 +50,7 @@ import {
 } from "@/types/communication"
 
 const initialState: CommunicationActionState = null
+type FormSurface = "card" | "plain"
 
 const announcementTargetOptions = [
   "school",
@@ -198,15 +201,97 @@ export function MessageForm({
 export function AnnouncementForm({
   gradeLevels,
   classes,
+  surface = "card",
+  cancelSlot,
 }: {
   gradeLevels: GradeLevel[]
   classes: ClassSection[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     createAnnouncementAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.title?.length)}>
+          <FieldLabel htmlFor="announcement-title">العنوان</FieldLabel>
+          <Input id="announcement-title" name="title" required />
+          <FieldError>{fieldErrors.title?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.target_type?.length)}>
+          <FieldLabel htmlFor="announcement-target-type">الجمهور</FieldLabel>
+          <NativeSelect id="announcement-target-type" name="target_type" className="w-full" required>
+            {announcementTargetOptions.map((targetType) => (
+              <NativeSelectOption key={targetType} value={targetType}>
+                {ANNOUNCEMENT_TARGET_TYPE_LABELS_AR[targetType]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.target_type?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.target_role?.length)}>
+          <FieldLabel htmlFor="announcement-target-role">الدور المستهدف</FieldLabel>
+          <NativeSelect id="announcement-target-role" name="target_role" className="w-full">
+            <NativeSelectOption value="">بدون دور</NativeSelectOption>
+            {roleOptions.map((role) => (
+              <NativeSelectOption key={role} value={role}>
+                {USER_ROLE_LABELS_AR[role]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.target_role?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
+          <FieldLabel htmlFor="announcement-grade-level">الصف الدراسي</FieldLabel>
+          <NativeSelect id="announcement-grade-level" name="grade_level_id" className="w-full">
+            <NativeSelectOption value="">بدون صف</NativeSelectOption>
+            {gradeLevels.map((gradeLevel) => (
+              <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
+                {gradeLevel.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
+          <FieldLabel htmlFor="announcement-class">الشعبة</FieldLabel>
+          <NativeSelect id="announcement-class" name="class_id" className="w-full">
+            <NativeSelectOption value="">بدون شعبة</NativeSelectOption>
+            {classes.map((classSection) => (
+              <NativeSelectOption key={classSection.id} value={classSection.id}>
+                {classSection.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.expires_at?.length)}>
+          <FieldLabel htmlFor="announcement-expires-at">ينتهي في</FieldLabel>
+          <Input id="announcement-expires-at" name="expires_at" type="datetime-local" dir="ltr" />
+          <FieldError>{fieldErrors.expires_at?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.body?.length)}>
+          <FieldLabel htmlFor="announcement-body">نص الإعلان</FieldLabel>
+          <Textarea id="announcement-body" name="body" required />
+          <FieldError>{fieldErrors.body?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ الإعلان"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -216,78 +301,7 @@ export function AnnouncementForm({
           ينشأ الإعلان كمسودة، ويمكن نشره من صفحة الإعلانات.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.title?.length)}>
-              <FieldLabel htmlFor="announcement-title">العنوان</FieldLabel>
-              <Input id="announcement-title" name="title" required />
-              <FieldError>{fieldErrors.title?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.target_type?.length)}>
-              <FieldLabel htmlFor="announcement-target-type">الجمهور</FieldLabel>
-              <NativeSelect id="announcement-target-type" name="target_type" className="w-full" required>
-                {announcementTargetOptions.map((targetType) => (
-                  <NativeSelectOption key={targetType} value={targetType}>
-                    {ANNOUNCEMENT_TARGET_TYPE_LABELS_AR[targetType]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.target_type?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.target_role?.length)}>
-              <FieldLabel htmlFor="announcement-target-role">الدور المستهدف</FieldLabel>
-              <NativeSelect id="announcement-target-role" name="target_role" className="w-full">
-                <NativeSelectOption value="">بدون دور</NativeSelectOption>
-                {roleOptions.map((role) => (
-                  <NativeSelectOption key={role} value={role}>
-                    {USER_ROLE_LABELS_AR[role]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.target_role?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
-              <FieldLabel htmlFor="announcement-grade-level">الصف الدراسي</FieldLabel>
-              <NativeSelect id="announcement-grade-level" name="grade_level_id" className="w-full">
-                <NativeSelectOption value="">بدون صف</NativeSelectOption>
-                {gradeLevels.map((gradeLevel) => (
-                  <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
-                    {gradeLevel.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
-              <FieldLabel htmlFor="announcement-class">الشعبة</FieldLabel>
-              <NativeSelect id="announcement-class" name="class_id" className="w-full">
-                <NativeSelectOption value="">بدون شعبة</NativeSelectOption>
-                {classes.map((classSection) => (
-                  <NativeSelectOption key={classSection.id} value={classSection.id}>
-                    {classSection.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.expires_at?.length)}>
-              <FieldLabel htmlFor="announcement-expires-at">ينتهي في</FieldLabel>
-              <Input id="announcement-expires-at" name="expires_at" type="datetime-local" dir="ltr" />
-              <FieldError>{fieldErrors.expires_at?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.body?.length)}>
-              <FieldLabel htmlFor="announcement-body">نص الإعلان</FieldLabel>
-              <Textarea id="announcement-body" name="body" required />
-              <FieldError>{fieldErrors.body?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ الإعلان" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

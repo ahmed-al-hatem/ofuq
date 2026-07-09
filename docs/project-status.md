@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 21 Professional UI Polish and Design System Pass implemented
-- Last completed implementation phase: Phase 21 Professional UI Polish and Design System Pass
-- Last completed quality phase: Phase 21 Professional UI Polish and Design System Pass Verification
-- Next implementation phase: Phase 22 Module UX Cleanup by Domain
+- Current phase: Phase 21.5 Modal Form UX Foundation implemented
+- Last completed implementation phase: Phase 21.5 Modal Form UX Foundation
+- Last completed quality phase: Phase 21.5 Modal Form UX Foundation Verification
+- Next implementation phase: Phase 22A Module UX Cleanup by Domain
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -52,6 +52,7 @@
 | Phase 19 Role-Aware UX Routing and Navigation Foundation | Done with documented local browser blocker | Login redirect now follows the resolved fixed role, `parent` and `student` are routed to `/portal`, dashboard shell access excludes portal roles, dashboard navigation is filtered by staff role, and developer-facing dashboard copy has been removed. |
 | Phase 20 Role-Specific Dashboards Foundation | Done with preflight auth repair verified | `/dashboard` now renders staff-specific dashboards for admin, teacher, accountant, and librarian roles, while `/portal` now surfaces richer parent/student overviews using authenticated linked-student scope only and without schema changes. |
 | Phase 21 Professional UI Polish and Design System Pass | Done with minimal verification budget | Dashboard and portal shells, headers, sidebars, shared cards, empty states, and landing-page copy now present a more cohesive Arabic-first SaaS experience without schema or workflow changes. |
+| Phase 21.5 Modal Form UX Foundation | Done with minimal verification budget | Reusable `Dialog` and `Sheet` composition wrappers now support quick create/edit flows, and selected low-risk forms were converted without schema, seed, or Supabase config changes. |
 
 ## Current Implemented Modules
 
@@ -77,6 +78,7 @@
 - Role-aware login routing and dashboard navigation filtering by fixed role.
 - Role-specific staff dashboards and richer parent/student portal summaries.
 - Professionalized dashboard and portal shell styling, shared section primitives, and production-ready Arabic empty-state copy.
+- Reusable modal-form UX foundation for selected quick forms using existing `components/ui` `Dialog` and `Sheet` primitives with dimmed overlays and Arabic-first action copy.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
 
@@ -248,6 +250,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - `docs/project-status.md`
 - `docs/testing.md`
 - `docs/verification-report.md`
+- `docs/ui-ux-role-roadmap.md`
 - `docs/verification-phase-06.md`
 - `docs/verification-phase-07.md`
 - `docs/requirements-roadmap.md`
@@ -270,6 +273,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - Automated coverage remains intentionally small: Vitest targets stable pure logic and Playwright targets a small local-only browser smoke slice rather than full regression coverage.
 - Browser smoke is now covered locally through Playwright only. Hosted CI E2E, cross-browser matrices, CRUD flows, and visual regression remain deferred.
+- Modal-form conversion is intentionally limited to a small set of quick forms. Broader page-by-page cleanup remains deferred to Phase 22.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, and authenticated browser workflow smoke is now covered separately in the Phase 17 Playwright foundation.
 - A local Auth smoke-login issue caused by `NULL` GoTrue token fields was fixed and documented in `docs/local-auth-smoke-troubleshooting.md`.
@@ -277,6 +281,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: Phase 21 Professional UI Polish and Design System Pass.
+Recommended next phase: Phase 22A Module UX Cleanup by Domain.
 
-Go/no-go status: Go for Phase 21 planning. Phase 20 implementation plus the local demo-auth preflight repair are verified locally with passing lint, build, targeted auth checks, and targeted accountant/librarian Playwright smoke.
+Go/no-go status: Go for Phase 22A planning. Phase 21.5 is implemented with passing `npm run build`, passing `git diff --check`, passing targeted ESLint on touched files, honest documentation of unrelated global lint blockers, and no schema/seed/Supabase config changes.

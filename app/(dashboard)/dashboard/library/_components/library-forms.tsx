@@ -2,7 +2,9 @@
 
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
+import type { ReactNode } from "react"
 
+import { FormActions } from "@/components/shared/form-actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -42,6 +44,7 @@ import {
 } from "@/types/library"
 
 const initialState: LibraryActionState = null
+type FormSurface = "card" | "plain"
 
 const bookCopyConditionOptions = [
   "new",
@@ -190,11 +193,75 @@ export function BookCatalogForm() {
 
 export function BookCopyForm({
   catalogOptions,
+  surface = "card",
+  cancelSlot,
 }: {
   catalogOptions: BookCatalogOption[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(createBookCopyAction, initialState)
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.catalog_id?.length)}>
+          <FieldLabel htmlFor="copy-catalog">الكتاب</FieldLabel>
+          <NativeSelect id="copy-catalog" name="catalog_id" className="w-full" required>
+            <NativeSelectOption value="">اختر الكتاب</NativeSelectOption>
+            {catalogOptions.map((catalog) => (
+              <NativeSelectOption key={catalog.id} value={catalog.id}>
+                {catalog.title}
+                {catalog.author ? ` - ${catalog.author}` : ""}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.catalog_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.condition?.length)}>
+          <FieldLabel htmlFor="copy-condition">حالة النسخة</FieldLabel>
+          <NativeSelect id="copy-condition" name="condition" className="w-full" defaultValue="good" required>
+            {bookCopyConditionOptions.map((condition) => (
+              <NativeSelectOption key={condition} value={condition}>
+                {BOOK_COPY_CONDITION_LABELS_AR[condition]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.condition?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.barcode?.length)}>
+          <FieldLabel htmlFor="copy-barcode">الباركود</FieldLabel>
+          <Input id="copy-barcode" name="barcode" dir="ltr" />
+          <FieldError>{fieldErrors.barcode?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.accession_number?.length)}>
+          <FieldLabel htmlFor="copy-accession">رقم القيد</FieldLabel>
+          <Input id="copy-accession" name="accession_number" dir="ltr" />
+          <FieldError>{fieldErrors.accession_number?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.shelf_location?.length)}>
+          <FieldLabel htmlFor="copy-shelf">موقع الرف</FieldLabel>
+          <Input id="copy-shelf" name="shelf_location" />
+          <FieldError>{fieldErrors.shelf_location?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
+          <FieldLabel htmlFor="copy-notes">ملاحظات</FieldLabel>
+          <Textarea id="copy-notes" name="notes" />
+          <FieldError>{fieldErrors.notes?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ النسخة"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -204,60 +271,7 @@ export function BookCopyForm({
           النسخة تمثل كتابًا فعليًا على الرف ويمكن إعارتها لطالب واحد فقط في كل مرة.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.catalog_id?.length)}>
-              <FieldLabel htmlFor="copy-catalog">الكتاب</FieldLabel>
-              <NativeSelect id="copy-catalog" name="catalog_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الكتاب</NativeSelectOption>
-                {catalogOptions.map((catalog) => (
-                  <NativeSelectOption key={catalog.id} value={catalog.id}>
-                    {catalog.title}
-                    {catalog.author ? ` - ${catalog.author}` : ""}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.catalog_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.condition?.length)}>
-              <FieldLabel htmlFor="copy-condition">حالة النسخة</FieldLabel>
-              <NativeSelect id="copy-condition" name="condition" className="w-full" defaultValue="good" required>
-                {bookCopyConditionOptions.map((condition) => (
-                  <NativeSelectOption key={condition} value={condition}>
-                    {BOOK_COPY_CONDITION_LABELS_AR[condition]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.condition?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.barcode?.length)}>
-              <FieldLabel htmlFor="copy-barcode">الباركود</FieldLabel>
-              <Input id="copy-barcode" name="barcode" dir="ltr" />
-              <FieldError>{fieldErrors.barcode?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.accession_number?.length)}>
-              <FieldLabel htmlFor="copy-accession">رقم القيد</FieldLabel>
-              <Input id="copy-accession" name="accession_number" dir="ltr" />
-              <FieldError>{fieldErrors.accession_number?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.shelf_location?.length)}>
-              <FieldLabel htmlFor="copy-shelf">موقع الرف</FieldLabel>
-              <Input id="copy-shelf" name="shelf_location" />
-              <FieldError>{fieldErrors.shelf_location?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
-              <FieldLabel htmlFor="copy-notes">ملاحظات</FieldLabel>
-              <Textarea id="copy-notes" name="notes" />
-              <FieldError>{fieldErrors.notes?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ النسخة" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

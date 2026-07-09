@@ -2,9 +2,10 @@ import Link from "next/link"
 import { Megaphone, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,6 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SheetClose } from "@/components/ui/sheet"
+import { listClasses, listGradeLevels } from "@/lib/academic/academic-structure"
 import { USER_ROLE_LABELS_AR, USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
 import { listAnnouncements } from "@/lib/communication/announcements"
@@ -21,7 +24,10 @@ import {
   ANNOUNCEMENT_STATUS_TONES,
   ANNOUNCEMENT_TARGET_TYPE_LABELS_AR,
 } from "@/types/communication"
-import { AnnouncementActions } from "@/app/(dashboard)/dashboard/communication/_components/communication-forms"
+import {
+  AnnouncementActions,
+  AnnouncementForm,
+} from "@/app/(dashboard)/dashboard/communication/_components/communication-forms"
 
 const communicationRoles = [
   USER_ROLES.SYSTEM_ADMIN,
@@ -76,10 +82,14 @@ export default async function CommunicationAnnouncementsPage() {
     )
   }
 
-  const announcements = await listAnnouncements(contextResult.data)
   const canManage =
     contextResult.data.role === USER_ROLES.SYSTEM_ADMIN ||
     contextResult.data.role === USER_ROLES.SCHOOL_ADMIN
+  const [announcements, gradeLevels, classes] = await Promise.all([
+    listAnnouncements(contextResult.data),
+    canManage ? listGradeLevels(contextResult.data) : Promise.resolve([]),
+    canManage ? listClasses(contextResult.data) : Promise.resolve([]),
+  ])
 
   return (
     <div className="flex flex-col gap-6">
@@ -88,12 +98,32 @@ export default async function CommunicationAnnouncementsPage() {
         description="إعلانات مدرسية بسيطة موجهة للمدرسة أو دور أو صف أو شعبة."
         actions={
           canManage ? (
-            <Link
-              href={appRoutes.newCommunicationAnnouncement}
-              className={buttonVariants({ size: "lg" })}
-            >
-              إعلان جديد
-            </Link>
+            <>
+              <FormSheet
+                trigger={<Button size="lg" />}
+                triggerLabel="إعلان جديد"
+                title="إعلان جديد"
+                description="نموذج سريع لإنشاء إعلان كمسودة مع بقاءك في صفحة الإعلانات."
+                width="lg"
+              >
+                <AnnouncementForm
+                  gradeLevels={gradeLevels}
+                  classes={classes}
+                  surface="plain"
+                  cancelSlot={
+                    <SheetClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </SheetClose>
+                  }
+                />
+              </FormSheet>
+              <Link
+                href={appRoutes.newCommunicationAnnouncement}
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                فتح الصفحة الكاملة
+              </Link>
+            </>
           ) : null
         }
       />
