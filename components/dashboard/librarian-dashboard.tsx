@@ -2,6 +2,8 @@ import { BookCopy, BookMarked, LibraryBig, NotebookText, TriangleAlert } from "l
 
 import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { QuickActionCard } from "@/components/shared/quick-action-card"
 import { SummarySectionCard } from "@/components/shared/summary-section-card"
 import { appRoutes } from "@/constants/routes"
@@ -15,10 +17,11 @@ const quickActionIcons = [BookMarked, BookCopy, NotebookText, TriangleAlert]
 
 export function LibrarianDashboard({ summary }: LibrarianDashboardProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
+        eyebrow="لوحة المكتبة"
         title="لوحة المكتبة"
-        description="ملخص يومي لفهرس الكتب وحركة الإعارات والحالات التي تحتاج متابعة."
+        description="تابع الفهرس والإعارات والحالات التي تحتاج متابعة من واجهة عملية وسريعة القراءة."
       />
 
       <KpiGrid
@@ -57,15 +60,23 @@ export function LibrarianDashboard({ summary }: LibrarianDashboardProps) {
         ]}
       />
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+      <PageSection
+        title="الإجراءات السريعة"
+        description="انتقل مباشرة إلى أكثر المهام استخدامًا في إدارة المكتبة."
+        contentClassName="grid gap-4 lg:grid-cols-2 xl:grid-cols-4"
+      >
         {summary.quickActions.map((action, index) => {
           const Icon = quickActionIcons[index] ?? LibraryBig
 
           return <QuickActionCard key={action.title} {...action} icon={Icon} />
         })}
-      </section>
+      </PageSection>
 
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="حالة التشغيل"
+        description="الأقسام التالية تعرض حركة الإعارة والمؤشرات التي تستحق انتباهًا سريعًا."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         <SummarySectionCard
           title="آخر الإعارات"
           description="الحركة الحديثة للكتب المستعارة داخل المكتبة."
@@ -99,7 +110,7 @@ export function LibrarianDashboard({ summary }: LibrarianDashboardProps) {
           emptyTitle="لا توجد بيانات مكتبية مطابقة حاليًا"
           emptyDescription="انتقل إلى قسم المكتبة لمراجعة السجلات المتاحة."
         />
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

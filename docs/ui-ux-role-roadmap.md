@@ -4,24 +4,24 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
-## Status Update After Phase 20
+## Status Update After Phase 21
 
-- Phase 19 and Phase 20 are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, and `/dashboard` now renders role-specific home content for staff users.
+- Phase 19, Phase 20, and Phase 21 are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, and the shared dashboard/portal presentation now has a more professional Arabic-first polish pass.
 - `/portal` overview is now more useful for `parent` and `student` without adding mutations or widening authorization scope.
-- These phases did not add RBAC, RLS, schema changes, or a full redesign.
-- The next recommended UI/UX slice is Phase 21 Professional UI Polish and Design System Pass.
+- These phases did not add RBAC, RLS, schema changes, or workflow redesign.
+- The next recommended UI/UX slice is Phase 22 Module UX Cleanup by Domain.
 
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 
 ## Current UX Problem
 
-The current UI has three visible product issues:
+The remaining UI work is now narrower and more domain-specific:
 
-1. All users are still routed into the dashboard experience after login, even when their role should use the parent/student portal.
-2. The dashboard shell/sidebar is too broad and exposes navigation that does not match every staff role.
-3. Some UI copy still looks like developer-facing placeholder text, such as wording about the dashboard being ready for Supabase Auth or Server Actions.
+1. Many module subpages still need the new shared polish patterns applied consistently.
+2. Some secondary pages still contain older operational copy or denser layouts that can be improved.
+3. The shell and landing experience are now stronger than a number of deeper module pages, so Phase 22 should focus on consistency by domain rather than new product surface area.
 
-These issues make the product feel unfinished during a final presentation even though the underlying modules are present.
+These are no longer product-foundation blockers. They are quality and consistency opportunities for the next UX slice.
 
 ## Product Principle
 

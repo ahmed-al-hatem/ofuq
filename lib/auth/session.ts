@@ -2,7 +2,7 @@ import "server-only"
 
 import type { User } from "@supabase/supabase-js"
 
-import { USER_ROLE_LABELS_AR, type UserRole } from "@/constants/roles"
+import { getRoleLabel as getSharedRoleLabel, type UserRole } from "@/constants/roles"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
 import type {
   AuthenticatedUser,
@@ -40,7 +40,7 @@ export function buildAuthenticatedUser(
 }
 
 export function getRoleLabel(role: UserRole): string {
-  return USER_ROLE_LABELS_AR[role]
+  return getSharedRoleLabel(role)
 }
 
 export async function getCurrentAuthUser(): Promise<User | null> {

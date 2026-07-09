@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 20 Role-Specific Dashboards Foundation implemented
-- Last completed implementation phase: Phase 20 Role-Specific Dashboards Foundation
-- Last completed quality phase: Phase 20 Role-Specific Dashboards Foundation Verification plus local demo-auth preflight repair for accountant/librarian E2E
-- Next implementation phase: Phase 21 Professional UI Polish and Design System Pass
+- Current phase: Phase 21 Professional UI Polish and Design System Pass implemented
+- Last completed implementation phase: Phase 21 Professional UI Polish and Design System Pass
+- Last completed quality phase: Phase 21 Professional UI Polish and Design System Pass Verification
+- Next implementation phase: Phase 22 Module UX Cleanup by Domain
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -51,6 +51,7 @@
 | Phase 18 Settings and Integrations Placeholders Foundation | Done | Admin-only `/dashboard/settings` and `/dashboard/integrations` now exist with school-scoped settings persistence, message-template editing, integration placeholder pages, local seed data, unit coverage, DB smoke updates, and Playwright smoke coverage without real external connections. |
 | Phase 19 Role-Aware UX Routing and Navigation Foundation | Done with documented local browser blocker | Login redirect now follows the resolved fixed role, `parent` and `student` are routed to `/portal`, dashboard shell access excludes portal roles, dashboard navigation is filtered by staff role, and developer-facing dashboard copy has been removed. |
 | Phase 20 Role-Specific Dashboards Foundation | Done with preflight auth repair verified | `/dashboard` now renders staff-specific dashboards for admin, teacher, accountant, and librarian roles, while `/portal` now surfaces richer parent/student overviews using authenticated linked-student scope only and without schema changes. |
+| Phase 21 Professional UI Polish and Design System Pass | Done with minimal verification budget | Dashboard and portal shells, headers, sidebars, shared cards, empty states, and landing-page copy now present a more cohesive Arabic-first SaaS experience without schema or workflow changes. |
 
 ## Current Implemented Modules
 
@@ -75,7 +76,7 @@
 - Integration placeholders foundation, including admin-only overview and provider pages for WhatsApp, webhooks, MoE, calendar, BI, and automation without real external API calls or secret storage.
 - Role-aware login routing and dashboard navigation filtering by fixed role.
 - Role-specific staff dashboards and richer parent/student portal summaries.
-- Dashboard shell and navigation with Arabic-first RTL UI.
+- Professionalized dashboard and portal shell styling, shared section primitives, and production-ready Arabic empty-state copy.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
 

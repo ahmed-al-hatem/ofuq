@@ -20,6 +20,7 @@
 18. Settings and integrations placeholders foundation
 19. Role-aware UX routing and navigation foundation
 20. Role-specific dashboards foundation
+21. Professional UI polish and design system pass
 
 ## Later-phase items
 
@@ -37,10 +38,17 @@ attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation, and
-role-specific dashboard foundations in
+role-specific dashboard and UI-polish foundations in
 place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 21 snapshot
+
+- Dashboard and portal shells now use a more cohesive visual foundation with softer surfaces, clearer spacing, and stronger hierarchy.
+- Shared primitives such as page headers, KPI cards, quick-action cards, summary cards, and empty states were polished for production-facing Arabic UI.
+- Staff and portal landing experiences now use shared section wrappers and more professional operational copy.
+- No schema changes, seed changes, Supabase config changes, RBAC, or RLS were introduced in this phase.
 
 ## Phase 20 snapshot
 

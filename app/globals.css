@@ -117,11 +117,24 @@
   }
 
   html {
-    @apply font-sans;
+    @apply bg-background font-sans;
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     min-height: 100vh;
+    min-height: 100dvh;
+    background-image:
+      radial-gradient(circle at top, hsl(var(--brand-gold) / 0.12), transparent 28%),
+      radial-gradient(circle at right top, hsl(var(--brand-teal) / 0.09), transparent 24%),
+      linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted) / 0.6));
+  }
+
+  ::selection {
+    @apply bg-primary text-primary-foreground;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring/20 ring-offset-2 ring-offset-background;
   }
 }

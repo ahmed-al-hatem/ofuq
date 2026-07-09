@@ -22,6 +22,10 @@ export const USER_ROLE_LABELS_AR = {
 
 export const ROLE_LABELS_AR = USER_ROLE_LABELS_AR
 
+export function getRoleLabel(role: UserRole): string {
+  return USER_ROLE_LABELS_AR[role]
+}
+
 export const ROLE_GROUPS = {
   administration: [USER_ROLES.SYSTEM_ADMIN, USER_ROLES.SCHOOL_ADMIN],
   education: [USER_ROLES.TEACHER, USER_ROLES.STUDENT],

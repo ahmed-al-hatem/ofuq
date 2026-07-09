@@ -2,6 +2,8 @@ import { Bell, BookOpen, CalendarCheck2, CalendarDays, NotebookPen, Presentation
 
 import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { QuickActionCard } from "@/components/shared/quick-action-card"
 import { SummarySectionCard } from "@/components/shared/summary-section-card"
 import { appRoutes } from "@/constants/routes"
@@ -15,10 +17,11 @@ const quickActionIcons = [CalendarCheck2, NotebookPen, CalendarDays, Bell]
 
 export function TeacherDashboard({ summary }: TeacherDashboardProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
+        eyebrow="لوحة المعلم"
         title="لوحة المعلم"
-        description="نظرة عامة على أعمالك اليومية، من الجدول والحضور حتى الدرجات والإعلانات."
+        description="ابدأ يومك بملخص منظم للحصص والحضور والدرجات والإعلانات المرتبطة بعملك التعليمي."
       />
 
       <KpiGrid
@@ -41,15 +44,23 @@ export function TeacherDashboard({ summary }: TeacherDashboardProps) {
         ]}
       />
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+      <PageSection
+        title="الإجراءات السريعة"
+        description="اختصارات للوصول إلى الأعمال المتكررة أثناء يومك الدراسي."
+        contentClassName="grid gap-4 lg:grid-cols-2 xl:grid-cols-4"
+      >
         {summary.quickActions.map((action, index) => {
           const Icon = quickActionIcons[index] ?? Presentation
 
           return <QuickActionCard key={action.title} {...action} icon={Icon} />
         })}
-      </section>
+      </PageSection>
 
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="ملخص التنفيذ"
+        description="الأقسام التالية تساعدك على متابعة اليوم الدراسي دون التنقل بين صفحات كثيرة."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         <SummarySectionCard
           title="جدولي اليوم"
           description="أقرب الحصص المجدولة لهذا اليوم."
@@ -78,7 +89,7 @@ export function TeacherDashboard({ summary }: TeacherDashboardProps) {
           emptyTitle="لا توجد إعلانات حديثة حاليًا"
           emptyDescription="راجع قسم التواصل للاطلاع على الرسائل والإعلانات."
         />
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

@@ -1,6 +1,8 @@
 import Link from "next/link"
 import type { ComponentType } from "react"
+import { ArrowLeft } from "lucide-react"
 
+import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -22,6 +24,14 @@ const toneClasses: Record<NonNullable<StatCardProps["tone"]>, string> = {
   danger: "bg-destructive/10 text-destructive",
 }
 
+const toneLabels: Record<NonNullable<StatCardProps["tone"]>, string> = {
+  default: "ملخص",
+  info: "متابعة",
+  success: "مستقر",
+  warning: "يتطلب انتباهًا",
+  danger: "أولوية",
+}
+
 export function StatCard({
   title,
   value,
@@ -31,15 +41,18 @@ export function StatCard({
   tone = "default",
 }: StatCardProps) {
   return (
-    <Card className="border-border/70 shadow-sm">
+    <Card className="overflow-hidden border-border/70 bg-linear-to-br from-background to-muted/20 shadow-sm transition-transform duration-200 hover:-translate-y-0.5">
       <CardHeader className="flex flex-row items-start justify-between gap-4">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-1 flex-col gap-3">
+          <Badge variant="outline" className="w-fit rounded-full">
+            {toneLabels[tone]}
+          </Badge>
           <CardDescription>{title}</CardDescription>
-          <CardTitle className="text-3xl">{value}</CardTitle>
+          <CardTitle className="text-3xl tabular-nums">{value}</CardTitle>
         </div>
         <div
           className={cn(
-            "flex size-11 items-center justify-center rounded-2xl",
+            "flex size-11 items-center justify-center rounded-2xl border border-border/60",
             toneClasses[tone]
           )}
         >
@@ -53,7 +66,11 @@ export function StatCard({
       ) : null}
       {href ? (
         <CardFooter>
-          <Link href={href} className={buttonVariants({ size: "sm", variant: "outline" })}>
+          <Link
+            href={href}
+            className={cn(buttonVariants({ size: "sm", variant: "outline" }), "rounded-full")}
+          >
+            <ArrowLeft data-icon="inline-start" />
             فتح القسم
           </Link>
         </CardFooter>

@@ -3,6 +3,29 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 21 Professional UI Polish and Design System Pass Verification
+
+Phase 21 professional UI polish is implemented and verified with the requested
+minimal/high-value quality budget. The work focused on shells, shared
+presentational components, dashboard/portal landing polish, and production-ready
+Arabic copy without changing schema, seeds, or route authorization behavior.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `supabase db reset` | Not run | Skipped because Phase 21 adds no schema or seed changes. |
+| `npm run test` | Not run | Skipped because this phase is presentational and does not intentionally expand logic coverage. |
+| `npm run lint` | Failed for unrelated workspace files | ESLint still reports pre-existing `@typescript-eslint/no-require-imports` errors inside `.codex/skills/brand/scripts/*.cjs` and `.codex/skills/design-system/scripts/*.cjs`; these files are outside the Phase 21 implementation surface. |
+| `npm run build` | Passed | Next.js production build completed successfully after the shared UI polish, shell updates, and documentation changes. |
+| Targeted Playwright smoke | Not run | Skipped because Phase 21 does not change routing or auth behavior, and the required budget does not mandate E2E. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Schema / config review | Passed by scope inspection | No schema files, seed files, or Supabase config files were changed in this phase. |
+
+Phase 21 scope notes:
+
+- Dashboard shell, portal shell, headers, sidebars, page headers, KPI cards, quick actions, summary cards, and empty states were visually polished.
+- Arabic-first production copy was improved on the main shell and landing surfaces.
+- No business workflows, RBAC, RLS, schema changes, or external integrations were added.
+
 ## Phase 20 Role-Specific Dashboards Foundation Verification
 
 Phase 20 role-specific dashboards foundation is implemented and verified for

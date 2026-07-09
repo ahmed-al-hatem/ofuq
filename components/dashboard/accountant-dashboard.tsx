@@ -2,6 +2,8 @@ import { BadgePercent, CircleDollarSign, FileText, Receipt, Wallet } from "lucid
 
 import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { QuickActionCard } from "@/components/shared/quick-action-card"
 import { SummarySectionCard } from "@/components/shared/summary-section-card"
 import { formatCurrencyLabel } from "@/lib/dashboard/shared"
@@ -16,10 +18,11 @@ const quickActionIcons = [FileText, Receipt, BadgePercent, Wallet]
 
 export function AccountantDashboard({ summary }: AccountantDashboardProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
+        eyebrow="لوحة المحاسبة"
         title="لوحة المحاسب"
-        description="نظرة مركزة على الفواتير والمدفوعات والرصيد القائم داخل المدرسة."
+        description="ملخص مالي سريع يساعدك على متابعة الفواتير والتحصيل والرصيد القائم داخل المدرسة."
       />
 
       <KpiGrid
@@ -58,15 +61,23 @@ export function AccountantDashboard({ summary }: AccountantDashboardProps) {
         ]}
       />
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+      <PageSection
+        title="الإجراءات السريعة"
+        description="اختصارات عملية للوصول إلى الإدخال والتحصيل والتقارير الأكثر استخدامًا."
+        contentClassName="grid gap-4 lg:grid-cols-2 xl:grid-cols-4"
+      >
         {summary.quickActions.map((action, index) => {
           const Icon = quickActionIcons[index] ?? Wallet
 
           return <QuickActionCard key={action.title} {...action} icon={Icon} />
         })}
-      </section>
+      </PageSection>
 
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="متابعة التحصيل"
+        description="نظرة مركزة على الحركة المالية الحديثة والتوزيع الحالي للفواتير."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         <SummarySectionCard
           title="آخر المدفوعات"
           description="الحركة المالية الحديثة داخل المدرسة."
@@ -106,7 +117,7 @@ export function AccountantDashboard({ summary }: AccountantDashboardProps) {
           emptyTitle="لا توجد بيانات مالية مطابقة حاليًا"
           emptyDescription="انتقل إلى المالية لمتابعة السجلات المتاحة."
         />
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

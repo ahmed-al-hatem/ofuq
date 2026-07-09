@@ -2,6 +2,8 @@ import { Bell, CalendarCheck2, CircleDollarSign, ClipboardList, FileText, Users2
 
 import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { QuickActionCard } from "@/components/shared/quick-action-card"
 import { SummarySectionCard } from "@/components/shared/summary-section-card"
 import { appRoutes } from "@/constants/routes"
@@ -15,10 +17,11 @@ const quickActionIcons = [Users2, FileText, CalendarCheck2, CircleDollarSign]
 
 export function AdminDashboard({ summary }: AdminDashboardProps) {
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
+        eyebrow="لوحة الإدارة"
         title="لوحة تشغيل المدرسة"
-        description="نظرة عامة على الأعمال اليومية والمجالات التي تحتاج متابعة تشغيلية."
+        description="تعرض هذه الصفحة ملخصًا لأهم بيانات المدرسة والمهام التي تستحق المتابعة خلال اليوم."
       />
 
       <KpiGrid
@@ -57,15 +60,23 @@ export function AdminDashboard({ summary }: AdminDashboardProps) {
         ]}
       />
 
-      <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-4">
+      <PageSection
+        title="الإجراءات السريعة"
+        description="انتقل مباشرة إلى أكثر الأعمال استخدامًا في التشغيل اليومي."
+        contentClassName="grid gap-4 lg:grid-cols-2 xl:grid-cols-4"
+      >
         {summary.quickActions.map((action, index) => {
           const Icon = quickActionIcons[index] ?? Bell
 
           return <QuickActionCard key={action.title} {...action} icon={Icon} />
         })}
-      </section>
+      </PageSection>
 
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="المتابعة اليومية"
+        description="نوافذ سريعة على الحضور والتحصيل والإعلانات والفعاليات القريبة."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         <SummarySectionCard
           title="آخر جلسات الحضور"
           description="جلسات الحضور الحديثة لمتابعة التنفيذ اليومي."
@@ -94,7 +105,7 @@ export function AdminDashboard({ summary }: AdminDashboardProps) {
           emptyTitle="لا توجد فعاليات قادمة حاليًا"
           emptyDescription="أضف فعالية من قسم التواصل عند الحاجة."
         />
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

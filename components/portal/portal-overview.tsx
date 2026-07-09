@@ -3,6 +3,8 @@ import { Bell, BookOpen, CalendarCheck2, CalendarDays, CircleDollarSign, Library
 import { EmptyState } from "@/components/shared/empty-state"
 import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
 import { SummarySectionCard } from "@/components/shared/summary-section-card"
 import type { PortalOverviewSummary } from "@/types/portal"
@@ -17,8 +19,9 @@ export function PortalOverview({ summary }: PortalOverviewProps) {
   const icons = summary.role === "parent" ? parentIcons : studentIcons
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
+        eyebrow="بوابة المتابعة"
         title={summary.title}
         description={summary.description}
         actions={<StatusBadge status="info">عرض فقط</StatusBadge>}
@@ -34,11 +37,15 @@ export function PortalOverview({ summary }: PortalOverviewProps) {
       {summary.role === "parent" && summary.linkedChildren.length === 0 ? (
         <EmptyState
           title="لا توجد روابط طلاب لهذا الحساب"
-          description="تم تسجيل الدخول بنجاح، لكن لا يوجد طالب مرتبط بهذا الحساب داخل المدرسة الحالية حتى الآن."
+          description="تم التحقق من الحساب بنجاح، لكن لا يظهر ارتباط طالب فعّال بهذا المستخدم داخل المدرسة الحالية."
         />
       ) : null}
 
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="ملخص المتابعة"
+        description="أهم الأقسام المقروءة المرتبطة بحسابك داخل المدرسة الحالية."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         {summary.role === "parent" ? (
           <SummarySectionCard
             title="الأبناء المرتبطون"
@@ -71,7 +78,7 @@ export function PortalOverview({ summary }: PortalOverviewProps) {
             description="نظرة سريعة على الفواتير والرصيد القائم للأبناء المرتبطين."
             items={summary.financeHighlights}
             emptyTitle="لا توجد فواتير مطابقة حاليًا"
-            emptyDescription="ستظهر الفواتير هنا عندما تتوفر سجلات مالية مرتبطة بالأبناء."
+            emptyDescription="ستظهر السجلات المالية هنا عند توفر فواتير أو مدفوعات مرتبطة بالأبناء."
           />
         ) : (
           <SummarySectionCard
@@ -98,7 +105,7 @@ export function PortalOverview({ summary }: PortalOverviewProps) {
           emptyTitle="لا توجد إعلانات مطابقة حاليًا"
           emptyDescription="راجع قسم الإعلانات للاطلاع على المنشورات والفعاليات."
         />
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

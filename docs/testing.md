@@ -8,6 +8,10 @@ The project keeps a small automated quality foundation:
 - Manual SQL smoke for the seeded local Supabase stack.
 - Playwright for a limited local browser smoke slice only.
 
+For UI-only polish phases, the default verification budget stays intentionally
+small: prefer `npm run lint`, `npm run build`, and `git diff --check`, and only
+expand into unit or browser coverage when logic or route behavior changes.
+
 ## Automated commands
 
 ```bash
