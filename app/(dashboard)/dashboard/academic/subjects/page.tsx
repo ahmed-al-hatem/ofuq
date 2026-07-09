@@ -1,8 +1,13 @@
-import { BookOpen, ShieldAlert } from "lucide-react"
+import { BookOpen, Link2, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormDialog } from "@/components/shared/form-dialog"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,6 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DialogClose } from "@/components/ui/dialog"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import { requireAcademicContext } from "@/lib/academic/context"
 import {
@@ -72,32 +79,70 @@ export default async function SubjectsPage() {
   const subjectById = new Map(subjects.map((subject) => [subject.id, subject]))
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="المواد"
-        description="المواد والربط مع الصفوف يجهزان البيانات للدرجات والجداول لاحقًا دون تنفيذها الآن."
+        description="المواد والربط مع الصفوف يجهزان بيانات الدرجات والجداول مع إبقاء إدارة القائمة سريعة وواضحة."
+        actions={
+          canMutate ? (
+            <>
+              <FormDialog
+                trigger={<Button size="lg" />}
+                triggerLabel="إضافة مادة"
+                title="إضافة مادة"
+                description="أضف مادة جديدة ثم تابع بقية العمل من نفس الصفحة."
+                size="lg"
+              >
+                <SubjectForm
+                  surface="plain"
+                  cancelSlot={
+                    <DialogClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </DialogClose>
+                  }
+                />
+              </FormDialog>
+              <FormSheet
+                trigger={<Button variant="outline" size="lg" />}
+                triggerLabel="ربط مادة بصف"
+                title="ربط مادة بصف"
+                description="اربط المادة بالسنة والصف المناسبين دون مغادرة صفحة المواد."
+                width="lg"
+              >
+                <GradeLevelSubjectForm
+                  academicYears={academicYears}
+                  gradeLevels={gradeLevels}
+                  subjects={subjects}
+                  surface="plain"
+                  cancelSlot={
+                    <SheetClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </SheetClose>
+                  }
+                />
+              </FormSheet>
+            </>
+          ) : null
+        }
       />
 
-      {canMutate ? (
-        <section className="grid gap-4 xl:grid-cols-2">
-          <SubjectForm />
-          <GradeLevelSubjectForm
-            academicYears={academicYears}
-            gradeLevels={gradeLevels}
-            subjects={subjects}
+      <PageSection
+        title="قائمة المواد"
+        description="اعرض المواد المعتمدة لكل مدرسة مع النوع والحالة ووصف مختصر لكل مادة."
+        contentClassName={
+          subjects.length === 0
+            ? undefined
+            : "grid gap-4 md:grid-cols-2 xl:grid-cols-3"
+        }
+      >
+        {subjects.length === 0 ? (
+          <EmptyState
+            icon={BookOpen}
+            title="لا توجد مواد مطابقة حاليًا"
+            description="ابدأ بإضافة مادة جديدة، ثم اربطها بالصفوف المناسبة عند الحاجة."
           />
-        </section>
-      ) : null}
-
-      {subjects.length === 0 ? (
-        <EmptyState
-          icon={BookOpen}
-          title="لا توجد مواد بعد"
-          description="أضف المواد الأساسية أولًا، ثم اربطها بالصفوف حسب السنة الدراسية."
-        />
-      ) : (
-        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {subjects.map((subject) => (
+        ) : (
+          subjects.map((subject) => (
             <Card key={subject.id} className="border-border/70 shadow-sm">
               <CardHeader className="gap-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -124,64 +169,68 @@ export default async function SubjectsPage() {
                 </p>
               </CardContent>
             </Card>
-          ))}
-        </section>
-      )}
+          ))
+        )}
+      </PageSection>
 
-      <section className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold">ربط المواد بالصفوف</h2>
+      <PageSection
+        title="ربط المواد بالصفوف"
+        description="الربط الأكاديمي يحدد أين تدرّس المادة داخل السنة الدراسية الحالية."
+        contentClassName={
+          assignments.length === 0 ? undefined : "grid gap-4 md:grid-cols-2"
+        }
+      >
         {assignments.length === 0 ? (
           <EmptyState
-            title="لا توجد مواد مرتبطة بصفوف بعد"
-            description="بعد إنشاء المواد والصفوف، اربط المادة بالصف والسنة الدراسية المناسبة."
+            icon={Link2}
+            title="لا توجد روابط مواد حتى الآن"
+            description="بعد إضافة المواد والصفوف، استخدم الإجراء السريع أعلاه لإكمال أول ربط."
           />
         ) : (
-          <div className="grid gap-4 md:grid-cols-2">
-            {assignments.map((assignment) => (
-              <Card key={assignment.id} className="border-border/70 shadow-sm">
-                <CardHeader>
-                  <CardTitle>
-                    {subjectById.get(assignment.subject_id)?.name ?? "مادة غير معروفة"}
-                  </CardTitle>
-                  <CardDescription>
-                    {gradeLevelById.get(assignment.grade_level_id)?.name ??
-                      "صف غير معروف"}{" "}
-                    -{" "}
-                    {academicYearById.get(assignment.academic_year_id)?.name ??
-                      "سنة غير معروفة"}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-3 md:grid-cols-3">
-                  <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
-                    <p className="text-xs font-medium text-muted-foreground">
-                      إلزامية
-                    </p>
-                    <p className="mt-1 text-sm leading-6">
-                      {assignment.is_required ? "نعم" : "لا"}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
-                    <p className="text-xs font-medium text-muted-foreground">
-                      حصص أسبوعية
-                    </p>
-                    <p className="mt-1 text-sm leading-6">
-                      {assignment.weekly_periods ?? "غير محددة"}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
-                    <p className="text-xs font-medium text-muted-foreground">
-                      ترتيب العرض
-                    </p>
-                    <p className="mt-1 text-sm leading-6">
-                      {assignment.sort_order}
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          assignments.map((assignment) => (
+            <Card key={assignment.id} className="border-border/70 shadow-sm">
+              <CardHeader>
+                <CardTitle>
+                  {subjectById.get(assignment.subject_id)?.name ?? "مادة غير معروفة"}
+                </CardTitle>
+                <CardDescription>
+                  {gradeLevelById.get(assignment.grade_level_id)?.name ??
+                    "صف غير معروف"}{" "}
+                  -{" "}
+                  {academicYearById.get(assignment.academic_year_id)?.name ??
+                    "سنة غير معروفة"}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-3 md:grid-cols-3">
+                <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    إلزامية
+                  </p>
+                  <p className="mt-1 text-sm leading-6">
+                    {assignment.is_required ? "نعم" : "لا"}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    حصص أسبوعية
+                  </p>
+                  <p className="mt-1 text-sm leading-6">
+                    {assignment.weekly_periods ?? "غير محددة"}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
+                  <p className="text-xs font-medium text-muted-foreground">
+                    ترتيب العرض
+                  </p>
+                  <p className="mt-1 text-sm leading-6">
+                    {assignment.sort_order}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))
         )}
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

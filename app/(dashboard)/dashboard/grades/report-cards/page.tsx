@@ -2,9 +2,12 @@ import Link from "next/link"
 import { FileText, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
 import {
@@ -66,28 +70,49 @@ export default async function ReportCardsPage() {
     ])
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="تقارير الدرجات"
         description="توليد وعرض تقرير أساسي لكل طالب من نتائج الاختبارات والدرجات اليومية."
+        actions={
+          <FormSheet
+            trigger={<Button size="lg" />}
+            triggerLabel="توليد تقرير"
+            title="توليد تقرير طالب"
+            description="أنشئ لقطة تقرير جديدة مع إبقاء قائمة التقارير الحالية متاحة للمراجعة."
+            width="lg"
+          >
+            <ReportCardGenerateForm
+              academicYears={academicYears}
+              classes={classes}
+              students={students}
+              terms={terms}
+              surface="plain"
+              cancelSlot={
+                <SheetClose render={<Button variant="outline" type="button" />}>
+                  إلغاء
+                </SheetClose>
+              }
+            />
+          </FormSheet>
+        }
       />
 
-      <ReportCardGenerateForm
-        academicYears={academicYears}
-        classes={classes}
-        students={students}
-        terms={terms}
-      />
-
-      {reportCards.length === 0 ? (
-        <EmptyState
-          icon={FileText}
-          title="لا توجد تقارير بعد"
-          description="يمكن توليد تقرير بعد توفر طالب مسجل ودرجات مرتبطة به."
-        />
-      ) : (
-        <section className="grid gap-4 md:grid-cols-2">
-          {reportCards.map((reportCard) => (
+      <PageSection
+        title="قائمة التقارير"
+        description="استخدم الإجراء السريع أعلاه لإنشاء لقطة جديدة، ثم افتح التقرير الكامل عند الحاجة."
+        contentClassName={
+          reportCards.length === 0 ? undefined : "grid gap-4 md:grid-cols-2"
+        }
+      >
+        {reportCards.length === 0 ? (
+          <EmptyState
+            icon={FileText}
+            title="لا توجد تقارير بعد"
+            description="يمكن توليد تقرير بعد توفر طالب مسجل ودرجات مرتبطة به."
+          />
+        ) : (
+          reportCards.map((reportCard) => (
             <Card key={reportCard.id} className="border-border/70 shadow-sm">
               <CardHeader className="gap-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -128,9 +153,9 @@ export default async function ReportCardsPage() {
                 </Link>
               </CardContent>
             </Card>
-          ))}
-        </section>
-      )}
-    </div>
+          ))
+        )}
+      </PageSection>
+    </PageShell>
   )
 }

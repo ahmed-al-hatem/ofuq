@@ -22,6 +22,9 @@
 20. Role-specific dashboards foundation
 21. Professional UI polish and design system pass
 21.5. Modal form UX foundation
+22A. Academic / attendance / grades UX cleanup
+22B. Finance / library / communication UX cleanup
+22C. Portal UX polish
 
 ## Later-phase items
 
@@ -39,9 +42,24 @@ attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation,
-role-specific dashboard, UI-polish, and modal-form UX foundations in place.
-New business modules should continue to be added one vertical slice at a time so
-schema, actions, UI, verification, and test coverage stay aligned.
+role-specific dashboard, UI-polish, modal-form UX, and the first
+domain-focused module cleanup slice in place. New business modules and deeper
+UX cleanup should continue one vertical slice at a time so schema, actions, UI,
+verification, and test coverage stay aligned.
+
+## Phase 22A snapshot
+
+- Academic, attendance, and grades pages now reuse the shared `PageHeader`, `PageSection`, and `PageShell` hierarchy more consistently on selected high-value pages.
+- Selected quick forms now open in reusable `FormDialog` or `FormSheet` wrappers:
+  - subject creation
+  - subject-to-grade assignment
+  - class/section creation
+  - attendance-session creation
+  - absence-excuse review
+  - exam creation
+  - report-card snapshot generation
+- Existing complex route pages such as attendance-session details, exam details, report-card details, `/dashboard/attendance/sessions/new`, and `/dashboard/grades/exams/new` remain available where direct linking or full-page context is useful.
+- No schema changes, seed changes, or Supabase config changes were introduced in this phase.
 
 ## Phase 21.5 snapshot
 

@@ -1,14 +1,15 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 
+import { FormActions } from "@/components/shared/form-actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -46,6 +47,7 @@ import {
 } from "@/types/attendance"
 
 const initialState: AttendanceActionState = null
+type FormSurface = "card" | "plain"
 
 const sessionMethodOptions = [
   "manual",
@@ -113,16 +115,127 @@ export function AttendanceSessionForm({
   academicYears,
   classes,
   terms,
+  surface = "card",
+  cancelSlot,
 }: {
   academicYears: AcademicYear[]
   classes: ClassSection[]
   terms: Term[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     createAttendanceSessionAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
+          <FieldLabel htmlFor="attendance-academic-year">
+            السنة الدراسية
+          </FieldLabel>
+          <NativeSelect
+            id="attendance-academic-year"
+            name="academic_year_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر السنة</NativeSelectOption>
+            {academicYears.map((year) => (
+              <NativeSelectOption key={year.id} value={year.id}>
+                {year.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
+          <FieldLabel htmlFor="attendance-class">الشعبة</FieldLabel>
+          <NativeSelect
+            id="attendance-class"
+            name="class_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر الشعبة</NativeSelectOption>
+            {classes.map((classSection) => (
+              <NativeSelectOption key={classSection.id} value={classSection.id}>
+                {classSection.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.term_id?.length)}>
+          <FieldLabel htmlFor="attendance-term">الفصل الدراسي</FieldLabel>
+          <NativeSelect id="attendance-term" name="term_id" className="w-full">
+            <NativeSelectOption value="">بدون فصل محدد</NativeSelectOption>
+            {terms.map((term) => (
+              <NativeSelectOption key={term.id} value={term.id}>
+                {term.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.term_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.session_date?.length)}>
+          <FieldLabel htmlFor="attendance-session-date">تاريخ الجلسة</FieldLabel>
+          <Input
+            id="attendance-session-date"
+            name="session_date"
+            type="date"
+            dir="ltr"
+            defaultValue={new Date().toISOString().slice(0, 10)}
+            required
+          />
+          <FieldError>{fieldErrors.session_date?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.method?.length)}>
+          <FieldLabel htmlFor="attendance-method">طريقة التسجيل</FieldLabel>
+          <NativeSelect
+            id="attendance-method"
+            name="method"
+            className="w-full"
+            defaultValue="manual"
+          >
+            {sessionMethodOptions.map((method) => (
+              <NativeSelectOption key={method} value={method}>
+                {ATTENDANCE_SESSION_METHOD_LABELS_AR[method]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.method?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.starts_at?.length)}>
+          <FieldLabel htmlFor="attendance-starts-at">وقت البداية</FieldLabel>
+          <Input id="attendance-starts-at" name="starts_at" type="time" dir="ltr" />
+          <FieldError>{fieldErrors.starts_at?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.ends_at?.length)}>
+          <FieldLabel htmlFor="attendance-ends-at">وقت النهاية</FieldLabel>
+          <Input id="attendance-ends-at" name="ends_at" type="time" dir="ltr" />
+          <FieldError>{fieldErrors.ends_at?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2">
+          <FieldLabel htmlFor="attendance-notes">ملاحظات</FieldLabel>
+          <Textarea id="attendance-notes" name="notes" />
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="إنشاء الجلسة"
+        pendingLabel="جاري الإنشاء..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -132,112 +245,7 @@ export function AttendanceSessionForm({
           المستأجر والمدرسة يحددان على الخادم من العضوية النشطة.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
-              <FieldLabel htmlFor="attendance-academic-year">
-                السنة الدراسية
-              </FieldLabel>
-              <NativeSelect
-                id="attendance-academic-year"
-                name="academic_year_id"
-                className="w-full"
-                required
-              >
-                <NativeSelectOption value="">اختر السنة</NativeSelectOption>
-                {academicYears.map((year) => (
-                  <NativeSelectOption key={year.id} value={year.id}>
-                    {year.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
-              <FieldLabel htmlFor="attendance-class">الشعبة</FieldLabel>
-              <NativeSelect
-                id="attendance-class"
-                name="class_id"
-                className="w-full"
-                required
-              >
-                <NativeSelectOption value="">اختر الشعبة</NativeSelectOption>
-                {classes.map((classSection) => (
-                  <NativeSelectOption key={classSection.id} value={classSection.id}>
-                    {classSection.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.term_id?.length)}>
-              <FieldLabel htmlFor="attendance-term">الفصل الدراسي</FieldLabel>
-              <NativeSelect
-                id="attendance-term"
-                name="term_id"
-                className="w-full"
-              >
-                <NativeSelectOption value="">بدون فصل محدد</NativeSelectOption>
-                {terms.map((term) => (
-                  <NativeSelectOption key={term.id} value={term.id}>
-                    {term.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.term_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.session_date?.length)}>
-              <FieldLabel htmlFor="attendance-session-date">
-                تاريخ الجلسة
-              </FieldLabel>
-              <Input
-                id="attendance-session-date"
-                name="session_date"
-                type="date"
-                dir="ltr"
-                defaultValue={new Date().toISOString().slice(0, 10)}
-                required
-              />
-              <FieldError>{fieldErrors.session_date?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.method?.length)}>
-              <FieldLabel htmlFor="attendance-method">طريقة التسجيل</FieldLabel>
-              <NativeSelect
-                id="attendance-method"
-                name="method"
-                className="w-full"
-                defaultValue="manual"
-              >
-                {sessionMethodOptions.map((method) => (
-                  <NativeSelectOption key={method} value={method}>
-                    {ATTENDANCE_SESSION_METHOD_LABELS_AR[method]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.method?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.starts_at?.length)}>
-              <FieldLabel htmlFor="attendance-starts-at">وقت البداية</FieldLabel>
-              <Input id="attendance-starts-at" name="starts_at" type="time" dir="ltr" />
-              <FieldError>{fieldErrors.starts_at?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.ends_at?.length)}>
-              <FieldLabel htmlFor="attendance-ends-at">وقت النهاية</FieldLabel>
-              <Input id="attendance-ends-at" name="ends_at" type="time" dir="ltr" />
-              <FieldError>{fieldErrors.ends_at?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2">
-              <FieldLabel htmlFor="attendance-notes">ملاحظات</FieldLabel>
-              <Textarea id="attendance-notes" name="notes" />
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="إنشاء الجلسة" pendingLabel="جاري الإنشاء..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
@@ -370,9 +378,11 @@ export function SubmitExcuseForm({
 export function ReviewExcuseForm({
   excuseId,
   status,
+  cancelSlot,
 }: {
   excuseId: string
   status: Extract<AbsenceExcuseStatus, "approved" | "rejected">
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     reviewAbsenceExcuseAction,
@@ -388,11 +398,13 @@ export function ReviewExcuseForm({
         placeholder="ملاحظات المراجعة"
         className="min-h-16 text-sm"
       />
-      <SubmitButton
-        label={status === "approved" ? "قبول العذر" : "رفض العذر"}
+      <FormActions
+        submitLabel={status === "approved" ? "قبول العذر" : "رفض العذر"}
         pendingLabel="جاري الحفظ..."
-        size="sm"
-        variant={status === "approved" ? "default" : "destructive"}
+        submitSize="sm"
+        submitVariant={status === "approved" ? "default" : "destructive"}
+        cancelSlot={cancelSlot}
+        className="pt-2"
       />
       <FormMessage state={state} />
     </form>

@@ -24,6 +24,17 @@ the touched application and shared UI files and document the blocker honestly.
 A tiny targeted browser smoke for modal open/close behavior is optional, not
 mandatory, for this phase type.
 
+For focused module UX cleanup work such as Phase 22A, use the same minimal
+budget:
+
+- `npm run build`
+- `git diff --check`
+- `npm run lint` when several TS/TSX files were touched
+
+If global ESLint still fails because of unrelated pre-existing workspace files,
+run targeted ESLint on the changed TypeScript/TSX files and document both the
+global blocker and the targeted pass honestly.
+
 ## Automated commands
 
 ```bash

@@ -1,8 +1,12 @@
 import { GraduationCap, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,6 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import { requireAcademicContext } from "@/lib/academic/context"
 import {
@@ -64,25 +69,49 @@ export default async function ClassesPage() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الشعب"
         description="كل شعبة ترتبط بسنة دراسية وصف دراسي داخل المدرسة الحالية."
+        actions={
+          canMutate ? (
+            <FormSheet
+              trigger={<Button size="lg" />}
+              triggerLabel="إضافة شعبة"
+              title="إضافة شعبة"
+              description="أنشئ شعبة جديدة مع إبقاء قائمة الشعب أمامك للمراجعة السريعة."
+              width="lg"
+            >
+              <ClassForm
+                academicYears={academicYears}
+                gradeLevels={gradeLevels}
+                surface="plain"
+                cancelSlot={
+                  <SheetClose render={<Button variant="outline" type="button" />}>
+                    إلغاء
+                  </SheetClose>
+                }
+              />
+            </FormSheet>
+          ) : null
+        }
       />
 
-      {canMutate ? (
-        <ClassForm academicYears={academicYears} gradeLevels={gradeLevels} />
-      ) : null}
-
-      {classes.length === 0 ? (
-        <EmptyState
-          icon={GraduationCap}
-          title="لا توجد شعب بعد"
-          description="أضف سنة دراسية وصفًا دراسيًا أولًا، ثم أنشئ الشعب المناسبة."
-        />
-      ) : (
-        <section className="grid gap-4 md:grid-cols-2">
-          {classes.map((classSection) => (
+      <PageSection
+        title="قائمة الشعب"
+        description="تابع الشعب حسب السنة والصف والسعة دون مغادرة شاشة الإدارة الرئيسية."
+        contentClassName={
+          classes.length === 0 ? undefined : "grid gap-4 md:grid-cols-2"
+        }
+      >
+        {classes.length === 0 ? (
+          <EmptyState
+            icon={GraduationCap}
+            title="لا توجد شعب مطابقة حاليًا"
+            description="أضف سنة دراسية وصفًا دراسيًا أولًا، ثم أنشئ الشعبة المناسبة من الإجراء أعلاه."
+          />
+        ) : (
+          classes.map((classSection) => (
             <Card key={classSection.id} className="border-border/70 shadow-sm">
               <CardHeader className="gap-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -134,9 +163,9 @@ export default async function ClassesPage() {
                 </div>
               </CardContent>
             </Card>
-          ))}
-        </section>
-      )}
-    </div>
+          ))
+        )}
+      </PageSection>
+    </PageShell>
   )
 }

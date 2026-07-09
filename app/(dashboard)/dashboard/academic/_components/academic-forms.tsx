@@ -1,8 +1,10 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { useActionState } from "react"
 import { useFormStatus } from "react-dom"
 
+import { FormActions } from "@/components/shared/form-actions"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -49,6 +51,7 @@ import {
 import type { Student } from "@/types/students"
 
 const initialState: AcademicActionState = null
+type FormSurface = "card" | "plain"
 
 const gradeLevelStageOptions = [
   "kindergarten",
@@ -283,121 +286,173 @@ export function GradeLevelForm() {
 export function ClassForm({
   academicYears,
   gradeLevels,
+  surface = "card",
+  cancelSlot,
 }: {
   academicYears: AcademicYear[]
   gradeLevels: GradeLevel[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(createClassAction, initialState)
   const fieldErrors = getFieldErrors(state)
+
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
+          <FieldLabel htmlFor="class-academic-year">السنة الدراسية</FieldLabel>
+          <NativeSelect
+            id="class-academic-year"
+            name="academic_year_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر السنة</NativeSelectOption>
+            {academicYears.map((year) => (
+              <NativeSelectOption key={year.id} value={year.id}>
+                {year.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
+          <FieldLabel htmlFor="class-grade-level">الصف الدراسي</FieldLabel>
+          <NativeSelect
+            id="class-grade-level"
+            name="grade_level_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر الصف</NativeSelectOption>
+            {gradeLevels.map((gradeLevel) => (
+              <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
+                {gradeLevel.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.name?.length)}>
+          <FieldLabel htmlFor="class-name">اسم الشعبة</FieldLabel>
+          <Input id="class-name" name="name" required />
+          <FieldError>{fieldErrors.name?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.section?.length)}>
+          <FieldLabel htmlFor="class-section">رمز الشعبة</FieldLabel>
+          <Input id="class-section" name="section" dir="ltr" required />
+          <FieldError>{fieldErrors.section?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.capacity?.length)}>
+          <FieldLabel htmlFor="class-capacity">السعة</FieldLabel>
+          <Input
+            id="class-capacity"
+            name="capacity"
+            type="number"
+            min="1"
+            inputMode="numeric"
+            dir="ltr"
+          />
+          <FieldError>{fieldErrors.capacity?.[0]}</FieldError>
+        </Field>
+        <Field>
+          <FieldLabel htmlFor="class-room-name">الغرفة</FieldLabel>
+          <Input id="class-room-name" name="room_name" />
+        </Field>
+      </FieldGroup>
+      <FormError state={state} />
+      <FormActions
+        submitLabel="حفظ الشعبة"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
       <CardHeader>
         <CardTitle>إضافة شعبة</CardTitle>
-        <CardDescription>الشعبة ترتبط بسنة دراسية وصف محددين من نفس المدرسة.</CardDescription>
+        <CardDescription>
+          الشعبة ترتبط بسنة دراسية وصف محددين من نفس المدرسة.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
-              <FieldLabel htmlFor="class-academic-year">السنة الدراسية</FieldLabel>
-              <NativeSelect id="class-academic-year" name="academic_year_id" className="w-full" required>
-                <NativeSelectOption value="">اختر السنة</NativeSelectOption>
-                {academicYears.map((year) => (
-                  <NativeSelectOption key={year.id} value={year.id}>
-                    {year.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
-              <FieldLabel htmlFor="class-grade-level">الصف الدراسي</FieldLabel>
-              <NativeSelect id="class-grade-level" name="grade_level_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الصف</NativeSelectOption>
-                {gradeLevels.map((gradeLevel) => (
-                  <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
-                    {gradeLevel.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.name?.length)}>
-              <FieldLabel htmlFor="class-name">اسم الشعبة</FieldLabel>
-              <Input id="class-name" name="name" required />
-              <FieldError>{fieldErrors.name?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.section?.length)}>
-              <FieldLabel htmlFor="class-section">رمز الشعبة</FieldLabel>
-              <Input id="class-section" name="section" dir="ltr" required />
-              <FieldError>{fieldErrors.section?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.capacity?.length)}>
-              <FieldLabel htmlFor="class-capacity">السعة</FieldLabel>
-              <Input id="class-capacity" name="capacity" type="number" min="1" inputMode="numeric" dir="ltr" />
-              <FieldError>{fieldErrors.capacity?.[0]}</FieldError>
-            </Field>
-            <Field>
-              <FieldLabel htmlFor="class-room-name">الغرفة</FieldLabel>
-              <Input id="class-room-name" name="room_name" />
-            </Field>
-          </FieldGroup>
-          <FormError state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ الشعبة" pendingLabel="جاري الحفظ..." />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
 
-export function SubjectForm() {
+export function SubjectForm({
+  surface = "card",
+  cancelSlot,
+}: {
+  surface?: FormSurface
+  cancelSlot?: ReactNode
+}) {
   const [state, formAction] = useActionState(createSubjectAction, initialState)
   const fieldErrors = getFieldErrors(state)
+
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.name?.length)}>
+          <FieldLabel htmlFor="subject-name">اسم المادة</FieldLabel>
+          <Input id="subject-name" name="name" required />
+          <FieldError>{fieldErrors.name?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.code?.length)}>
+          <FieldLabel htmlFor="subject-code">الرمز</FieldLabel>
+          <Input id="subject-code" name="code" dir="ltr" required />
+          <FieldError>{fieldErrors.code?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.subject_type?.length)}>
+          <FieldLabel htmlFor="subject-type">نوع المادة</FieldLabel>
+          <NativeSelect
+            id="subject-type"
+            name="subject_type"
+            className="w-full"
+            defaultValue="core"
+          >
+            {subjectTypeOptions.map((type) => (
+              <NativeSelectOption key={type} value={type}>
+                {SUBJECT_TYPE_LABELS_AR[type]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.subject_type?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2">
+          <FieldLabel htmlFor="subject-description">الوصف</FieldLabel>
+          <Textarea id="subject-description" name="description" />
+        </Field>
+      </FieldGroup>
+      <FormError state={state} />
+      <FormActions
+        submitLabel="حفظ المادة"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
       <CardHeader>
         <CardTitle>إضافة مادة</CardTitle>
-        <CardDescription>المادة لا تحمل أوزانًا أو إعدادات اختبارات في هذه المرحلة.</CardDescription>
+        <CardDescription>
+          المادة لا تحمل أوزانًا أو إعدادات اختبارات في هذه المرحلة.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.name?.length)}>
-              <FieldLabel htmlFor="subject-name">اسم المادة</FieldLabel>
-              <Input id="subject-name" name="name" required />
-              <FieldError>{fieldErrors.name?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.code?.length)}>
-              <FieldLabel htmlFor="subject-code">الرمز</FieldLabel>
-              <Input id="subject-code" name="code" dir="ltr" required />
-              <FieldError>{fieldErrors.code?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.subject_type?.length)}>
-              <FieldLabel htmlFor="subject-type">نوع المادة</FieldLabel>
-              <NativeSelect id="subject-type" name="subject_type" className="w-full" defaultValue="core">
-                {subjectTypeOptions.map((type) => (
-                  <NativeSelectOption key={type} value={type}>
-                    {SUBJECT_TYPE_LABELS_AR[type]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.subject_type?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2">
-              <FieldLabel htmlFor="subject-description">الوصف</FieldLabel>
-              <Textarea id="subject-description" name="description" />
-            </Field>
-          </FieldGroup>
-          <FormError state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ المادة" pendingLabel="جاري الحفظ..." />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
@@ -406,10 +461,14 @@ export function GradeLevelSubjectForm({
   academicYears,
   gradeLevels,
   subjects,
+  surface = "card",
+  cancelSlot,
 }: {
   academicYears: AcademicYear[]
   gradeLevels: GradeLevel[]
   subjects: Subject[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     assignSubjectToGradeLevelAction,
@@ -417,78 +476,117 @@ export function GradeLevelSubjectForm({
   )
   const fieldErrors = getFieldErrors(state)
 
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
+          <FieldLabel htmlFor="assignment-academic-year">السنة الدراسية</FieldLabel>
+          <NativeSelect
+            id="assignment-academic-year"
+            name="academic_year_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر السنة</NativeSelectOption>
+            {academicYears.map((year) => (
+              <NativeSelectOption key={year.id} value={year.id}>
+                {year.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
+          <FieldLabel htmlFor="assignment-grade-level">الصف الدراسي</FieldLabel>
+          <NativeSelect
+            id="assignment-grade-level"
+            name="grade_level_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر الصف</NativeSelectOption>
+            {gradeLevels.map((gradeLevel) => (
+              <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
+                {gradeLevel.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.subject_id?.length)}>
+          <FieldLabel htmlFor="assignment-subject">المادة</FieldLabel>
+          <NativeSelect
+            id="assignment-subject"
+            name="subject_id"
+            className="w-full"
+            required
+          >
+            <NativeSelectOption value="">اختر المادة</NativeSelectOption>
+            {subjects.map((subject) => (
+              <NativeSelectOption key={subject.id} value={subject.id}>
+                {subject.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.subject_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.weekly_periods?.length)}>
+          <FieldLabel htmlFor="assignment-weekly-periods">الحصص الأسبوعية</FieldLabel>
+          <Input
+            id="assignment-weekly-periods"
+            name="weekly_periods"
+            type="number"
+            min="1"
+            inputMode="numeric"
+            dir="ltr"
+          />
+          <FieldError>{fieldErrors.weekly_periods?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.sort_order?.length)}>
+          <FieldLabel htmlFor="assignment-sort-order">ترتيب العرض</FieldLabel>
+          <Input
+            id="assignment-sort-order"
+            name="sort_order"
+            type="number"
+            inputMode="numeric"
+            dir="ltr"
+            defaultValue="0"
+          />
+          <FieldError>{fieldErrors.sort_order?.[0]}</FieldError>
+        </Field>
+        <Field orientation="horizontal">
+          <input
+            id="assignment-is-required"
+            name="is_required"
+            type="checkbox"
+            defaultChecked
+            className="mt-1 size-4 rounded border-input accent-primary"
+          />
+          <FieldLabel htmlFor="assignment-is-required">مادة إلزامية</FieldLabel>
+        </Field>
+      </FieldGroup>
+      <FormError state={state} />
+      <FormActions
+        submitLabel="حفظ الربط"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
+
   return (
     <Card className="border-border/70 shadow-sm">
       <CardHeader>
         <CardTitle>ربط مادة بصف</CardTitle>
-        <CardDescription>هذا الربط يؤسس الخطة الدراسية دون إنشاء جدول حصص.</CardDescription>
+        <CardDescription>
+          هذا الربط يؤسس الخطة الدراسية دون إنشاء جدول حصص.
+        </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
-              <FieldLabel htmlFor="assignment-academic-year">السنة الدراسية</FieldLabel>
-              <NativeSelect id="assignment-academic-year" name="academic_year_id" className="w-full" required>
-                <NativeSelectOption value="">اختر السنة</NativeSelectOption>
-                {academicYears.map((year) => (
-                  <NativeSelectOption key={year.id} value={year.id}>
-                    {year.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
-              <FieldLabel htmlFor="assignment-grade-level">الصف الدراسي</FieldLabel>
-              <NativeSelect id="assignment-grade-level" name="grade_level_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الصف</NativeSelectOption>
-                {gradeLevels.map((gradeLevel) => (
-                  <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
-                    {gradeLevel.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.subject_id?.length)}>
-              <FieldLabel htmlFor="assignment-subject">المادة</FieldLabel>
-              <NativeSelect id="assignment-subject" name="subject_id" className="w-full" required>
-                <NativeSelectOption value="">اختر المادة</NativeSelectOption>
-                {subjects.map((subject) => (
-                  <NativeSelectOption key={subject.id} value={subject.id}>
-                    {subject.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.subject_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.weekly_periods?.length)}>
-              <FieldLabel htmlFor="assignment-weekly-periods">الحصص الأسبوعية</FieldLabel>
-              <Input id="assignment-weekly-periods" name="weekly_periods" type="number" min="1" inputMode="numeric" dir="ltr" />
-              <FieldError>{fieldErrors.weekly_periods?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.sort_order?.length)}>
-              <FieldLabel htmlFor="assignment-sort-order">ترتيب العرض</FieldLabel>
-              <Input id="assignment-sort-order" name="sort_order" type="number" inputMode="numeric" dir="ltr" defaultValue="0" />
-              <FieldError>{fieldErrors.sort_order?.[0]}</FieldError>
-            </Field>
-            <Field orientation="horizontal">
-              <input
-                id="assignment-is-required"
-                name="is_required"
-                type="checkbox"
-                defaultChecked
-                className="mt-1 size-4 rounded border-input accent-primary"
-              />
-              <FieldLabel htmlFor="assignment-is-required">مادة إلزامية</FieldLabel>
-            </Field>
-          </FieldGroup>
-          <FormError state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ الربط" pendingLabel="جاري الحفظ..." />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

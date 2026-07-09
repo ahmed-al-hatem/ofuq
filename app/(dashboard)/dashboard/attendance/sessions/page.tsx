@@ -2,9 +2,12 @@ import Link from "next/link"
 import { ClipboardList, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,8 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
+import {
+  listAcademicYears,
+  listClasses,
+  listTerms,
+} from "@/lib/academic/academic-structure"
 import { requireAttendanceContext } from "@/lib/attendance/context"
 import { listAttendanceSessions } from "@/lib/attendance/attendance-sessions"
 import {
@@ -21,6 +30,7 @@ import {
   ATTENDANCE_SESSION_STATUS_LABELS_AR,
   ATTENDANCE_SESSION_STATUS_TONES,
 } from "@/types/attendance"
+import { AttendanceSessionForm } from "../_components/attendance-forms"
 
 const attendanceReadRoles = [
   USER_ROLES.SYSTEM_ADMIN,
@@ -50,32 +60,64 @@ export default async function AttendanceSessionsPage() {
     )
   }
 
-  const sessions = await listAttendanceSessions(contextResult.data)
+  const [sessions, academicYears, classes, terms] = await Promise.all([
+    listAttendanceSessions(contextResult.data),
+    listAcademicYears(contextResult.data),
+    listClasses(contextResult.data),
+    listTerms(contextResult.data),
+  ])
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="جلسات الحضور"
         description="قائمة الجلسات مرتبة من الأحدث، ومحصورة في المدرسة الحالية."
         actions={
-          <Link
-            href={appRoutes.newAttendanceSession}
-            className={buttonVariants({ size: "lg" })}
-          >
-            جلسة جديدة
-          </Link>
+          <>
+            <FormSheet
+              trigger={<Button size="lg" />}
+              triggerLabel="جلسة جديدة"
+              title="جلسة حضور جديدة"
+              description="أنشئ جلسة حضور بسرعة ثم تابع إدارة الجلسات من نفس الصفحة."
+              width="lg"
+            >
+              <AttendanceSessionForm
+                academicYears={academicYears}
+                classes={classes}
+                terms={terms}
+                surface="plain"
+                cancelSlot={
+                  <SheetClose render={<Button variant="outline" type="button" />}>
+                    إلغاء
+                  </SheetClose>
+                }
+              />
+            </FormSheet>
+            <Link
+              href={appRoutes.newAttendanceSession}
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+            >
+              فتح الصفحة الكاملة
+            </Link>
+          </>
         }
       />
 
-      {sessions.length === 0 ? (
-        <EmptyState
-          icon={ClipboardList}
-          title="لا توجد جلسات حضور بعد"
-          description="أنشئ أول جلسة حضور ثم سجل الطلاب يدويًا أو عبر رمز QR."
-        />
-      ) : (
-        <section className="grid gap-4 md:grid-cols-2">
-          {sessions.map((session) => (
+      <PageSection
+        title="قائمة الجلسات"
+        description="استخدم الإجراء السريع أعلاه لإنشاء جلسة جديدة، أو افتح الصفحة الكاملة عندما تحتاج مسارًا مباشرًا."
+        contentClassName={
+          sessions.length === 0 ? undefined : "grid gap-4 md:grid-cols-2"
+        }
+      >
+        {sessions.length === 0 ? (
+          <EmptyState
+            icon={ClipboardList}
+            title="لا توجد جلسات حضور بعد"
+            description="أنشئ أول جلسة حضور، ثم سجل الطلاب يدويًا أو عبر رمز QR."
+          />
+        ) : (
+          sessions.map((session) => (
             <Card key={session.id} className="border-border/70 shadow-sm">
               <CardHeader className="gap-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
@@ -133,9 +175,9 @@ export default async function AttendanceSessionsPage() {
                 </Link>
               </CardContent>
             </Card>
-          ))}
-        </section>
-      )}
-    </div>
+          ))
+        )}
+      </PageSection>
+    </PageShell>
   )
 }
