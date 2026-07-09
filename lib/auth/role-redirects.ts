@@ -9,9 +9,9 @@ export function isDashboardRole(role: UserRole): boolean {
 export function getDefaultRouteForRole(role: UserRole): string {
   switch (role) {
     case USER_ROLES.ACCOUNTANT:
-      return appRoutes.finance
+      return appRoutes.dashboard
     case USER_ROLES.LIBRARIAN:
-      return appRoutes.library
+      return appRoutes.dashboard
     case USER_ROLES.PARENT:
     case USER_ROLES.STUDENT:
       return appRoutes.portal

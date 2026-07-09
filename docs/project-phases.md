@@ -19,6 +19,7 @@
 17. Browser smoke / E2E tests foundation
 18. Settings and integrations placeholders foundation
 19. Role-aware UX routing and navigation foundation
+20. Role-specific dashboards foundation
 
 ## Later-phase items
 
@@ -35,10 +36,20 @@ The project now has its auth, tenant, student/admission, academic-structure,
 attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
-smoke, settings/integrations placeholders, and role-aware routing/navigation foundations in
+smoke, settings/integrations placeholders, role-aware routing/navigation, and
+role-specific dashboard foundations in
 place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 20 snapshot
+
+- `/dashboard` now stays as the single staff landing route, but the rendered content changes by fixed role.
+- `system_admin` and `school_admin` see an operations-oriented school dashboard.
+- `teacher` sees a teaching-focused dashboard, `accountant` sees a finance-focused dashboard, and `librarian` sees a library-focused dashboard.
+- `/portal` now provides richer read-only overviews for `parent` and `student`, including linked-child, attendance, grades, timetable, finance, library, and announcement summaries as appropriate to the role.
+- Staff default routing is now unified on `/dashboard`; `parent` and `student` still land on `/portal`.
+- No schema changes, RBAC, RLS, or full redesign were added in this phase.
 
 ## Phase 19 snapshot
 

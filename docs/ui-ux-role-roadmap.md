@@ -4,11 +4,12 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
-## Status Update After Phase 19
+## Status Update After Phase 20
 
-- Phase 19 is now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, and staff dashboard navigation is filtered by fixed role.
-- This phase did not add RBAC, RLS, schema changes, or a full redesign.
-- The next recommended UI/UX slice is Phase 20 Role-Specific Dashboards Foundation.
+- Phase 19 and Phase 20 are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, and `/dashboard` now renders role-specific home content for staff users.
+- `/portal` overview is now more useful for `parent` and `student` without adding mutations or widening authorization scope.
+- These phases did not add RBAC, RLS, schema changes, or a full redesign.
+- The next recommended UI/UX slice is Phase 21 Professional UI Polish and Design System Pass.
 
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 

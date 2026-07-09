@@ -3,6 +3,37 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 20 Role-Specific Dashboards Foundation Verification
+
+Phase 20 role-specific dashboards foundation is implemented and verified for
+server-rendered dashboard behavior, unit coverage, lint, and production build.
+Local browser smoke improved for the new admin, teacher, parent, and student
+paths, while accountant/librarian browser verification remains blocked by the
+current local demo-auth dataset rather than by a confirmed Phase 20 rendering
+regression.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Supabase status | Passed after elevation | Local Supabase and PostgreSQL were reachable in this Windows environment. |
+| `supabase db reset` | Not run | Skipped because Phase 20 adds no schema changes and the current local data was sufficient for targeted verification. |
+| Targeted local auth/demo query | Failed for two expected demo users | Direct Docker/psql checks showed `accountant.main@ofuq.local` and `librarian.main@ofuq.local` are absent from local `auth.users`, which explains the remaining login failures in E2E. |
+| `npm run test` | Passed | Vitest completed successfully, including the new dashboard summary, role dashboard, portal summary, and redirect coverage. |
+| `npm run lint` | Passed | ESLint completed successfully after the new dashboard, portal, and E2E changes. |
+| `npm run build` | Passed | Next.js production build completed successfully with the new role-specific `/dashboard` content and updated `/portal` overview. |
+| `npm run test:all` | Passed | Combined lint, unit tests, and production build completed successfully. |
+| `npm run test:e2e` | Failed / blocked | A targeted rerun of `tests/e2e/role-dashboards-smoke.spec.ts` passed 4/4 for admin, teacher, parent, and student after the new selectors were corrected. The full `npm run test:e2e` path still fails because `accountant.main@ofuq.local` and `librarian.main@ofuq.local` are missing from local `auth.users`, and the command eventually hit the terminal timeout window while waiting through those known auth-precondition failures. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Schema / auth scope review | Passed | Phase 20 adds no schema changes, no RBAC, no RLS, and keeps all dashboard/portal summaries scoped from authenticated membership context only. |
+
+Phase 20 scope notes:
+
+- `/dashboard` now renders role-specific content for `system_admin`, `school_admin`, `teacher`, `accountant`, and `librarian`.
+- `/portal` now provides richer read-only parent/student summaries without adding mutations.
+- Dashboard and portal summaries are UX helpers only and do not replace module-level server-side authorization.
+- No schema changes, no RBAC, no RLS, and no full design-system redesign were added in this phase.
+
+Go/no-go after Phase 20 closure: Go for Phase 21 planning once the local accountant/librarian demo-auth gap is either reseeded or explicitly accepted as an environment-only blocker.
+
 ## Phase 19 Role-Aware UX Routing and Navigation Foundation Verification
 
 Phase 19 role-aware UX routing and navigation foundation is implemented and

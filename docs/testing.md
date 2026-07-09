@@ -35,6 +35,7 @@ npm run test:quality
 - Route constant stability in `constants/routes.ts`
 - Dashboard navigation consistency in `config/navigation.ts`
 - Role-aware default-route and dashboard-navigation helpers in `lib/auth/role-redirects.ts` and `lib/navigation/role-navigation.ts`
+- Role-specific dashboard summary builders, dashboard rendering, and portal overview builders
 - Portal navigation and route consistency in `config/portal-navigation.ts` and `constants/routes.ts`
 - Settings and integrations route/navigation consistency in `constants/routes.ts`, `config/navigation.ts`, and `lib/settings/constants.ts`
 - Fixed-role sanity checks in `constants/roles.ts` and `lib/actions/require-role.ts`
@@ -93,6 +94,8 @@ Coverage:
 - parent/student login lands on `/portal`
 - parent/student visiting `/dashboard` is redirected back to `/portal`
 - teacher/accountant/librarian navigation is filtered by fixed role
+- `/dashboard` renders role-specific staff headings and quick actions for admin, teacher, accountant, and librarian users
+- `/portal` overview exposes richer parent/student summary sections
 - parent portal opens after login
 - student portal opens after login
 - portal pages show read-only cues
@@ -127,7 +130,7 @@ npx playwright install chromium
 
 - In the Phase 17 verification session, Chromium was already available locally,
   so no additional browser install was required.
-- In the latest Phase 19 verification attempt, browser smoke was blocked by the current local auth/demo-state preconditions; see [verification-report.md](./verification-report.md) for the exact failure notes.
+- In the latest Phase 20 verification attempt, browser smoke passed for admin, teacher, parent, and student flows, but accountant/librarian login smoke remained blocked by missing local demo auth users; see [verification-report.md](./verification-report.md) for the exact failure notes.
 
 ## Intentionally deferred
 

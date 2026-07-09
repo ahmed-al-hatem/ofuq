@@ -103,10 +103,10 @@ test.describe("role-aware routing and navigation smoke", () => {
     await assertNoRuntimeErrors(page)
   })
 
-  test("accountant lands on finance and sees finance-focused navigation", async ({
+  test("accountant lands on dashboard and sees finance-focused navigation", async ({
     page,
   }) => {
-    await loginAs(page, E2E_USERS.accountant, appRoutes.finance)
+    await loginAs(page, E2E_USERS.accountant, appRoutes.dashboard)
 
     for (const label of ["لوحة التحكم", "المالية", "التواصل", "التقارير"]) {
       await expectNavLinkVisible(page, label)
@@ -123,15 +123,15 @@ test.describe("role-aware routing and navigation smoke", () => {
     }
 
     await expect(
-      page.getByRole("heading", { name: "المالية", exact: true })
+      page.getByRole("heading", { name: "لوحة المحاسب", exact: true })
     ).toBeVisible()
     await assertNoRuntimeErrors(page)
   })
 
-  test("librarian lands on library and sees library-focused navigation", async ({
+  test("librarian lands on dashboard and sees library-focused navigation", async ({
     page,
   }) => {
-    await loginAs(page, E2E_USERS.librarian, appRoutes.library)
+    await loginAs(page, E2E_USERS.librarian, appRoutes.dashboard)
 
     for (const label of ["لوحة التحكم", "المكتبة", "التواصل", "التقارير"]) {
       await expectNavLinkVisible(page, label)
@@ -142,7 +142,7 @@ test.describe("role-aware routing and navigation smoke", () => {
     }
 
     await expect(
-      page.getByRole("heading", { name: "المكتبة", exact: true })
+      page.getByRole("heading", { name: "لوحة المكتبة", exact: true })
     ).toBeVisible()
     await assertNoRuntimeErrors(page)
   })

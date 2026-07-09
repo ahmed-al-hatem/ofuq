@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 19 Role-Aware UX Routing and Navigation Foundation implemented
-- Last completed implementation phase: Phase 19 Role-Aware UX Routing and Navigation Foundation
-- Last completed quality phase: Phase 19 Role-Aware UX Routing and Navigation Foundation Verification with documented local browser blocker
-- Next implementation phase: Phase 20 Role-Specific Dashboards Foundation
+- Current phase: Phase 20 Role-Specific Dashboards Foundation implemented
+- Last completed implementation phase: Phase 20 Role-Specific Dashboards Foundation
+- Last completed quality phase: Phase 20 Role-Specific Dashboards Foundation Verification with documented local accountant/librarian demo-auth blocker in E2E
+- Next implementation phase: Phase 21 Professional UI Polish and Design System Pass
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -50,6 +50,7 @@
 | Phase 17 Browser Smoke / E2E Tests Foundation | Done | Playwright-based local browser smoke now covers login, dashboard access, parent/student portal entry, portal read-only cues, dashboard-navigation absence in the portal, and honest local verification docs. |
 | Phase 18 Settings and Integrations Placeholders Foundation | Done | Admin-only `/dashboard/settings` and `/dashboard/integrations` now exist with school-scoped settings persistence, message-template editing, integration placeholder pages, local seed data, unit coverage, DB smoke updates, and Playwright smoke coverage without real external connections. |
 | Phase 19 Role-Aware UX Routing and Navigation Foundation | Done with documented local browser blocker | Login redirect now follows the resolved fixed role, `parent` and `student` are routed to `/portal`, dashboard shell access excludes portal roles, dashboard navigation is filtered by staff role, and developer-facing dashboard copy has been removed. |
+| Phase 20 Role-Specific Dashboards Foundation | Done with documented local demo-auth blocker | `/dashboard` now renders staff-specific dashboards for admin, teacher, accountant, and librarian roles, while `/portal` now surfaces richer parent/student overviews using authenticated linked-student scope only and without schema changes. |
 
 ## Current Implemented Modules
 
@@ -73,6 +74,7 @@
 - Settings foundation, including school display settings, branding placeholders, localization settings, module flags, and editable local message templates.
 - Integration placeholders foundation, including admin-only overview and provider pages for WhatsApp, webhooks, MoE, calendar, BI, and automation without real external API calls or secret storage.
 - Role-aware login routing and dashboard navigation filtering by fixed role.
+- Role-specific staff dashboards and richer parent/student portal summaries.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
@@ -83,7 +85,7 @@ AI Query, chatbot, real external integrations, and report builder are not implem
 | --- | --- | --- |
 | `/` | Active | Public home route. |
 | `/login` | Active | Supabase email/password login. |
-| `/portal` | Active | Read-only parent/student portal overview. |
+| `/portal` | Active | Read-only parent/student portal overview with richer role-specific summary cards and sections. |
 | `/portal/students` | Active | Linked student list for the signed-in parent or student. |
 | `/portal/students/[studentId]` | Active | Read-only linked student details. |
 | `/portal/attendance` | Active | Read-only attendance view for linked students. |
@@ -93,7 +95,7 @@ AI Query, chatbot, real external integrations, and report builder are not implem
 | `/portal/library` | Active | Read-only active and historical book-loan view for linked students. |
 | `/portal/announcements` | Active | Read-only published announcements and school events relevant to linked students. |
 | `/portal/profile` | Active | Read-only membership/profile summary for the signed-in portal user. |
-| `/dashboard` | Active | Protected staff dashboard overview. `parent` and `student` memberships are redirected to `/portal` before the shell renders. |
+| `/dashboard` | Active | Protected staff landing route that renders role-specific content for `system_admin`, `school_admin`, `teacher`, `accountant`, and `librarian`. `parent` and `student` memberships are redirected to `/portal` before the shell renders. |
 | `/dashboard/admissions` | Active | Admissions list and management actions. |
 | `/dashboard/admissions/new` | Active | Admission creation form. |
 | `/dashboard/students` | Active | Official student records. |

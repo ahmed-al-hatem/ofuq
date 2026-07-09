@@ -7,7 +7,7 @@
 - `user_profiles.id` matches `auth.users.id`.
 - Email/password is the first supported login flow.
 - A successful login must resolve both the app profile and an active membership before granting application access.
-- Role-aware login routing is resolved on the server from the active membership role only: `parent` and `student` land on `/portal`, while staff roles land on the dashboard or their strongest existing operational route.
+- Role-aware login routing is resolved on the server from the active membership role only: `parent` and `student` land on `/portal`, while all staff roles land on `/dashboard`.
 
 ## Authorization
 
@@ -16,6 +16,7 @@
 - Client Components must not be trusted for tenant or role enforcement.
 - Dashboard protection happens server-side in the route layout, not from client-only guards.
 - The dashboard layout redirects `parent` and `student` memberships to `/portal` before rendering the dashboard shell.
+- `/dashboard` content now changes by fixed staff role, but this remains a UX layer only; the role-specific home page does not replace server-side authorization inside module routes and actions.
 - Dashboard sidebar filtering is a UX improvement only. It reduces irrelevant navigation by fixed role, but it is not a replacement for server-side authorization checks.
 - Tenant and school context should come from the current membership, never from submitted form values.
 - Parent/student portal protection also happens server-side and is limited to fixed `parent` and `student` roles.

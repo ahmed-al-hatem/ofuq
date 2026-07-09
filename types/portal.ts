@@ -51,3 +51,47 @@ export type PortalContext = {
   linked_student_ids: string[]
   linked_students: PortalStudentLink[]
 }
+
+export type PortalOverviewStat = {
+  title: string
+  value: string | number
+  description: string
+  href: string
+}
+
+export type PortalOverviewSectionItem = {
+  id: string
+  title: string
+  description: string
+  meta?: string
+  href?: string
+}
+
+export type ParentPortalOverviewSummary = {
+  role: "parent"
+  title: string
+  description: string
+  stats: PortalOverviewStat[]
+  linkedChildren: PortalOverviewSectionItem[]
+  attendanceHighlights: PortalOverviewSectionItem[]
+  latestGrades: PortalOverviewSectionItem[]
+  financeHighlights: PortalOverviewSectionItem[]
+  upcomingTimetable: PortalOverviewSectionItem[]
+  recentAnnouncements: PortalOverviewSectionItem[]
+}
+
+export type StudentPortalOverviewSummary = {
+  role: "student"
+  title: string
+  description: string
+  stats: PortalOverviewStat[]
+  attendanceHighlights: PortalOverviewSectionItem[]
+  latestGrades: PortalOverviewSectionItem[]
+  libraryHighlights: PortalOverviewSectionItem[]
+  upcomingTimetable: PortalOverviewSectionItem[]
+  recentAnnouncements: PortalOverviewSectionItem[]
+}
+
+export type PortalOverviewSummary =
+  | ParentPortalOverviewSummary
+  | StudentPortalOverviewSummary
