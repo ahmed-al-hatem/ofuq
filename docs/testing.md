@@ -107,8 +107,8 @@ Local demo accounts used by the suite:
 
 - `school.admin@ofuq.local`
 - `teacher.arabic@ofuq.local`
-- `accountant.main@ofuq.local`
-- `librarian.main@ofuq.local`
+- `accountant@ofuq.local`
+- `librarian@ofuq.local`
 - `parent.hassan@ofuq.local`
 - `student.youssef@ofuq.local`
 
@@ -130,7 +130,7 @@ npx playwright install chromium
 
 - In the Phase 17 verification session, Chromium was already available locally,
   so no additional browser install was required.
-- In the latest Phase 20 verification attempt, browser smoke passed for admin, teacher, parent, and student flows, but accountant/librarian login smoke remained blocked by missing local demo auth users; see [verification-report.md](./verification-report.md) for the exact failure notes.
+- In the local demo-auth preflight repair after Phase 20, targeted accountant/librarian browser smoke passed after the E2E helper was realigned to the seeded demo accounts and the role-dashboard selectors were tightened; see [verification-report.md](./verification-report.md) for the exact verification notes.
 
 ## Intentionally deferred
 

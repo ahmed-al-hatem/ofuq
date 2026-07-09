@@ -35,8 +35,12 @@ test("accountant sees the finance dashboard quick actions only", async ({ page }
   await page.goto(appRoutes.dashboard)
 
   await expect(page.getByRole("heading", { name: "لوحة المحاسب" })).toBeVisible()
-  await expect(page.getByText("الفواتير")).toBeVisible()
-  await expect(page.getByText("المدفوعات")).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "الفواتير", exact: true })
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "المدفوعات", exact: true })
+  ).toBeVisible()
   await expect(page.getByText("الإعارات")).toHaveCount(0)
   await expect(page.getByText("إدخال الدرجات")).toHaveCount(0)
   await assertNoRuntimeErrors(page)
@@ -47,8 +51,12 @@ test("librarian sees the library dashboard quick actions only", async ({ page })
   await page.goto(appRoutes.dashboard)
 
   await expect(page.getByRole("heading", { name: "لوحة المكتبة" })).toBeVisible()
-  await expect(page.getByText("فهرس الكتب")).toBeVisible()
-  await expect(page.getByText("الإعارات")).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "فهرس الكتب", exact: true })
+  ).toBeVisible()
+  await expect(
+    page.getByRole("heading", { name: "الإعارات", exact: true })
+  ).toBeVisible()
   await expect(page.getByText("الفواتير")).toHaveCount(0)
   await assertNoRuntimeErrors(page)
 })

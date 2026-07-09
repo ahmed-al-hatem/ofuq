@@ -7,8 +7,8 @@ const defaultPassword = process.env.E2E_PASSWORD ?? "OfuqLocal123!"
 export const E2E_USERS = {
   admin: "school.admin@ofuq.local",
   teacher: "teacher.arabic@ofuq.local",
-  accountant: "accountant.main@ofuq.local",
-  librarian: "librarian.main@ofuq.local",
+  accountant: "accountant@ofuq.local",
+  librarian: "librarian@ofuq.local",
   parent: "parent.hassan@ofuq.local",
   student: "student.youssef@ofuq.local",
 } as const

@@ -5,7 +5,7 @@
 - Project name: Ofuq | أُفُق
 - Current phase: Phase 20 Role-Specific Dashboards Foundation implemented
 - Last completed implementation phase: Phase 20 Role-Specific Dashboards Foundation
-- Last completed quality phase: Phase 20 Role-Specific Dashboards Foundation Verification with documented local accountant/librarian demo-auth blocker in E2E
+- Last completed quality phase: Phase 20 Role-Specific Dashboards Foundation Verification plus local demo-auth preflight repair for accountant/librarian E2E
 - Next implementation phase: Phase 21 Professional UI Polish and Design System Pass
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
@@ -50,7 +50,7 @@
 | Phase 17 Browser Smoke / E2E Tests Foundation | Done | Playwright-based local browser smoke now covers login, dashboard access, parent/student portal entry, portal read-only cues, dashboard-navigation absence in the portal, and honest local verification docs. |
 | Phase 18 Settings and Integrations Placeholders Foundation | Done | Admin-only `/dashboard/settings` and `/dashboard/integrations` now exist with school-scoped settings persistence, message-template editing, integration placeholder pages, local seed data, unit coverage, DB smoke updates, and Playwright smoke coverage without real external connections. |
 | Phase 19 Role-Aware UX Routing and Navigation Foundation | Done with documented local browser blocker | Login redirect now follows the resolved fixed role, `parent` and `student` are routed to `/portal`, dashboard shell access excludes portal roles, dashboard navigation is filtered by staff role, and developer-facing dashboard copy has been removed. |
-| Phase 20 Role-Specific Dashboards Foundation | Done with documented local demo-auth blocker | `/dashboard` now renders staff-specific dashboards for admin, teacher, accountant, and librarian roles, while `/portal` now surfaces richer parent/student overviews using authenticated linked-student scope only and without schema changes. |
+| Phase 20 Role-Specific Dashboards Foundation | Done with preflight auth repair verified | `/dashboard` now renders staff-specific dashboards for admin, teacher, accountant, and librarian roles, while `/portal` now surfaces richer parent/student overviews using authenticated linked-student scope only and without schema changes. |
 
 ## Current Implemented Modules
 
@@ -276,6 +276,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: Phase 20 Role-Specific Dashboards Foundation.
+Recommended next phase: Phase 21 Professional UI Polish and Design System Pass.
 
-Go/no-go status: Go for Phase 20 planning. Phase 19 implementation, unit coverage, lint, build, and `test:all` are verified locally. Browser smoke is documented honestly as blocked by the current local auth/demo environment state.
+Go/no-go status: Go for Phase 21 planning. Phase 20 implementation plus the local demo-auth preflight repair are verified locally with passing lint, build, targeted auth checks, and targeted accountant/librarian Playwright smoke.
