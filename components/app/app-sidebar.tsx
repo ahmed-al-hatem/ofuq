@@ -7,12 +7,14 @@ import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { appConfig } from "@/config/app"
-import { dashboardNavigation } from "@/config/navigation"
 import { appRoutes } from "@/constants/routes"
+import { getDashboardNavigationForRole } from "@/lib/navigation/role-navigation"
 import { cn } from "@/lib/utils"
+import type { SessionUser } from "@/types/auth"
 
-export function AppSidebar() {
+export function AppSidebar({ user }: Readonly<{ user: SessionUser }>) {
   const pathname = usePathname()
+  const navigation = user.role ? getDashboardNavigationForRole(user.role) : []
 
   return (
     <aside className="border-b bg-sidebar text-sidebar-foreground lg:min-h-screen lg:border-b-0 lg:border-r">
@@ -32,43 +34,27 @@ export function AppSidebar() {
             </div>
           </Link>
           <Badge variant="secondary" className="w-fit rounded-full">
-            مرحلة التأسيس
+            منصة أُفُق
           </Badge>
         </div>
 
         <Separator />
 
         <nav className="flex flex-col gap-6">
-          {dashboardNavigation.map((group) => (
+          {navigation.map((group) => (
             <div key={group.label} className="space-y-2">
               <p className="px-3 text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 {group.label}
               </p>
               <div className="flex flex-col gap-1">
                 {group.items.map((item) => {
-                  const Icon = item.icon
-                  const active = item.href
-                    ? pathname === item.href || pathname.startsWith(`${item.href}/`)
-                    : false
-
-                  if (item.placeholder || !item.href) {
-                    return (
-                      <span
-                        key={item.label}
-                        aria-disabled="true"
-                        className={cn(
-                          buttonVariants({ variant: "ghost", size: "sm" }),
-                          "justify-start gap-3 text-muted-foreground opacity-70"
-                        )}
-                      >
-                        <Icon className="size-4 shrink-0" />
-                        <span className="flex-1 text-start">{item.label}</span>
-                        <Badge variant="outline" className="rounded-full border-dashed">
-                          لاحقًا
-                        </Badge>
-                      </span>
-                    )
+                  if (!item.href) {
+                    return null
                   }
+
+                  const Icon = item.icon
+                  const active =
+                    pathname === item.href || pathname.startsWith(`${item.href}/`)
 
                   return (
                     <Link

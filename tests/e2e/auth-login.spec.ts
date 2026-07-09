@@ -9,7 +9,7 @@ const loginCases = [
     name: "school admin",
     email: E2E_USERS.admin,
     destination: appRoutes.dashboard,
-    heading: "لوحة التحكم",
+    heading: "لوحة تشغيل المدرسة",
   },
   {
     name: "parent portal user",
@@ -34,8 +34,7 @@ test.describe("Auth login smoke", () => {
         page.getByRole("heading", { name: "تسجيل الدخول إلى أُفُق" })
       ).toBeVisible()
 
-      await loginAs(page, loginCase.email)
-      await page.goto(loginCase.destination)
+      await loginAs(page, loginCase.email, loginCase.destination)
 
       await expect(
         page.getByRole("heading", { name: loginCase.heading, exact: false })

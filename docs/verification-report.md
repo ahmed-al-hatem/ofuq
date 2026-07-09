@@ -3,6 +3,35 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 19 Role-Aware UX Routing and Navigation Foundation Verification
+
+Phase 19 role-aware UX routing and navigation foundation is implemented and
+verified for code quality, with the local browser smoke honestly documented as
+blocked by the current auth/demo environment state.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| Git status review | Passed after safe-directory override | `git -c safe.directory=D:/ofuq/ofuq status --short` showed only Phase 19-scoped file changes during closure review. |
+| Supabase status | Failed / blocked after elevation | `supabase status` could not inspect the local Docker engine (`dockerDesktopLinuxEngine` pipe not available), so the local stack health could not be confirmed in this session. |
+| `supabase db reset` | Not run | Skipped because the local Docker/Supabase engine was unavailable after the status failure. |
+| DB smoke SQL | Not run | Skipped because the local Supabase stack could not be confirmed as running in this session. |
+| `npm run test` | Passed | Vitest completed successfully, including the new role redirect and role navigation unit tests. |
+| `npm run lint` | Passed | ESLint completed successfully after the dashboard shell, routing, tests, and helper updates. |
+| `npm run build` | Passed | Next.js production build completed successfully and retained all dashboard and portal routes. |
+| `npm run test:all` | Passed | Combined lint, unit tests, and production build completed successfully. |
+| `npm run test:e2e` | Failed / blocked | The Playwright run started but timed out after early login failures. In the current local state, `school.admin@ofuq.local` stalled behind the generic login error message and `parent.hassan@ofuq.local` returned `لا يوجد ملف مستخدم مرتبط بهذا الحساب`, which points to local auth/demo-data preconditions rather than a verified role-routing regression. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported `LF` to `CRLF` normalization warnings only. |
+| Browser smoke status | Blocked in current local environment | The new role-aware Playwright coverage exists, but this verification session could not complete it against the current local auth/demo environment state. |
+
+Phase 19 scope notes:
+
+- Login redirect is now role-aware and resolved server-side from the active membership.
+- `parent` and `student` users are routed to `/portal` and redirected away from `/dashboard`.
+- Dashboard sidebar filtering is a UX improvement only and does not replace server-side authorization.
+- No RBAC, RLS, schema changes, or full redesign were added in this phase.
+
+Go/no-go after Phase 19 closure: Go for Phase 20 planning, with the current local browser-smoke blocker documented honestly.
+
 ## Phase 18 Settings and Integrations Placeholders Foundation Verification
 
 Phase 18 settings and integrations placeholders foundation is now verified. The

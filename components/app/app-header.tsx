@@ -28,12 +28,12 @@ export function AppHeader({ user }: Readonly<{ user: SessionUser }>) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="outline">RTL</Badge>
+            <Badge variant="secondary">{roleLabel}</Badge>
             <div className="flex flex-col items-end text-sm">
               <span className="font-medium">
                 {user.display_name ?? user.full_name}
               </span>
-              <span className="text-muted-foreground">{roleLabel}</span>
+              <span className="text-muted-foreground">{user.email ?? "حساب المدرسة"}</span>
             </div>
             <form action={signOutFromForm}>
               <Button type="submit" variant="outline" size="sm">
@@ -47,7 +47,7 @@ export function AppHeader({ user }: Readonly<{ user: SessionUser }>) {
         <Separator />
 
         <p className="text-sm leading-6 text-muted-foreground">
-          بنية dashboard عربية جاهزة للربط مع Supabase Auth و Server Actions.
+          تابع أعمالك اليومية من مكان واحد داخل منصة أُفُق.
         </p>
       </div>
     </header>

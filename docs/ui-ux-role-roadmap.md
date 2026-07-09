@@ -4,6 +4,12 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
+## Status Update After Phase 19
+
+- Phase 19 is now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, and staff dashboard navigation is filtered by fixed role.
+- This phase did not add RBAC, RLS, schema changes, or a full redesign.
+- The next recommended UI/UX slice is Phase 20 Role-Specific Dashboards Foundation.
+
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 
 ## Current UX Problem
@@ -591,13 +597,13 @@ This plan is useful after Phase 19, not before it.
 
 # Recommended Immediate Next Step
 
-Create and execute:
+Proceed with:
 
 ```text
-prompts/codex_19_role_aware_ux_routing_navigation_prompt.md
+prompts/codex_20_role_specific_dashboards_foundation_prompt.md
 ```
 
-The next phase should not add a new module. It should correct the role-aware user experience.
+The next phase should not add a new business module. It should replace the remaining generic staff landing experience with meaningful role-specific summaries.
 
 ## Phase 19 Done Criteria
 
@@ -615,7 +621,7 @@ Phase 19 should only close when all of the following are true:
 - Playwright role-routing smoke passes.
 - Documentation is updated honestly.
 
-## Suggested Verification Commands For Phase 19
+## Suggested Verification Commands For Phase 20
 
 ```bash
 supabase status
@@ -642,15 +648,14 @@ Then rerun DB smoke and E2E checks.
 Proceed with:
 
 ```text
-19 - Role-Aware UX Routing and Navigation Foundation
+20 - Role-Specific Dashboards Foundation
 ```
 
 Then continue with:
 
 ```text
-20 - Role-Specific Dashboards Foundation
 21 - Professional UI Polish and Design System Pass
 22 - Module UX Cleanup by Domain
 ```
 
-This sequence gives Ofuq the best path from a technically complete foundation to a polished, role-aware SaaS product suitable for a final presentation.
+This sequence gives Ofuq the best path from the new role-aware foundation into a polished, role-specific SaaS product suitable for a final presentation.

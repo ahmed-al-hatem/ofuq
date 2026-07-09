@@ -34,6 +34,7 @@ npm run test:quality
 
 - Route constant stability in `constants/routes.ts`
 - Dashboard navigation consistency in `config/navigation.ts`
+- Role-aware default-route and dashboard-navigation helpers in `lib/auth/role-redirects.ts` and `lib/navigation/role-navigation.ts`
 - Portal navigation and route consistency in `config/portal-navigation.ts` and `constants/routes.ts`
 - Settings and integrations route/navigation consistency in `constants/routes.ts`, `config/navigation.ts`, and `lib/settings/constants.ts`
 - Fixed-role sanity checks in `constants/roles.ts` and `lib/actions/require-role.ts`
@@ -89,6 +90,9 @@ Coverage:
 
 - `/login` loads and authenticates demo users
 - admin dashboard opens after login
+- parent/student login lands on `/portal`
+- parent/student visiting `/dashboard` is redirected back to `/portal`
+- teacher/accountant/librarian navigation is filtered by fixed role
 - parent portal opens after login
 - student portal opens after login
 - portal pages show read-only cues
@@ -100,6 +104,8 @@ Local demo accounts used by the suite:
 
 - `school.admin@ofuq.local`
 - `teacher.arabic@ofuq.local`
+- `accountant.main@ofuq.local`
+- `librarian.main@ofuq.local`
 - `parent.hassan@ofuq.local`
 - `student.youssef@ofuq.local`
 
@@ -121,6 +127,7 @@ npx playwright install chromium
 
 - In the Phase 17 verification session, Chromium was already available locally,
   so no additional browser install was required.
+- In the latest Phase 19 verification attempt, browser smoke was blocked by the current local auth/demo-state preconditions; see [verification-report.md](./verification-report.md) for the exact failure notes.
 
 ## Intentionally deferred
 

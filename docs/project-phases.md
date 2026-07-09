@@ -18,6 +18,7 @@
 16. Parent and student read-only portal foundation
 17. Browser smoke / E2E tests foundation
 18. Settings and integrations placeholders foundation
+19. Role-aware UX routing and navigation foundation
 
 ## Later-phase items
 
@@ -34,10 +35,19 @@ The project now has its auth, tenant, student/admission, academic-structure,
 attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
-smoke, and settings/integrations placeholders foundations in
+smoke, settings/integrations placeholders, and role-aware routing/navigation foundations in
 place.
 New business modules should continue to be added one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 19 snapshot
+
+- Login redirect is now role-aware and is resolved server-side from the active membership role.
+- `parent` and `student` users land on `/portal` and are redirected away from `/dashboard`.
+- The dashboard shell no longer renders for portal roles or for users without an active membership.
+- Dashboard navigation is filtered by fixed role for `teacher`, `accountant`, and `librarian`, while `system_admin` and `school_admin` retain the full active dashboard navigation.
+- Developer-facing shell and dashboard copy such as `مرحلة التأسيس` and `بنية dashboard` was removed from the production-facing dashboard UI.
+- No RBAC, RLS, schema changes, or full redesign were added in this phase.
 
 ## Phase 18 snapshot
 

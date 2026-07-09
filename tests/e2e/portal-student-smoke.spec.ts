@@ -19,7 +19,7 @@ const studentPortalRoutes = [
 
 test("student portal smoke remains read-only", async ({ page }) => {
   test.setTimeout(120_000)
-  await loginAs(page, E2E_USERS.student)
+  await loginAs(page, E2E_USERS.student, appRoutes.portal)
   const main = page.getByRole("main")
 
   for (const route of studentPortalRoutes) {

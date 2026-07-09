@@ -100,7 +100,7 @@ export const dashboardNavigation: NavigationGroup[] = [
     ],
   },
   {
-    label: "إعدادات ومراحل لاحقة",
+    label: "الإدارة والخدمات",
     items: [
       {
         label: "الرعاية الطلابية",

@@ -19,7 +19,7 @@ const parentPortalRoutes = [
 
 test("parent portal smoke remains read-only", async ({ page }) => {
   test.setTimeout(120_000)
-  await loginAs(page, E2E_USERS.parent)
+  await loginAs(page, E2E_USERS.parent, appRoutes.portal)
   const main = page.getByRole("main")
   const navigation = page.getByRole("navigation")
 

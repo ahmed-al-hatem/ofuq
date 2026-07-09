@@ -9,30 +9,34 @@ const dashboardCards = [
   {
     title: "الطلاب",
     value: "0",
-    description: "لا توجد بيانات فعلية بعد. هذا مكان ملخص القبولات والملفات.",
+    description: "تابع ملفات الطلاب والطلبات الحديثة من قسم الطلاب والقبول.",
     icon: Users,
     status: "neutral" as const,
+    badge: "ملفات الطلاب",
   },
   {
     title: "الحضور",
     value: "0%",
-    description: "مخطط جاهز لملخص الحضور اليدوي وQR لاحقًا.",
+    description: "راجع الحضور اليومي والجلسات المفتوحة من قسم الحضور.",
     icon: CalendarCheck2,
     status: "info" as const,
+    badge: "متابعة يومية",
   },
   {
     title: "المالية",
     value: "0",
-    description: "الرسوم والفواتير والمدفوعات ستتصل هنا في المرحلة التالية.",
+    description: "انتقل إلى قسم المالية لمراجعة الرسوم والفواتير والمدفوعات.",
     icon: CircleDollarSign,
     status: "warning" as const,
+    badge: "التحصيل المالي",
   },
   {
     title: "التقارير",
     value: "0",
-    description: "لوحات وتقارير جاهزة للاستخدام مع أول مجموعة بيانات حقيقية.",
+    description: "راجع التقارير الجاهزة لمتابعة مؤشرات المدرسة الأساسية.",
     icon: BarChart3,
     status: "success" as const,
+    badge: "مؤشرات سريعة",
   },
 ]
 
@@ -40,8 +44,8 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="لوحة التحكم"
-        description="ملخص تأسيسي قابل للتوسع قبل ربط الوحدات التشغيلية."
+        title="لوحة تشغيل المدرسة"
+        description="نظرة عامة على أهم أعمال المدرسة اليومية."
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -60,7 +64,7 @@ export default function DashboardPage() {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <StatusBadge status={card.status}>جاهز للمرحلة التالية</StatusBadge>
+                <StatusBadge status={card.status}>{card.badge}</StatusBadge>
                 <p className="text-sm leading-6 text-muted-foreground">
                   {card.description}
                 </p>
@@ -72,15 +76,15 @@ export default function DashboardPage() {
 
       <Card className="border-dashed">
         <CardHeader>
-          <CardTitle>ملاحظات التأسيس</CardTitle>
+          <CardTitle>متابعة السجلات</CardTitle>
           <CardDescription>
-            هذه المساحة ستتحول لاحقًا إلى نشاط حديث، لكن الآن تبقى واضحة وخفيفة.
+            اعتمد على الروابط الجانبية للوصول السريع إلى الطلاب والحضور والمالية والتقارير.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <EmptyState
-            title="لا توجد سجلات فعلية بعد"
-            description="بمجرد توصيل Supabase والبيانات الأساسية ستتحول هذه المساحة إلى لوحة تشغيل حقيقية."
+            title="لا توجد سجلات مطابقة حاليًا"
+            description="ابدأ من الأقسام الجانبية لإدارة أعمال المدرسة ومراجعة البيانات المتاحة."
           />
         </CardContent>
       </Card>

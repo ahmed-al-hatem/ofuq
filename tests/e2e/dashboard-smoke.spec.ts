@@ -12,7 +12,7 @@ test("admin dashboard smoke", async ({ page }) => {
   const navigation = page.getByRole("navigation")
 
   await expect(
-    page.getByRole("heading", { name: "لوحة التحكم", exact: false })
+    page.getByRole("heading", { name: "لوحة تشغيل المدرسة", exact: false })
   ).toBeVisible()
 
   for (const label of dashboardLabels) {

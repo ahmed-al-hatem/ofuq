@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 18 Settings and Integrations Placeholders Foundation closed
-- Last completed implementation phase: Phase 18 Settings and Integrations Placeholders Foundation
-- Last completed quality phase: Phase 18 Settings and Integrations Placeholders Foundation Verification
-- Next implementation phase: choose the next Phase 19 slice separately
+- Current phase: Phase 19 Role-Aware UX Routing and Navigation Foundation implemented
+- Last completed implementation phase: Phase 19 Role-Aware UX Routing and Navigation Foundation
+- Last completed quality phase: Phase 19 Role-Aware UX Routing and Navigation Foundation Verification with documented local browser blocker
+- Next implementation phase: Phase 20 Role-Specific Dashboards Foundation
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -49,6 +49,7 @@
 | Phase 16 Parent and Student Read-Only Portal Foundation | Done | `/portal` overview, linked students, attendance, grades, timetable, finance, library, announcements, and profile pages now exist with server-side linked-student scoping and no portal mutations. |
 | Phase 17 Browser Smoke / E2E Tests Foundation | Done | Playwright-based local browser smoke now covers login, dashboard access, parent/student portal entry, portal read-only cues, dashboard-navigation absence in the portal, and honest local verification docs. |
 | Phase 18 Settings and Integrations Placeholders Foundation | Done | Admin-only `/dashboard/settings` and `/dashboard/integrations` now exist with school-scoped settings persistence, message-template editing, integration placeholder pages, local seed data, unit coverage, DB smoke updates, and Playwright smoke coverage without real external connections. |
+| Phase 19 Role-Aware UX Routing and Navigation Foundation | Done with documented local browser blocker | Login redirect now follows the resolved fixed role, `parent` and `student` are routed to `/portal`, dashboard shell access excludes portal roles, dashboard navigation is filtered by staff role, and developer-facing dashboard copy has been removed. |
 
 ## Current Implemented Modules
 
@@ -71,6 +72,7 @@
 - Local Playwright browser smoke foundation for authenticated login, dashboard access, and read-only portal route coverage.
 - Settings foundation, including school display settings, branding placeholders, localization settings, module flags, and editable local message templates.
 - Integration placeholders foundation, including admin-only overview and provider pages for WhatsApp, webhooks, MoE, calendar, BI, and automation without real external API calls or secret storage.
+- Role-aware login routing and dashboard navigation filtering by fixed role.
 - Dashboard shell and navigation with Arabic-first RTL UI.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
@@ -91,7 +93,7 @@ AI Query, chatbot, real external integrations, and report builder are not implem
 | `/portal/library` | Active | Read-only active and historical book-loan view for linked students. |
 | `/portal/announcements` | Active | Read-only published announcements and school events relevant to linked students. |
 | `/portal/profile` | Active | Read-only membership/profile summary for the signed-in portal user. |
-| `/dashboard` | Active | Protected dashboard overview. |
+| `/dashboard` | Active | Protected staff dashboard overview. `parent` and `student` memberships are redirected to `/portal` before the shell renders. |
 | `/dashboard/admissions` | Active | Admissions list and management actions. |
 | `/dashboard/admissions/new` | Active | Admission creation form. |
 | `/dashboard/students` | Active | Official student records. |
@@ -225,6 +227,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Feedback mutations derive tenant/school/user scope from active membership, validate complaint relationships, survey targets, and duplicate response prevention server-side, and write minimal audit logs without complaint text or survey answers.
 - Settings reads and writes derive tenant/school/user scope from the active membership and remain limited to `system_admin` and `school_admin`.
 - Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth, webhook delivery, provider sync, or real API secret storage.
+- Login destination is role-aware and is resolved on the server from the active membership only.
+- Dashboard navigation is filtered by fixed role for UX purposes, but sensitive reads and mutations still rely on server-side authorization.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
 - `SUPABASE_SERVICE_ROLE_KEY` remains server-only.
@@ -253,6 +257,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Feedback is an operational foundation only; no anonymous/public complaint forms, public survey links, attachments, external notifications, AI analysis, advanced branching, or escalation automation are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Parent/student portal is currently read-only. It does not support payment submission, absence excuse submission, complaint/survey participation, profile editing, health/discipline visibility, or other self-service mutations.
+- Staff users still share the same dashboard route tree. Phase 19 filters navigation by role, but dedicated role-specific dashboard summaries remain deferred to Phase 20.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent notifications, and advanced analytics are deferred.
@@ -269,6 +274,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: choose a Phase 19 slice separately, such as parent/student interaction foundations, CI quality workflow foundation, or ready-made reports polish and export preparation.
+Recommended next phase: Phase 20 Role-Specific Dashboards Foundation.
 
-Go/no-go status: Go for separate Phase 19 planning. Phase 18 is now verified locally with honest placeholder-only integration claims and passing browser smoke.
+Go/no-go status: Go for Phase 20 planning. Phase 19 implementation, unit coverage, lint, build, and `test:all` are verified locally. Browser smoke is documented honestly as blocked by the current local auth/demo environment state.

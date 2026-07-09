@@ -7,11 +7,17 @@ const defaultPassword = process.env.E2E_PASSWORD ?? "OfuqLocal123!"
 export const E2E_USERS = {
   admin: "school.admin@ofuq.local",
   teacher: "teacher.arabic@ofuq.local",
+  accountant: "accountant.main@ofuq.local",
+  librarian: "librarian.main@ofuq.local",
   parent: "parent.hassan@ofuq.local",
   student: "student.youssef@ofuq.local",
 } as const
 
-export async function loginAs(page: Page, email: string): Promise<void> {
+export async function loginAs(
+  page: Page,
+  email: string,
+  expectedPath = appRoutes.dashboard
+): Promise<void> {
   await page.goto(appRoutes.login)
 
   for (let attempt = 1; attempt <= 2; attempt += 1) {
@@ -22,7 +28,7 @@ export async function loginAs(page: Page, email: string): Promise<void> {
     await page.getByRole("button", { name: "الدخول إلى لوحة التحكم" }).click()
 
     try {
-      await page.waitForURL(`**${appRoutes.dashboard}`, {
+      await page.waitForURL((url) => url.pathname === expectedPath, {
         timeout: 90_000,
         waitUntil: "domcontentloaded",
       })

@@ -9,6 +9,7 @@ import {
   type ActionResult,
   validationFailure,
 } from "@/lib/actions/action-result"
+import { getDefaultRouteForRole } from "@/lib/auth/role-redirects"
 import { getPrimaryMembership, getUserProfile } from "@/lib/auth/session"
 import { createSupabaseServerClient } from "@/lib/supabase/server"
 
@@ -92,7 +93,7 @@ export async function signInWithEmail(
     return failure("لا توجد عضوية نشطة مرتبطة بهذا الحساب")
   }
 
-  redirect(appRoutes.dashboard)
+  redirect(getDefaultRouteForRole(membership.role))
 }
 
 export async function signOut(): Promise<ActionResult<{ redirectTo: string }>> {
