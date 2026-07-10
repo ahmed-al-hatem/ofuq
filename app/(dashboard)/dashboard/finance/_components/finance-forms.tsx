@@ -126,16 +126,87 @@ export function FeeStructureForm({
   academicYears,
   gradeLevels,
   classes,
+  surface = "card",
+  cancelSlot,
 }: {
   academicYears: AcademicYear[]
   gradeLevels: GradeLevel[]
   classes: ClassSection[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     createFeeStructureAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
+          <FieldLabel htmlFor="fee-structure-year">السنة الدراسية</FieldLabel>
+          <NativeSelect id="fee-structure-year" name="academic_year_id" className="w-full" required>
+            <NativeSelectOption value="">اختر السنة</NativeSelectOption>
+            {academicYears.map((year) => (
+              <NativeSelectOption key={year.id} value={year.id}>
+                {year.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.name?.length)}>
+          <FieldLabel htmlFor="fee-structure-name">اسم الخطة</FieldLabel>
+          <Input id="fee-structure-name" name="name" required />
+          <FieldError>{fieldErrors.name?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
+          <FieldLabel htmlFor="fee-structure-grade">الصف الدراسي</FieldLabel>
+          <NativeSelect id="fee-structure-grade" name="grade_level_id" className="w-full">
+            <NativeSelectOption value="">بدون صف محدد</NativeSelectOption>
+            {gradeLevels.map((gradeLevel) => (
+              <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
+                {gradeLevel.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
+          <FieldLabel htmlFor="fee-structure-class">الشعبة</FieldLabel>
+          <NativeSelect id="fee-structure-class" name="class_id" className="w-full">
+            <NativeSelectOption value="">بدون شعبة محددة</NativeSelectOption>
+            {classes.map((classSection) => (
+              <NativeSelectOption key={classSection.id} value={classSection.id}>
+                {classSection.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.currency_code?.length)}>
+          <FieldLabel htmlFor="fee-structure-currency">العملة</FieldLabel>
+          <Input id="fee-structure-currency" name="currency_code" defaultValue="USD" dir="ltr" required />
+          <FieldError>{fieldErrors.currency_code?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
+          <FieldLabel htmlFor="fee-structure-description">الوصف</FieldLabel>
+          <Textarea id="fee-structure-description" name="description" />
+          <FieldError>{fieldErrors.description?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ خطة الرسوم"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -145,78 +216,86 @@ export function FeeStructureForm({
           الخطة ترتبط بسنة دراسية ويمكن تخصيصها لصف أو شعبة عند الحاجة.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
-              <FieldLabel htmlFor="fee-structure-year">السنة الدراسية</FieldLabel>
-              <NativeSelect id="fee-structure-year" name="academic_year_id" className="w-full" required>
-                <NativeSelectOption value="">اختر السنة</NativeSelectOption>
-                {academicYears.map((year) => (
-                  <NativeSelectOption key={year.id} value={year.id}>
-                    {year.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.name?.length)}>
-              <FieldLabel htmlFor="fee-structure-name">اسم الخطة</FieldLabel>
-              <Input id="fee-structure-name" name="name" required />
-              <FieldError>{fieldErrors.name?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
-              <FieldLabel htmlFor="fee-structure-grade">الصف الدراسي</FieldLabel>
-              <NativeSelect id="fee-structure-grade" name="grade_level_id" className="w-full">
-                <NativeSelectOption value="">بدون صف محدد</NativeSelectOption>
-                {gradeLevels.map((gradeLevel) => (
-                  <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
-                    {gradeLevel.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
-              <FieldLabel htmlFor="fee-structure-class">الشعبة</FieldLabel>
-              <NativeSelect id="fee-structure-class" name="class_id" className="w-full">
-                <NativeSelectOption value="">بدون شعبة محددة</NativeSelectOption>
-                {classes.map((classSection) => (
-                  <NativeSelectOption key={classSection.id} value={classSection.id}>
-                    {classSection.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.currency_code?.length)}>
-              <FieldLabel htmlFor="fee-structure-currency">العملة</FieldLabel>
-              <Input id="fee-structure-currency" name="currency_code" defaultValue="USD" dir="ltr" required />
-              <FieldError>{fieldErrors.currency_code?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
-              <FieldLabel htmlFor="fee-structure-description">الوصف</FieldLabel>
-              <Textarea id="fee-structure-description" name="description" />
-              <FieldError>{fieldErrors.description?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ خطة الرسوم" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
 
 export function FeeItemForm({
   feeStructures,
+  surface = "card",
+  cancelSlot,
 }: {
   feeStructures: FeeStructure[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(createFeeItemAction, initialState)
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.fee_structure_id?.length)}>
+          <FieldLabel htmlFor="fee-item-structure">خطة الرسوم</FieldLabel>
+          <NativeSelect id="fee-item-structure" name="fee_structure_id" className="w-full" required>
+            <NativeSelectOption value="">اختر الخطة</NativeSelectOption>
+            {feeStructures.map((feeStructure) => (
+              <NativeSelectOption key={feeStructure.id} value={feeStructure.id}>
+                {feeStructure.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.fee_structure_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.name?.length)}>
+          <FieldLabel htmlFor="fee-item-name">اسم البند</FieldLabel>
+          <Input id="fee-item-name" name="name" required />
+          <FieldError>{fieldErrors.name?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.item_type?.length)}>
+          <FieldLabel htmlFor="fee-item-type">نوع البند</FieldLabel>
+          <NativeSelect id="fee-item-type" name="item_type" className="w-full" required>
+            {feeItemTypeOptions.map((itemType) => (
+              <NativeSelectOption key={itemType} value={itemType}>
+                {FEE_ITEM_TYPE_LABELS_AR[itemType]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.item_type?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.amount?.length)}>
+          <FieldLabel htmlFor="fee-item-amount">المبلغ</FieldLabel>
+          <Input id="fee-item-amount" name="amount" type="number" min="0" step="0.01" dir="ltr" required />
+          <FieldError>{fieldErrors.amount?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.due_date?.length)}>
+          <FieldLabel htmlFor="fee-item-due-date">تاريخ الاستحقاق</FieldLabel>
+          <Input id="fee-item-due-date" name="due_date" type="date" dir="ltr" />
+          <FieldError>{fieldErrors.due_date?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.sort_order?.length)}>
+          <FieldLabel htmlFor="fee-item-sort-order">الترتيب</FieldLabel>
+          <Input id="fee-item-sort-order" name="sort_order" type="number" defaultValue="0" dir="ltr" />
+          <FieldError>{fieldErrors.sort_order?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
+          <FieldLabel htmlFor="fee-item-description">الوصف</FieldLabel>
+          <Textarea id="fee-item-description" name="description" />
+          <FieldError>{fieldErrors.description?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ بند الرسوم"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -226,64 +305,7 @@ export function FeeItemForm({
           يتم استخدام البنود النشطة عند توليد الفواتير من خطة الرسوم.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.fee_structure_id?.length)}>
-              <FieldLabel htmlFor="fee-item-structure">خطة الرسوم</FieldLabel>
-              <NativeSelect id="fee-item-structure" name="fee_structure_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الخطة</NativeSelectOption>
-                {feeStructures.map((feeStructure) => (
-                  <NativeSelectOption key={feeStructure.id} value={feeStructure.id}>
-                    {feeStructure.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.fee_structure_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.name?.length)}>
-              <FieldLabel htmlFor="fee-item-name">اسم البند</FieldLabel>
-              <Input id="fee-item-name" name="name" required />
-              <FieldError>{fieldErrors.name?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.item_type?.length)}>
-              <FieldLabel htmlFor="fee-item-type">نوع البند</FieldLabel>
-              <NativeSelect id="fee-item-type" name="item_type" className="w-full" required>
-                {feeItemTypeOptions.map((itemType) => (
-                  <NativeSelectOption key={itemType} value={itemType}>
-                    {FEE_ITEM_TYPE_LABELS_AR[itemType]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.item_type?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.amount?.length)}>
-              <FieldLabel htmlFor="fee-item-amount">المبلغ</FieldLabel>
-              <Input id="fee-item-amount" name="amount" type="number" min="0" step="0.01" dir="ltr" required />
-              <FieldError>{fieldErrors.amount?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.due_date?.length)}>
-              <FieldLabel htmlFor="fee-item-due-date">تاريخ الاستحقاق</FieldLabel>
-              <Input id="fee-item-due-date" name="due_date" type="date" dir="ltr" />
-              <FieldError>{fieldErrors.due_date?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.sort_order?.length)}>
-              <FieldLabel htmlFor="fee-item-sort-order">الترتيب</FieldLabel>
-              <Input id="fee-item-sort-order" name="sort_order" type="number" defaultValue="0" dir="ltr" />
-              <FieldError>{fieldErrors.sort_order?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
-              <FieldLabel htmlFor="fee-item-description">الوصف</FieldLabel>
-              <Textarea id="fee-item-description" name="description" />
-              <FieldError>{fieldErrors.description?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ بند الرسوم" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
@@ -361,17 +383,100 @@ export function StudentDiscountForm({
   discountTypes,
   academicYears,
   terms,
+  surface = "card",
+  cancelSlot,
 }: {
   students: Student[]
   discountTypes: { id: string; name: string }[]
   academicYears: AcademicYear[]
   terms: Term[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     assignStudentDiscountAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.student_id?.length)}>
+          <FieldLabel htmlFor="student-discount-student">الطالب</FieldLabel>
+          <NativeSelect id="student-discount-student" name="student_id" className="w-full" required>
+            <NativeSelectOption value="">اختر الطالب</NativeSelectOption>
+            {students.map((student) => (
+              <NativeSelectOption key={student.id} value={student.id}>
+                {student.full_name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.student_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.discount_type_id?.length)}>
+          <FieldLabel htmlFor="student-discount-type">نوع الخصم</FieldLabel>
+          <NativeSelect id="student-discount-type" name="discount_type_id" className="w-full" required>
+            <NativeSelectOption value="">اختر الخصم</NativeSelectOption>
+            {discountTypes.map((discountType) => (
+              <NativeSelectOption key={discountType.id} value={discountType.id}>
+                {discountType.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.discount_type_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
+          <FieldLabel htmlFor="student-discount-year">السنة الدراسية</FieldLabel>
+          <NativeSelect id="student-discount-year" name="academic_year_id" className="w-full" required>
+            <NativeSelectOption value="">اختر السنة</NativeSelectOption>
+            {academicYears.map((year) => (
+              <NativeSelectOption key={year.id} value={year.id}>
+                {year.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.term_id?.length)}>
+          <FieldLabel htmlFor="student-discount-term">الفصل الدراسي</FieldLabel>
+          <NativeSelect id="student-discount-term" name="term_id" className="w-full">
+            <NativeSelectOption value="">كل الفصول</NativeSelectOption>
+            {terms.map((term) => (
+              <NativeSelectOption key={term.id} value={term.id}>
+                {term.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.term_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.starts_on?.length)}>
+          <FieldLabel htmlFor="student-discount-starts">يبدأ في</FieldLabel>
+          <Input id="student-discount-starts" name="starts_on" type="date" dir="ltr" />
+          <FieldError>{fieldErrors.starts_on?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.ends_on?.length)}>
+          <FieldLabel htmlFor="student-discount-ends">ينتهي في</FieldLabel>
+          <Input id="student-discount-ends" name="ends_on" type="date" dir="ltr" />
+          <FieldError>{fieldErrors.ends_on?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
+          <FieldLabel htmlFor="student-discount-notes">ملاحظات</FieldLabel>
+          <Textarea id="student-discount-notes" name="notes" />
+          <FieldError>{fieldErrors.notes?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ خصم الطالب"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -381,79 +486,7 @@ export function StudentDiscountForm({
           يتم التحقق من الطالب ونوع الخصم والسنة الدراسية داخل المدرسة الحالية.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.student_id?.length)}>
-              <FieldLabel htmlFor="student-discount-student">الطالب</FieldLabel>
-              <NativeSelect id="student-discount-student" name="student_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الطالب</NativeSelectOption>
-                {students.map((student) => (
-                  <NativeSelectOption key={student.id} value={student.id}>
-                    {student.full_name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.student_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.discount_type_id?.length)}>
-              <FieldLabel htmlFor="student-discount-type">نوع الخصم</FieldLabel>
-              <NativeSelect id="student-discount-type" name="discount_type_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الخصم</NativeSelectOption>
-                {discountTypes.map((discountType) => (
-                  <NativeSelectOption key={discountType.id} value={discountType.id}>
-                    {discountType.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.discount_type_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.academic_year_id?.length)}>
-              <FieldLabel htmlFor="student-discount-year">السنة الدراسية</FieldLabel>
-              <NativeSelect id="student-discount-year" name="academic_year_id" className="w-full" required>
-                <NativeSelectOption value="">اختر السنة</NativeSelectOption>
-                {academicYears.map((year) => (
-                  <NativeSelectOption key={year.id} value={year.id}>
-                    {year.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.academic_year_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.term_id?.length)}>
-              <FieldLabel htmlFor="student-discount-term">الفصل الدراسي</FieldLabel>
-              <NativeSelect id="student-discount-term" name="term_id" className="w-full">
-                <NativeSelectOption value="">كل الفصول</NativeSelectOption>
-                {terms.map((term) => (
-                  <NativeSelectOption key={term.id} value={term.id}>
-                    {term.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.term_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.starts_on?.length)}>
-              <FieldLabel htmlFor="student-discount-starts">يبدأ في</FieldLabel>
-              <Input id="student-discount-starts" name="starts_on" type="date" dir="ltr" />
-              <FieldError>{fieldErrors.starts_on?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.ends_on?.length)}>
-              <FieldLabel htmlFor="student-discount-ends">ينتهي في</FieldLabel>
-              <Input id="student-discount-ends" name="ends_on" type="date" dir="ltr" />
-              <FieldError>{fieldErrors.ends_on?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
-              <FieldLabel htmlFor="student-discount-notes">ملاحظات</FieldLabel>
-              <Textarea id="student-discount-notes" name="notes" />
-              <FieldError>{fieldErrors.notes?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ خصم الطالب" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

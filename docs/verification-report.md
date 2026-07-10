@@ -3,6 +3,51 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 22B Finance / Library / Communication UX Cleanup Verification
+
+Phase 22B finance / library / communication UX cleanup is implemented and
+verified with the requested minimal/high-value budget. The work stayed within
+existing server actions, validation, and authorization boundaries, applied the
+Phase 21 shared page polish plus the Phase 21.5 modal-form pattern to a small
+set of high-value staff pages, and kept complex detail routes intact.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Not run | Skipped because this phase does not change schema, domain services, financial calculations, communication authorization rules, or library loan business semantics. |
+| `npm run lint` | Failed for unrelated workspace files | Global ESLint still reports pre-existing `@typescript-eslint/no-require-imports` errors in `.codex/skills/brand/scripts/*.cjs` and `.codex/skills/design-system/scripts/*.cjs`, plus pre-existing React hook warnings in `components/ui/carousel.tsx` and `hooks/use-mobile.ts`. These files are outside the Phase 22B change surface. |
+| Targeted ESLint on touched files | Passed | `npm run lint -- ...` succeeded for the changed finance, library, and communication page/form files touched in this phase. |
+| `npm run build` | Passed | Next.js production build completed successfully after the selected page cleanups, table updates, and modal/sheet conversions. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq -C D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Targeted browser smoke | Not run | Skipped because the phase budget is intentionally minimal and this slice does not require a local browser pass by default. |
+| Schema / seed / Supabase config review | Passed by scope inspection | No schema files, seed files, or Supabase config files were changed in this phase. |
+
+Phase 22B selected improvements:
+
+- Finance
+  - fee structure creation now uses a quick `FormSheet` from `/dashboard/finance/fees`
+  - fee item creation now uses a quick `FormDialog` from `/dashboard/finance/fees`
+  - student discount assignment now uses a quick `FormSheet` from `/dashboard/finance/discounts`
+- Library
+  - catalog creation now uses a quick `FormSheet` from `/dashboard/library/catalog`, with `/dashboard/library/catalog/new` retained as a full-page fallback
+  - loan issue now uses a quick `FormSheet` from `/dashboard/library/loans`, with `/dashboard/library/loans/new` retained as a full-page fallback
+  - catalog and loans list views now use shared table composition and improved Arabic empty states
+- Communication
+  - internal message creation now uses a quick `FormSheet` from `/dashboard/communication/messages`, with `/dashboard/communication/messages/new` retained as a full-page fallback
+  - school event creation now uses a quick `FormSheet` from `/dashboard/communication/events`, with `/dashboard/communication/events/new` retained as a full-page fallback
+
+Phase 22B scope notes:
+
+- Reused existing `components/ui` and shared wrappers only: `FormDialog`, `FormSheet`, `FormActions`, `PageHeader`, `PageSection`, `PageShell`, `EmptyState`, `StatusBadge`, `Card`, `Button`, `DialogClose`, `SheetClose`, and shared `Table` primitives.
+- No custom modal primitive, custom overlay, or custom backdrop was introduced; dialog and sheet dimming continue to use the existing `components/ui/dialog.tsx` and `components/ui/sheet.tsx` backdrop behavior.
+- Complex detail pages remain routes, including invoice details, payment details, message details, catalog details, and loan details.
+- No schema changes, seed changes, Supabase config changes, RBAC, or RLS changes were introduced.
+
+Skills used:
+
+- `shadcn`: used for `Dialog`/`Sheet`/`Form`/`Button`/`Input`/`Select`/`Table` patterns
+- `ui-ux-pro-max`: used for Finance/Library/Communication UX cleanup, density, form placement, loading feedback, and Arabic RTL polish
+- `migrate-radix-to-base`: not needed because no Radix imports were found
+
 ## Phase 22A Academic / Attendance / Grades UX Cleanup Verification
 
 Phase 22A academic / attendance / grades UX cleanup is implemented and verified

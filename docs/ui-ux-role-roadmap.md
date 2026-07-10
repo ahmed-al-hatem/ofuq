@@ -4,12 +4,12 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
-## Status Update After Phase 22A
+## Status Update After Phase 22B
 
-- Phase 19, Phase 20, Phase 21, Phase 21.5, and Phase 22A are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, selected quick forms use reusable `Dialog`/`Sheet` patterns, and high-value academic/attendance/grades pages now follow that pattern more consistently.
+- Phase 19, Phase 20, Phase 21, Phase 21.5, Phase 22A, and Phase 22B are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, selected quick forms use reusable `Dialog`/`Sheet` patterns, and high-value academic, attendance, grades, finance, library, and communication pages now follow that pattern more consistently.
 - `/portal` overview is now more useful for `parent` and `student` without adding mutations or widening authorization scope.
 - These phases did not add RBAC, RLS, schema changes, or workflow redesign.
-- The next recommended UI/UX slice is Phase 22B Finance / Library / Communication UX Cleanup.
+- The next recommended UI/UX slice is Phase 22C Portal UX Polish.
 
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 
@@ -17,9 +17,9 @@ The current project already has a strong technical foundation: authentication, f
 
 The remaining UI work is now narrower and more domain-specific:
 
-1. Finance, library, and communication subpages still need the new shared polish and modal-form patterns applied consistently.
-2. Portal read-only pages still have room for better information density and section consistency.
-3. The shell, dashboards, and academic/attendance/grades slice are now stronger than several remaining deeper module pages, so the next work should continue by domain rather than adding a new product surface.
+1. Portal read-only pages still have room for better information density and section consistency.
+2. A few deeper staff detail surfaces can still benefit from the newer shared polish patterns, but the largest remaining consistency gap is now portal-specific.
+3. The shell, dashboards, and staff module slices are now stronger than the portal's day-to-day reading experience, so the next work should stay focused rather than adding a new product surface.
 
 These are no longer product-foundation blockers. They are quality and consistency opportunities for the next UX slice.
 
@@ -636,12 +636,12 @@ This plan is useful after Phase 19, not before it.
 Proceed with:
 
 ```text
-prompts/codex_23_finance_library_communication_ui_cleanup_prompt.md
+Phase 22C portal UX polish prompt
 ```
 
 The next phase should not add a new business module. It should continue
-applying the shared polish and modal-form rules to the remaining staff-facing
-domains with the same controlled scope used in Phase 22A.
+applying the shared polish rules to the remaining parent/student portal
+surfaces with the same controlled scope used in Phase 22A and Phase 22B.
 
 ## Phase 19 Done Criteria
 
@@ -686,7 +686,6 @@ Then rerun DB smoke and E2E checks.
 Proceed with:
 
 ```text
-22B - Finance, Library, Communication cleanup
 22C - Portal polish
 ```
 

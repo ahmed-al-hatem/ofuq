@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 22A Academic / Attendance / Grades UX Cleanup implemented
-- Last completed implementation phase: Phase 22A Academic / Attendance / Grades UX Cleanup
-- Last completed quality phase: Phase 22A Academic / Attendance / Grades UX Cleanup Verification
-- Next implementation phase: Phase 22B Finance / Library / Communication UX Cleanup
+- Current phase: Phase 22B Finance / Library / Communication UX Cleanup implemented
+- Last completed implementation phase: Phase 22B Finance / Library / Communication UX Cleanup
+- Last completed quality phase: Phase 22B Finance / Library / Communication UX Cleanup Verification
+- Next implementation phase: Phase 22C Portal UX Polish
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -54,6 +54,7 @@
 | Phase 21 Professional UI Polish and Design System Pass | Done with minimal verification budget | Dashboard and portal shells, headers, sidebars, shared cards, empty states, and landing-page copy now present a more cohesive Arabic-first SaaS experience without schema or workflow changes. |
 | Phase 21.5 Modal Form UX Foundation | Done with minimal verification budget | Reusable `Dialog` and `Sheet` composition wrappers now support quick create/edit flows, and selected low-risk forms were converted without schema, seed, or Supabase config changes. |
 | Phase 22A Academic / Attendance / Grades UX Cleanup | Done with minimal verification budget | Selected academic, attendance, and grades pages now apply the Phase 21 shared page polish and the Phase 21.5 modal-form pattern for quick create/review flows while keeping complex detail routes intact. |
+| Phase 22B Finance / Library / Communication UX Cleanup | Done with minimal verification budget | Selected finance, library, and communication pages now use the shared page hierarchy more consistently, move quick create flows into `Dialog` or `Sheet`, and keep complex detail views as route pages. |
 
 ## Current Implemented Modules
 
@@ -81,6 +82,7 @@
 - Professionalized dashboard and portal shell styling, shared section primitives, and production-ready Arabic empty-state copy.
 - Reusable modal-form UX foundation for selected quick forms using existing `components/ui` `Dialog` and `Sheet` primitives with dimmed overlays and Arabic-first action copy.
 - Academic, attendance, and grades high-value screens now use quick `Dialog` and `Sheet` actions for selected short or mid-size forms, while complex details such as attendance sessions, exam details, and report-card details remain route pages.
+- Selected finance, library, and communication operational screens now use quick `Dialog` or `Sheet` actions for fee structures, fee items, student discounts, catalog records, loans, internal messages, and school events, while invoice details, message details, and loan details remain full route pages.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
 
@@ -275,7 +277,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - Automated coverage remains intentionally small: Vitest targets stable pure logic and Playwright targets a small local-only browser smoke slice rather than full regression coverage.
 - Browser smoke is now covered locally through Playwright only. Hosted CI E2E, cross-browser matrices, CRUD flows, and visual regression remain deferred.
-- Phase 22A intentionally cleaned only a narrow academic/attendance/grades slice. Broader finance, library, communication, and portal cleanup remains deferred to later Phase 22 work.
+- Phase 22B intentionally cleaned only a narrow finance/library/communication slice. Portal-focused polish and any broader cross-module cleanup remain deferred to later Phase 22 work.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, and authenticated browser workflow smoke is now covered separately in the Phase 17 Playwright foundation.
 - A local Auth smoke-login issue caused by `NULL` GoTrue token fields was fixed and documented in `docs/local-auth-smoke-troubleshooting.md`.
@@ -283,6 +285,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: Phase 22B Finance / Library / Communication UX Cleanup.
+Recommended next phase: Phase 22C Portal UX Polish.
 
-Go/no-go status: Go for Phase 22B planning. Phase 22A is implemented with passing `npm run build`, passing `git diff --check` with Windows line-ending warnings only, passing targeted ESLint on touched files, honest documentation of unrelated global lint blockers, and no schema/seed/Supabase config changes.
+Go/no-go status: Go for Phase 22C planning. Phase 22B is implemented with passing `npm run build`, passing `git diff --check` with Windows line-ending warnings only, passing targeted ESLint on touched files, honest documentation of unrelated global lint blockers, and no schema/seed/Supabase config changes.

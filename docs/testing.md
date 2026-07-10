@@ -24,7 +24,7 @@ the touched application and shared UI files and document the blocker honestly.
 A tiny targeted browser smoke for modal open/close behavior is optional, not
 mandatory, for this phase type.
 
-For focused module UX cleanup work such as Phase 22A, use the same minimal
+For focused module UX cleanup work such as Phase 22A and Phase 22B, use the same minimal
 budget:
 
 - `npm run build`

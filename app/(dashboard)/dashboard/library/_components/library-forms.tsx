@@ -112,12 +112,84 @@ function getCopyOptionLabel(copy: BookCopyOption) {
   return `${copy.book_catalog?.title ?? "كتاب غير معروف"} - ${copyCode}${location}`
 }
 
-export function BookCatalogForm() {
+export function BookCatalogForm({
+  surface = "card",
+  cancelSlot,
+}: {
+  surface?: FormSurface
+  cancelSlot?: ReactNode
+} = {}) {
   const [state, formAction] = useActionState(
     createBookCatalogAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.title?.length)}>
+          <FieldLabel htmlFor="book-title">العنوان</FieldLabel>
+          <Input id="book-title" name="title" required />
+          <FieldError>{fieldErrors.title?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.subtitle?.length)}>
+          <FieldLabel htmlFor="book-subtitle">العنوان الفرعي</FieldLabel>
+          <Input id="book-subtitle" name="subtitle" />
+          <FieldError>{fieldErrors.subtitle?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.author?.length)}>
+          <FieldLabel htmlFor="book-author">المؤلف</FieldLabel>
+          <Input id="book-author" name="author" />
+          <FieldError>{fieldErrors.author?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.publisher?.length)}>
+          <FieldLabel htmlFor="book-publisher">الناشر</FieldLabel>
+          <Input id="book-publisher" name="publisher" />
+          <FieldError>{fieldErrors.publisher?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.publication_year?.length)}>
+          <FieldLabel htmlFor="book-year">سنة النشر</FieldLabel>
+          <Input id="book-year" name="publication_year" type="number" dir="ltr" />
+          <FieldError>{fieldErrors.publication_year?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.isbn?.length)}>
+          <FieldLabel htmlFor="book-isbn">ISBN</FieldLabel>
+          <Input id="book-isbn" name="isbn" dir="ltr" />
+          <FieldError>{fieldErrors.isbn?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.category?.length)}>
+          <FieldLabel htmlFor="book-category">التصنيف</FieldLabel>
+          <Input id="book-category" name="category" />
+          <FieldError>{fieldErrors.category?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.language?.length)}>
+          <FieldLabel htmlFor="book-language">اللغة</FieldLabel>
+          <Input id="book-language" name="language" defaultValue="ar" dir="ltr" />
+          <FieldError>{fieldErrors.language?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.cover_image_url?.length)}>
+          <FieldLabel htmlFor="book-cover-url">رابط صورة الغلاف</FieldLabel>
+          <Input id="book-cover-url" name="cover_image_url" type="url" dir="ltr" />
+          <FieldError>{fieldErrors.cover_image_url?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
+          <FieldLabel htmlFor="book-description">الوصف</FieldLabel>
+          <Textarea id="book-description" name="description" />
+          <FieldError>{fieldErrors.description?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ الكتاب"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -127,66 +199,7 @@ export function BookCatalogForm() {
           يسجل الفهرس بيانات الكتاب العامة، أما النسخ الفعلية فتضاف من صفحة النسخ.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.title?.length)}>
-              <FieldLabel htmlFor="book-title">العنوان</FieldLabel>
-              <Input id="book-title" name="title" required />
-              <FieldError>{fieldErrors.title?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.subtitle?.length)}>
-              <FieldLabel htmlFor="book-subtitle">العنوان الفرعي</FieldLabel>
-              <Input id="book-subtitle" name="subtitle" />
-              <FieldError>{fieldErrors.subtitle?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.author?.length)}>
-              <FieldLabel htmlFor="book-author">المؤلف</FieldLabel>
-              <Input id="book-author" name="author" />
-              <FieldError>{fieldErrors.author?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.publisher?.length)}>
-              <FieldLabel htmlFor="book-publisher">الناشر</FieldLabel>
-              <Input id="book-publisher" name="publisher" />
-              <FieldError>{fieldErrors.publisher?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.publication_year?.length)}>
-              <FieldLabel htmlFor="book-year">سنة النشر</FieldLabel>
-              <Input id="book-year" name="publication_year" type="number" dir="ltr" />
-              <FieldError>{fieldErrors.publication_year?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.isbn?.length)}>
-              <FieldLabel htmlFor="book-isbn">ISBN</FieldLabel>
-              <Input id="book-isbn" name="isbn" dir="ltr" />
-              <FieldError>{fieldErrors.isbn?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.category?.length)}>
-              <FieldLabel htmlFor="book-category">التصنيف</FieldLabel>
-              <Input id="book-category" name="category" />
-              <FieldError>{fieldErrors.category?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.language?.length)}>
-              <FieldLabel htmlFor="book-language">اللغة</FieldLabel>
-              <Input id="book-language" name="language" defaultValue="ar" dir="ltr" />
-              <FieldError>{fieldErrors.language?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.cover_image_url?.length)}>
-              <FieldLabel htmlFor="book-cover-url">رابط صورة الغلاف</FieldLabel>
-              <Input id="book-cover-url" name="cover_image_url" type="url" dir="ltr" />
-              <FieldError>{fieldErrors.cover_image_url?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
-              <FieldLabel htmlFor="book-description">الوصف</FieldLabel>
-              <Textarea id="book-description" name="description" />
-              <FieldError>{fieldErrors.description?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ الكتاب" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
@@ -279,12 +292,66 @@ export function BookCopyForm({
 export function IssueBookLoanForm({
   copyOptions,
   students,
+  surface = "card",
+  cancelSlot,
 }: {
   copyOptions: BookCopyOption[]
   students: Student[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(issueBookLoanAction, initialState)
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.copy_id?.length)}>
+          <FieldLabel htmlFor="loan-copy">نسخة الكتاب</FieldLabel>
+          <NativeSelect id="loan-copy" name="copy_id" className="w-full" required>
+            <NativeSelectOption value="">اختر النسخة المتاحة</NativeSelectOption>
+            {copyOptions.map((copy) => (
+              <NativeSelectOption key={copy.id} value={copy.id}>
+                {getCopyOptionLabel(copy)}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.copy_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.student_id?.length)}>
+          <FieldLabel htmlFor="loan-student">الطالب</FieldLabel>
+          <NativeSelect id="loan-student" name="student_id" className="w-full" required>
+            <NativeSelectOption value="">اختر الطالب</NativeSelectOption>
+            {students.map((student) => (
+              <NativeSelectOption key={student.id} value={student.id}>
+                {student.full_name} - {student.student_number}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.student_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.due_at?.length)}>
+          <FieldLabel htmlFor="loan-due-at">موعد الاستحقاق</FieldLabel>
+          <Input id="loan-due-at" name="due_at" type="datetime-local" dir="ltr" required />
+          <FieldError>{fieldErrors.due_at?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
+          <FieldLabel htmlFor="loan-notes">ملاحظات</FieldLabel>
+          <Textarea id="loan-notes" name="notes" />
+          <FieldError>{fieldErrors.notes?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="تسجيل الإعارة"
+        pendingLabel="جاري التسجيل..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -294,50 +361,7 @@ export function IssueBookLoanForm({
           يتم التحقق من الطالب والنسخة وحالة الإعارة داخل المدرسة الحالية على الخادم.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.copy_id?.length)}>
-              <FieldLabel htmlFor="loan-copy">نسخة الكتاب</FieldLabel>
-              <NativeSelect id="loan-copy" name="copy_id" className="w-full" required>
-                <NativeSelectOption value="">اختر النسخة المتاحة</NativeSelectOption>
-                {copyOptions.map((copy) => (
-                  <NativeSelectOption key={copy.id} value={copy.id}>
-                    {getCopyOptionLabel(copy)}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.copy_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.student_id?.length)}>
-              <FieldLabel htmlFor="loan-student">الطالب</FieldLabel>
-              <NativeSelect id="loan-student" name="student_id" className="w-full" required>
-                <NativeSelectOption value="">اختر الطالب</NativeSelectOption>
-                {students.map((student) => (
-                  <NativeSelectOption key={student.id} value={student.id}>
-                    {student.full_name} - {student.student_number}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.student_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.due_at?.length)}>
-              <FieldLabel htmlFor="loan-due-at">موعد الاستحقاق</FieldLabel>
-              <Input id="loan-due-at" name="due_at" type="datetime-local" dir="ltr" required />
-              <FieldError>{fieldErrors.due_at?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.notes?.length)}>
-              <FieldLabel htmlFor="loan-notes">ملاحظات</FieldLabel>
-              <Textarea id="loan-notes" name="notes" />
-              <FieldError>{fieldErrors.notes?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="تسجيل الإعارة" pendingLabel="جاري التسجيل..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

@@ -1,8 +1,13 @@
 import { Receipt, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormDialog } from "@/components/shared/form-dialog"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,6 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { DialogClose } from "@/components/ui/dialog"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import {
   listAcademicYears,
@@ -71,30 +78,75 @@ export default async function FinanceFeesPage() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الرسوم"
         description="تعريف خطط الرسوم وبنودها. المبالغ تستخدم لاحقًا عند توليد الفواتير من الخادم."
+        actions={
+          <>
+            <FormSheet
+              trigger={<Button size="lg" />}
+              triggerLabel="خطة رسوم جديدة"
+              title="إضافة خطة رسوم"
+              description="أضف خطة رسوم جديدة مع بقائك داخل صفحة الرسوم."
+              width="lg"
+            >
+              <FeeStructureForm
+                academicYears={academicYears}
+                gradeLevels={gradeLevels}
+                classes={classes}
+                surface="plain"
+                cancelSlot={
+                  <SheetClose render={<Button variant="outline" type="button" />}>
+                    إلغاء
+                  </SheetClose>
+                }
+              />
+            </FormSheet>
+            {feeStructures.length > 0 ? (
+              <FormDialog
+                trigger={<Button variant="outline" size="lg" />}
+                triggerLabel="إضافة بند رسوم"
+                title="إضافة بند رسوم"
+                description="أضف بندًا جديدًا إلى خطة رسوم موجودة من دون مغادرة الصفحة."
+                size="lg"
+              >
+                <FeeItemForm
+                  feeStructures={feeStructures}
+                  surface="plain"
+                  cancelSlot={
+                    <DialogClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </DialogClose>
+                  }
+                />
+              </FormDialog>
+            ) : (
+              <Button variant="outline" size="lg" disabled>
+                أضف خطة رسوم أولًا
+              </Button>
+            )}
+          </>
+        }
       />
 
-      <section className="grid gap-6 xl:grid-cols-2">
-        <FeeStructureForm
-          academicYears={academicYears}
-          gradeLevels={gradeLevels}
-          classes={classes}
-        />
-        <FeeItemForm feeStructures={feeStructures} />
-      </section>
-
-      {feeStructures.length === 0 ? (
-        <EmptyState
-          icon={Receipt}
-          title="لا توجد خطط رسوم بعد"
-          description="أضف خطة رسوم ثم أضف بنودها حتى يمكن توليد الفواتير."
-        />
-      ) : (
-        <section className="grid gap-4 xl:grid-cols-2">
-          {feeStructures.map((feeStructure) => {
+      <PageSection
+        title="خطط الرسوم وبنودها"
+        description="احتفظنا بهذه الصفحة كعرض تشغيلي كامل، بينما انتقلت عمليات الإضافة السريعة إلى النوافذ الجانبية والحوارية."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
+        {feeStructures.length === 0 ? (
+          <Card className="border-dashed border-border/70 shadow-sm xl:col-span-2">
+            <CardContent className="pt-6">
+              <EmptyState
+                icon={Receipt}
+                title="لا توجد خطط رسوم بعد"
+                description="ابدأ بإضافة خطة رسوم، ثم أضف البنود المرتبطة بها لتصبح جاهزة لتوليد الفواتير."
+              />
+            </CardContent>
+          </Card>
+        ) : (
+          feeStructures.map((feeStructure) => {
             const structureItems = feeItemsByStructure.get(feeStructure.id) ?? []
 
             return (
@@ -104,7 +156,7 @@ export default async function FinanceFeesPage() {
                     <div className="flex flex-col gap-1">
                       <CardTitle>{feeStructure.name}</CardTitle>
                       <CardDescription>
-                        {feeStructure.description ?? "بدون وصف"}
+                        {feeStructure.description ?? "لا توجد ملاحظات إضافية لهذه الخطة حاليًا."}
                       </CardDescription>
                     </div>
                     <StatusBadge
@@ -116,9 +168,13 @@ export default async function FinanceFeesPage() {
                 </CardHeader>
                 <CardContent className="flex flex-col gap-3">
                   {structureItems.length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
-                      لا توجد بنود لهذه الخطة.
-                    </p>
+                    <EmptyState
+                      icon={Receipt}
+                      title="لا توجد بنود مرتبطة بعد"
+                      description="أضف بند رسوم لهذه الخطة ليظهر هنا ضمن تفاصيلها."
+                      size="compact"
+                      className="bg-transparent shadow-none"
+                    />
                   ) : (
                     structureItems.map((item) => (
                       <div
@@ -140,9 +196,9 @@ export default async function FinanceFeesPage() {
                 </CardContent>
               </Card>
             )
-          })}
-        </section>
-      )}
-    </div>
+          })
+        )}
+      </PageSection>
+    </PageShell>
   )
 }

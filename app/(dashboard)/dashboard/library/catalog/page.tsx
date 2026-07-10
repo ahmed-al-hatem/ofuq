@@ -2,9 +2,12 @@ import Link from "next/link"
 import { LibraryBig, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -12,6 +15,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SheetClose } from "@/components/ui/sheet"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
 import { listBookCatalog } from "@/lib/library/catalog"
@@ -20,6 +32,7 @@ import {
   BOOK_CATALOG_STATUS_LABELS_AR,
   BOOK_CATALOG_STATUS_TONES,
 } from "@/types/library"
+import { BookCatalogForm } from "../_components/library-forms"
 
 const libraryReadRoles = [
   USER_ROLES.SYSTEM_ADMIN,
@@ -57,83 +70,106 @@ export default async function LibraryCatalogPage() {
   const canManage = canManageLibrary(contextResult.data.role)
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="فهرس الكتب"
         description="إدارة السجلات الببليوغرافية للكتب وربطها بالنسخ الفعلية."
         actions={
           canManage ? (
-            <Link
-              href={appRoutes.newLibraryCatalog}
-              className={buttonVariants({ size: "lg" })}
-            >
-              إضافة كتاب
-            </Link>
+            <>
+              <FormSheet
+                trigger={<Button size="lg" />}
+                triggerLabel="إضافة كتاب"
+                title="إضافة كتاب"
+                description="أضف سجلًا جديدًا إلى الفهرس مع بقائك في صفحة الكتب."
+                width="xl"
+              >
+                <BookCatalogForm
+                  surface="plain"
+                  cancelSlot={
+                    <SheetClose render={<Button variant="outline" type="button" />}>
+                      إلغاء
+                    </SheetClose>
+                  }
+                />
+              </FormSheet>
+              <Link
+                href={appRoutes.newLibraryCatalog}
+                className={buttonVariants({ variant: "outline", size: "lg" })}
+              >
+                فتح الصفحة الكاملة
+              </Link>
+            </>
           ) : null
         }
       />
 
-      <Card className="border-border/70 shadow-sm">
-        <CardHeader>
-          <CardTitle>الكتب</CardTitle>
-          <CardDescription>
-            يعرض الجدول عدد النسخ الإجمالي والمتاح لكل كتاب.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="overflow-x-auto">
-          {catalog.length === 0 ? (
-            <EmptyState
-              icon={LibraryBig}
-              title="لا توجد كتب بعد"
-              description="ابدأ بإضافة سجل كتاب ثم أضف النسخ الفعلية المرتبطة به."
-            />
-          ) : (
-            <table className="w-full min-w-[760px] text-sm">
-              <thead className="text-muted-foreground">
-                <tr className="border-b border-border">
-                  <th className="py-3 text-start font-medium">العنوان</th>
-                  <th className="py-3 text-start font-medium">المؤلف</th>
-                  <th className="py-3 text-start font-medium">ISBN</th>
-                  <th className="py-3 text-start font-medium">التصنيف</th>
-                  <th className="py-3 text-start font-medium">الحالة</th>
-                  <th className="py-3 text-start font-medium">النسخ</th>
-                  <th className="py-3 text-start font-medium">المتاح</th>
-                </tr>
-              </thead>
-              <tbody>
-                {catalog.map((item) => (
-                  <tr key={item.id} className="border-b border-border/60">
-                    <td className="py-3">
-                      <Link
-                        href={appRoutes.libraryCatalogDetails(item.id)}
-                        className="font-medium text-primary hover:underline"
-                      >
-                        {item.title}
-                      </Link>
-                    </td>
-                    <td className="py-3 text-muted-foreground">
-                      {item.author ?? "غير محدد"}
-                    </td>
-                    <td className="py-3 text-muted-foreground" dir="ltr">
-                      {item.isbn ?? "-"}
-                    </td>
-                    <td className="py-3 text-muted-foreground">
-                      {item.category ?? "غير مصنف"}
-                    </td>
-                    <td className="py-3">
-                      <StatusBadge status={BOOK_CATALOG_STATUS_TONES[item.status]}>
-                        {BOOK_CATALOG_STATUS_LABELS_AR[item.status]}
-                      </StatusBadge>
-                    </td>
-                    <td className="py-3">{item.copies_count}</td>
-                    <td className="py-3">{item.available_copies_count}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+      <PageSection
+        title="قائمة الكتب"
+        description="يبقى العرض الكامل هنا مناسبًا للمراجعة الكثيفة، بينما أصبحت إضافة الكتب متاحة كنموذج سريع داخل الصفحة."
+      >
+        <Card className="border-border/70 shadow-sm">
+          <CardHeader>
+            <CardTitle>الكتب</CardTitle>
+            <CardDescription>
+              يعرض الجدول عدد النسخ الإجمالي والمتاح لكل كتاب.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {catalog.length === 0 ? (
+              <EmptyState
+                icon={LibraryBig}
+                title="لا توجد كتب بعد"
+                description="ابدأ بإضافة سجل كتاب جديد، ثم أضف النسخ الفعلية المرتبطة به ليظهر المخزون هنا."
+              />
+            ) : (
+              <Table className="min-w-[760px] text-sm">
+                <TableHeader className="text-muted-foreground">
+                  <TableRow>
+                    <TableHead>العنوان</TableHead>
+                    <TableHead>المؤلف</TableHead>
+                    <TableHead>ISBN</TableHead>
+                    <TableHead>التصنيف</TableHead>
+                    <TableHead>الحالة</TableHead>
+                    <TableHead>النسخ</TableHead>
+                    <TableHead>المتاح</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {catalog.map((item) => (
+                    <TableRow key={item.id}>
+                      <TableCell>
+                        <Link
+                          href={appRoutes.libraryCatalogDetails(item.id)}
+                          className="font-medium text-primary hover:underline"
+                        >
+                          {item.title}
+                        </Link>
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {item.author ?? "غير محدد"}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground" dir="ltr">
+                        {item.isbn ?? "-"}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {item.category ?? "غير مصنف"}
+                      </TableCell>
+                      <TableCell>
+                        <StatusBadge status={BOOK_CATALOG_STATUS_TONES[item.status]}>
+                          {BOOK_CATALOG_STATUS_LABELS_AR[item.status]}
+                        </StatusBadge>
+                      </TableCell>
+                      <TableCell>{item.copies_count}</TableCell>
+                      <TableCell>{item.available_copies_count}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </CardContent>
+        </Card>
+      </PageSection>
+    </PageShell>
   )
 }

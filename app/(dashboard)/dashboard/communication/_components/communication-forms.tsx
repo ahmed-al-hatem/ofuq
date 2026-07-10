@@ -10,7 +10,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -129,12 +128,72 @@ function getFieldErrors(state: CommunicationActionState) {
 export function MessageForm({
   recipients,
   students,
+  surface = "card",
+  cancelSlot,
 }: {
   recipients: CommunicationUserOption[]
   students: Student[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(sendMessageAction, initialState)
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.recipient_user_ids?.length)}>
+          <FieldLabel htmlFor="message-recipients">المستلمون</FieldLabel>
+          <select
+            id="message-recipients"
+            name="recipient_user_ids"
+            multiple
+            className="min-h-36 w-full rounded-md border border-input bg-input/20 px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
+            required
+          >
+            {recipients.map((recipient) => (
+              <option key={recipient.id} value={recipient.id}>
+                {recipient.display_name ?? recipient.full_name} -{" "}
+                {USER_ROLE_LABELS_AR[recipient.role]}
+              </option>
+            ))}
+          </select>
+          <FieldError>{fieldErrors.recipient_user_ids?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.related_student_id?.length)}>
+          <FieldLabel htmlFor="message-student">طالب مرتبط</FieldLabel>
+          <NativeSelect id="message-student" name="related_student_id" className="w-full">
+            <NativeSelectOption value="">بدون طالب مرتبط</NativeSelectOption>
+            {students.map((student) => (
+              <NativeSelectOption key={student.id} value={student.id}>
+                {student.full_name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.related_student_id?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.subject?.length)}>
+          <FieldLabel htmlFor="message-subject">الموضوع</FieldLabel>
+          <Input id="message-subject" name="subject" required />
+          <FieldError>{fieldErrors.subject?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.body?.length)}>
+          <FieldLabel htmlFor="message-body">نص الرسالة</FieldLabel>
+          <Textarea id="message-body" name="body" required />
+          <FieldError>{fieldErrors.body?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="إرسال الرسالة"
+        pendingLabel="جاري الإرسال..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -144,56 +203,7 @@ export function MessageForm({
           يتم التحقق من عضوية المستلمين داخل المدرسة الحالية على الخادم.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.recipient_user_ids?.length)}>
-              <FieldLabel htmlFor="message-recipients">المستلمون</FieldLabel>
-              <select
-                id="message-recipients"
-                name="recipient_user_ids"
-                multiple
-                className="min-h-36 w-full rounded-md border border-input bg-input/20 px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30"
-                required
-              >
-                {recipients.map((recipient) => (
-                  <option key={recipient.id} value={recipient.id}>
-                    {recipient.display_name ?? recipient.full_name} -{" "}
-                    {USER_ROLE_LABELS_AR[recipient.role]}
-                  </option>
-                ))}
-              </select>
-              <FieldError>{fieldErrors.recipient_user_ids?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.related_student_id?.length)}>
-              <FieldLabel htmlFor="message-student">طالب مرتبط</FieldLabel>
-              <NativeSelect id="message-student" name="related_student_id" className="w-full">
-                <NativeSelectOption value="">بدون طالب مرتبط</NativeSelectOption>
-                {students.map((student) => (
-                  <NativeSelectOption key={student.id} value={student.id}>
-                    {student.full_name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.related_student_id?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.subject?.length)}>
-              <FieldLabel htmlFor="message-subject">الموضوع</FieldLabel>
-              <Input id="message-subject" name="subject" required />
-              <FieldError>{fieldErrors.subject?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.body?.length)}>
-              <FieldLabel htmlFor="message-body">نص الرسالة</FieldLabel>
-              <Textarea id="message-body" name="body" required />
-              <FieldError>{fieldErrors.body?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="إرسال الرسالة" pendingLabel="جاري الإرسال..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }
@@ -309,15 +319,95 @@ export function AnnouncementForm({
 export function SchoolEventForm({
   gradeLevels,
   classes,
+  surface = "card",
+  cancelSlot,
 }: {
   gradeLevels: GradeLevel[]
   classes: ClassSection[]
+  surface?: FormSurface
+  cancelSlot?: ReactNode
 }) {
   const [state, formAction] = useActionState(
     createSchoolEventAction,
     initialState
   )
   const fieldErrors = getFieldErrors(state)
+  const form = (
+    <form action={formAction} className="flex flex-col gap-4" noValidate>
+      <FieldGroup className="grid gap-4 md:grid-cols-2">
+        <Field data-invalid={Boolean(fieldErrors.title?.length)}>
+          <FieldLabel htmlFor="event-title">العنوان</FieldLabel>
+          <Input id="event-title" name="title" required />
+          <FieldError>{fieldErrors.title?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.location?.length)}>
+          <FieldLabel htmlFor="event-location">الموقع</FieldLabel>
+          <Input id="event-location" name="location" />
+          <FieldError>{fieldErrors.location?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.starts_at?.length)}>
+          <FieldLabel htmlFor="event-starts-at">يبدأ في</FieldLabel>
+          <Input id="event-starts-at" name="starts_at" type="datetime-local" dir="ltr" required />
+          <FieldError>{fieldErrors.starts_at?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.ends_at?.length)}>
+          <FieldLabel htmlFor="event-ends-at">ينتهي في</FieldLabel>
+          <Input id="event-ends-at" name="ends_at" type="datetime-local" dir="ltr" required />
+          <FieldError>{fieldErrors.ends_at?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.target_type?.length)}>
+          <FieldLabel htmlFor="event-target-type">الجمهور</FieldLabel>
+          <NativeSelect id="event-target-type" name="target_type" className="w-full" required>
+            {schoolEventTargetOptions.map((targetType) => (
+              <NativeSelectOption key={targetType} value={targetType}>
+                {SCHOOL_EVENT_TARGET_TYPE_LABELS_AR[targetType]}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.target_type?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
+          <FieldLabel htmlFor="event-grade-level">الصف الدراسي</FieldLabel>
+          <NativeSelect id="event-grade-level" name="grade_level_id" className="w-full">
+            <NativeSelectOption value="">بدون صف</NativeSelectOption>
+            {gradeLevels.map((gradeLevel) => (
+              <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
+                {gradeLevel.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
+        </Field>
+        <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
+          <FieldLabel htmlFor="event-class">الشعبة</FieldLabel>
+          <NativeSelect id="event-class" name="class_id" className="w-full">
+            <NativeSelectOption value="">بدون شعبة</NativeSelectOption>
+            {classes.map((classSection) => (
+              <NativeSelectOption key={classSection.id} value={classSection.id}>
+                {classSection.name}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+          <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
+        </Field>
+        <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
+          <FieldLabel htmlFor="event-description">الوصف</FieldLabel>
+          <Textarea id="event-description" name="description" />
+          <FieldError>{fieldErrors.description?.[0]}</FieldError>
+        </Field>
+      </FieldGroup>
+      <FormMessage state={state} />
+      <FormActions
+        submitLabel="حفظ الحدث"
+        pendingLabel="جاري الحفظ..."
+        cancelSlot={cancelSlot}
+      />
+    </form>
+  )
+
+  if (surface === "plain") {
+    return form
+  }
 
   return (
     <Card className="border-border/70 shadow-sm">
@@ -327,76 +417,7 @@ export function SchoolEventForm({
           الأحداث بسيطة ولا تتضمن مزامنة تقويم أو تكرار في هذه المرحلة.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <form action={formAction} className="flex flex-col gap-4" noValidate>
-          <FieldGroup className="grid gap-4 md:grid-cols-2">
-            <Field data-invalid={Boolean(fieldErrors.title?.length)}>
-              <FieldLabel htmlFor="event-title">العنوان</FieldLabel>
-              <Input id="event-title" name="title" required />
-              <FieldError>{fieldErrors.title?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.location?.length)}>
-              <FieldLabel htmlFor="event-location">الموقع</FieldLabel>
-              <Input id="event-location" name="location" />
-              <FieldError>{fieldErrors.location?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.starts_at?.length)}>
-              <FieldLabel htmlFor="event-starts-at">يبدأ في</FieldLabel>
-              <Input id="event-starts-at" name="starts_at" type="datetime-local" dir="ltr" required />
-              <FieldError>{fieldErrors.starts_at?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.ends_at?.length)}>
-              <FieldLabel htmlFor="event-ends-at">ينتهي في</FieldLabel>
-              <Input id="event-ends-at" name="ends_at" type="datetime-local" dir="ltr" required />
-              <FieldError>{fieldErrors.ends_at?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.target_type?.length)}>
-              <FieldLabel htmlFor="event-target-type">الجمهور</FieldLabel>
-              <NativeSelect id="event-target-type" name="target_type" className="w-full" required>
-                {schoolEventTargetOptions.map((targetType) => (
-                  <NativeSelectOption key={targetType} value={targetType}>
-                    {SCHOOL_EVENT_TARGET_TYPE_LABELS_AR[targetType]}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.target_type?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.grade_level_id?.length)}>
-              <FieldLabel htmlFor="event-grade-level">الصف الدراسي</FieldLabel>
-              <NativeSelect id="event-grade-level" name="grade_level_id" className="w-full">
-                <NativeSelectOption value="">بدون صف</NativeSelectOption>
-                {gradeLevels.map((gradeLevel) => (
-                  <NativeSelectOption key={gradeLevel.id} value={gradeLevel.id}>
-                    {gradeLevel.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.grade_level_id?.[0]}</FieldError>
-            </Field>
-            <Field data-invalid={Boolean(fieldErrors.class_id?.length)}>
-              <FieldLabel htmlFor="event-class">الشعبة</FieldLabel>
-              <NativeSelect id="event-class" name="class_id" className="w-full">
-                <NativeSelectOption value="">بدون شعبة</NativeSelectOption>
-                {classes.map((classSection) => (
-                  <NativeSelectOption key={classSection.id} value={classSection.id}>
-                    {classSection.name}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-              <FieldError>{fieldErrors.class_id?.[0]}</FieldError>
-            </Field>
-            <Field className="md:col-span-2" data-invalid={Boolean(fieldErrors.description?.length)}>
-              <FieldLabel htmlFor="event-description">الوصف</FieldLabel>
-              <Textarea id="event-description" name="description" />
-              <FieldError>{fieldErrors.description?.[0]}</FieldError>
-            </Field>
-          </FieldGroup>
-          <FormMessage state={state} />
-          <CardFooter className="px-0 pb-0 pt-2">
-            <SubmitButton label="حفظ الحدث" pendingLabel="جاري الحفظ..." size="lg" />
-          </CardFooter>
-        </form>
-      </CardContent>
+      <CardContent>{form}</CardContent>
     </Card>
   )
 }

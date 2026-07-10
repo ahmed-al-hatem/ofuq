@@ -61,6 +61,21 @@ verification, and test coverage stay aligned.
 - Existing complex route pages such as attendance-session details, exam details, report-card details, `/dashboard/attendance/sessions/new`, and `/dashboard/grades/exams/new` remain available where direct linking or full-page context is useful.
 - No schema changes, seed changes, or Supabase config changes were introduced in this phase.
 
+## Phase 22B snapshot
+
+- Selected finance, library, and communication pages now reuse the shared `PageHeader`, `PageSection`, and `PageShell` hierarchy more consistently on high-value staff screens.
+- Additional quick create flows now open in reusable `FormDialog` or `FormSheet` wrappers:
+  - fee structure creation
+  - fee item creation
+  - student discount assignment
+  - library catalog creation
+  - library loan issue
+  - internal message creation
+  - school event creation
+- Dense operational list pages now rely more on shared table and empty-state patterns where that improves scannability, especially in library catalog and loans.
+- Existing complex route pages such as invoice details, message details, loan details, and the related `/new` routes remain available where direct linking or full-page context is useful.
+- No schema changes, seed changes, or Supabase config changes were introduced in this phase.
+
 ## Phase 21.5 snapshot
 
 - Quick create/edit forms now prefer `Dialog` or `Sheet` from `components/ui`, while complex details, reports, and multi-step flows remain full route pages.

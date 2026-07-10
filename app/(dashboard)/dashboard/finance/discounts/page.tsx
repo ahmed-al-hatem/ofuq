@@ -2,7 +2,10 @@ import { Percent, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
 import { FormDialog } from "@/components/shared/form-dialog"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -13,6 +16,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { DialogClose } from "@/components/ui/dialog"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import { listAcademicYears, listTerms } from "@/lib/academic/academic-structure"
 import { requireFinanceContext } from "@/lib/finance/context"
@@ -66,40 +70,57 @@ export default async function FinanceDiscountsPage() {
   )
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الخصومات"
         description="تعريف أنواع الخصومات وتعيينها للطلاب حتى تحتسب عند توليد الفواتير."
         actions={
-          <FormDialog
-            trigger={<Button size="lg" />}
-            triggerLabel="نوع خصم جديد"
-            title="إضافة نوع خصم"
-            description="نموذج سريع لتعريف نوع خصم جديد من دون مغادرة صفحة الخصومات."
-            size="md"
-          >
-            <DiscountTypeForm
-              surface="plain"
-              cancelSlot={
-                <DialogClose render={<Button variant="outline" type="button" />}>
-                  إلغاء
-                </DialogClose>
-              }
-            />
-          </FormDialog>
+          <>
+            <FormDialog
+              trigger={<Button size="lg" />}
+              triggerLabel="نوع خصم جديد"
+              title="إضافة نوع خصم"
+              description="نموذج سريع لتعريف نوع خصم جديد من دون مغادرة صفحة الخصومات."
+              size="md"
+            >
+              <DiscountTypeForm
+                surface="plain"
+                cancelSlot={
+                  <DialogClose render={<Button variant="outline" type="button" />}>
+                    إلغاء
+                  </DialogClose>
+                }
+              />
+            </FormDialog>
+            <FormSheet
+              trigger={<Button variant="outline" size="lg" />}
+              triggerLabel="تعيين خصم لطالب"
+              title="تعيين خصم لطالب"
+              description="أضف خصمًا لطالب من داخل الصفحة مع بقاء عرض السجلات أمامك."
+              width="lg"
+            >
+              <StudentDiscountForm
+                students={students}
+                discountTypes={discountTypes}
+                academicYears={academicYears}
+                terms={terms}
+                surface="plain"
+                cancelSlot={
+                  <SheetClose render={<Button variant="outline" type="button" />}>
+                    إلغاء
+                  </SheetClose>
+                }
+              />
+            </FormSheet>
+          </>
         }
       />
 
-      <section className="grid gap-6 xl:max-w-4xl">
-        <StudentDiscountForm
-          students={students}
-          discountTypes={discountTypes}
-          academicYears={academicYears}
-          terms={terms}
-        />
-      </section>
-
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="سجل الخصومات"
+        description="يعرض هذا القسم أنواع الخصومات القابلة لإعادة الاستخدام، ثم الخصومات المخصصة للطلاب خلال العام الدراسي."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         <Card className="border-border/70 shadow-sm">
           <CardHeader>
             <CardTitle>أنواع الخصومات</CardTitle>
@@ -110,7 +131,7 @@ export default async function FinanceDiscountsPage() {
               <EmptyState
                 icon={Percent}
                 title="لا توجد أنواع خصم"
-                description="أضف نوع خصم لاستخدامه مع الطلاب."
+                description="ابدأ بإضافة نوع خصم جديد ليصبح متاحًا عند ربطه بالطلاب."
               />
             ) : (
               discountTypes.map((discountType) => (
@@ -143,9 +164,13 @@ export default async function FinanceDiscountsPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {studentDiscounts.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                لا توجد خصومات مخصصة للطلاب بعد.
-              </p>
+              <EmptyState
+                icon={Percent}
+                title="لا توجد خصومات مخصصة للطلاب"
+                description="يمكنك تعيين خصم لطالب من الزر أعلاه ليظهر هنا ضمن السجل."
+                size="compact"
+                className="bg-transparent shadow-none"
+              />
             ) : (
               studentDiscounts.map((studentDiscount) => (
                 <div
@@ -174,7 +199,7 @@ export default async function FinanceDiscountsPage() {
             )}
           </CardContent>
         </Card>
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }

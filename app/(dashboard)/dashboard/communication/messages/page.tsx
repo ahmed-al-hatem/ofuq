@@ -2,8 +2,11 @@ import Link from "next/link"
 import { Inbox, Send, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { FormSheet } from "@/components/shared/form-sheet"
 import { PageHeader } from "@/components/shared/page-header"
-import { buttonVariants } from "@/components/ui/button"
+import { PageSection } from "@/components/shared/page-section"
+import { PageShell } from "@/components/shared/page-shell"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -11,13 +14,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { SheetClose } from "@/components/ui/sheet"
 import { USER_ROLES } from "@/constants/roles"
 import { appRoutes } from "@/constants/routes"
 import { requireCommunicationContext } from "@/lib/communication/context"
 import {
   listInboxMessages,
+  listMessageRecipientOptions,
   listSentMessages,
 } from "@/lib/communication/messages"
+import { listStudents } from "@/lib/students/students"
+import { MessageForm } from "../_components/communication-forms"
 
 const messagingRoles = [
   USER_ROLES.SYSTEM_ADMIN,
@@ -50,27 +57,53 @@ export default async function CommunicationMessagesPage() {
     )
   }
 
-  const [inboxMessages, sentMessages] = await Promise.all([
+  const [inboxMessages, sentMessages, recipients, students] = await Promise.all([
     listInboxMessages(contextResult.data),
     listSentMessages(contextResult.data),
+    listMessageRecipientOptions(contextResult.data),
+    listStudents(contextResult.data),
   ])
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الرسائل"
         description="وارد ومرسل داخلي بين مستخدمي المدرسة. لا توجد محادثة فورية أو تسليم خارجي في هذه المرحلة."
         actions={
-          <Link
-            href={appRoutes.newCommunicationMessage}
-            className={buttonVariants({ size: "lg" })}
-          >
-            رسالة جديدة
-          </Link>
+          <>
+            <FormSheet
+              trigger={<Button size="lg" />}
+              triggerLabel="رسالة جديدة"
+              title="إرسال رسالة"
+              description="أرسل رسالة داخلية من الصفحة الحالية، أو افتح الصفحة الكاملة إذا كنت تحتاج مساحة عمل أكبر."
+              width="xl"
+            >
+              <MessageForm
+                recipients={recipients}
+                students={students}
+                surface="plain"
+                cancelSlot={
+                  <SheetClose render={<Button variant="outline" type="button" />}>
+                    إلغاء
+                  </SheetClose>
+                }
+              />
+            </FormSheet>
+            <Link
+              href={appRoutes.newCommunicationMessage}
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+            >
+              فتح الصفحة الكاملة
+            </Link>
+          </>
         }
       />
 
-      <section className="grid gap-4 xl:grid-cols-2">
+      <PageSection
+        title="الوارد والمرسل"
+        description="تظل تفاصيل الرسائل في صفحات مستقلة، بينما أصبح الإرسال السريع متاحًا مباشرة من هنا."
+        contentClassName="grid gap-4 xl:grid-cols-2"
+      >
         <Card className="border-border/70 shadow-sm">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -81,7 +114,13 @@ export default async function CommunicationMessagesPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {inboxMessages.length === 0 ? (
-              <p className="text-sm text-muted-foreground">لا توجد رسائل واردة.</p>
+              <EmptyState
+                icon={Inbox}
+                title="لا توجد رسائل واردة"
+                description="ستظهر الرسائل الجديدة هنا فور وصولها إلى حسابك."
+                size="compact"
+                className="bg-transparent shadow-none"
+              />
             ) : (
               inboxMessages.map((recipient) =>
                 recipient.messages ? (
@@ -115,7 +154,13 @@ export default async function CommunicationMessagesPage() {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {sentMessages.length === 0 ? (
-              <p className="text-sm text-muted-foreground">لا توجد رسائل مرسلة.</p>
+              <EmptyState
+                icon={Send}
+                title="لا توجد رسائل مرسلة"
+                description="أرسل أول رسالة داخلية من الزر أعلاه لتظهر هنا ضمن السجل."
+                size="compact"
+                className="bg-transparent shadow-none"
+              />
             ) : (
               sentMessages.map((message) => (
                 <Link
@@ -132,7 +177,7 @@ export default async function CommunicationMessagesPage() {
             )}
           </CardContent>
         </Card>
-      </section>
-    </div>
+      </PageSection>
+    </PageShell>
   )
 }
