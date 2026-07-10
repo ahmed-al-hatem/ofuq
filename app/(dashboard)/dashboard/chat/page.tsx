@@ -1,19 +1,37 @@
 import { ShieldAlert } from "lucide-react"
 
 import { ChatLayout } from "@/components/chat/chat-layout"
+import { RealtimeChatThread } from "@/components/chat/realtime-chat-thread"
 import { ChatSidebar } from "@/components/chat/chat-sidebar"
-import { ChatThread } from "@/components/chat/chat-thread"
 import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
 import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buildDashboardChatScaffold } from "@/lib/chat/presenters"
-import { getAuthenticatedUser } from "@/lib/auth/session"
+import { getDashboardChatContext } from "@/lib/chat/access"
+import { getDashboardChatPageData } from "@/lib/chat/queries"
 
-export default async function DashboardChatPage() {
-  const user = await getAuthenticatedUser()
+type DashboardChatPageProps = {
+  searchParams?: Promise<{
+    conversation?: string | string[]
+  }>
+}
 
-  if (!user || !user.role) {
+function getRequestedConversationId(
+  conversation: string | string[] | undefined
+): string | null {
+  if (Array.isArray(conversation)) {
+    return conversation[0] ?? null
+  }
+
+  return conversation ?? null
+}
+
+export default async function DashboardChatPage({
+  searchParams,
+}: DashboardChatPageProps) {
+  const contextResult = await getDashboardChatContext()
+
+  if (!contextResult.ok) {
     return (
       <div className="flex flex-col gap-6">
         <PageHeader
@@ -23,42 +41,66 @@ export default async function DashboardChatPage() {
         <EmptyState
           icon={ShieldAlert}
           title="لا يمكن تحميل واجهة المحادثات"
-          description="تعذر تحديد العضوية الحالية اللازمة لعرض واجهة المحادثات الداخلية."
+          description={contextResult.error}
         />
       </div>
     )
   }
 
-  const scaffold = buildDashboardChatScaffold(user)
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  const pageData = await getDashboardChatPageData({
+    context: contextResult.data,
+    activeConversationId: getRequestedConversationId(
+      resolvedSearchParams?.conversation
+    ),
+  })
+
+  if (pageData.status === "restricted") {
+    return (
+      <PageShell>
+        <PageHeader
+          title="المحادثات الداخلية"
+          description="متابعة رسائل أولياء الأمور والطلاب ضمن المدرسة الحالية."
+          actions={<StatusBadge status="info">مقيد حسب الدور</StatusBadge>}
+        />
+        <EmptyState
+          icon={ShieldAlert}
+          title={pageData.title}
+          description={pageData.description}
+        />
+      </PageShell>
+    )
+  }
 
   return (
     <PageShell>
       <PageHeader
         title="المحادثات الداخلية"
         description="متابعة رسائل أولياء الأمور والطلاب ضمن المدرسة الحالية."
-        actions={<StatusBadge status="info">تهيئة Phase 25A</StatusBadge>}
+        actions={<StatusBadge status="success">Realtime MVP</StatusBadge>}
       />
 
       <ChatLayout
         sidebar={
           <ChatSidebar
-            title={scaffold.sidebarTitle}
-            description={scaffold.sidebarDescription}
-            conversations={scaffold.conversations}
-            activeConversationId={scaffold.activeConversationId}
+            title={pageData.sidebarTitle}
+            description={pageData.sidebarDescription}
+            conversations={pageData.conversations}
+            activeConversationId={pageData.activeConversationId}
           />
         }
         main={
-          <ChatThread
-            title={scaffold.threadTitle}
-            description={scaffold.threadDescription}
-            phaseLabel={scaffold.phaseLabel}
-            note={scaffold.note}
-            messages={scaffold.messages}
-            composer={scaffold.composer}
-            emptyTitle={scaffold.emptyStateTitle}
-            emptyDescription={scaffold.emptyStateDescription}
+          <RealtimeChatThread
+            title={pageData.threadTitle}
+            description={pageData.threadDescription}
+            phaseLabel={pageData.phaseLabel}
+            note={pageData.note}
+            messages={pageData.messages}
+            composer={pageData.composer}
+            emptyTitle={pageData.emptyStateTitle}
+            emptyDescription={pageData.emptyStateDescription}
             ariaLabel="قائمة الرسائل الداخلية"
+            conversationId={pageData.activeConversationId}
           />
         }
       />

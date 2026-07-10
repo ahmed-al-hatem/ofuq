@@ -36,7 +36,9 @@ Phase 16 adds the parent/student read-only portal foundation by introducing a di
 
 Phase 18 adds the settings and integrations placeholders foundation with school-scoped settings persistence, placeholder integration records, and local message templates.
 
-Phase 25A adds the chat UI and assistant schema foundation with internal chat history tables plus separate AI conversation history tables, while keeping realtime delivery and Gemini execution deferred.
+Phase 25A adds the chat UI and assistant schema foundation with internal chat history tables plus separate AI conversation history tables.
+
+Phase 25B extends that foundation with the `school_office` conversation type, a per-portal-user uniqueness guard for school-office threads, and local Supabase Realtime publication support for `chat_messages`.
 
 ## Core tables
 
@@ -292,26 +294,28 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 ### `chat_conversations`
 
 - Stores internal conversation containers scoped by `tenant_id` and `school_id`.
-- Uses a simple `internal` conversation type for now, plus `open`, `closed`, and `archived` states.
+- Uses `internal` plus the Phase 25B `school_office` conversation type, alongside `open`, `closed`, and `archived` states.
 - `created_by_user_id` references `public.user_profiles.id`, matching the rest of the application schema.
+- School-office conversations keep the portal owner in `metadata` and use an expression unique index to avoid duplicate parent/student school-office threads inside the same school.
 
 ### `chat_participants`
 
 - Stores one participant row per internal conversation membership.
 - Keeps the participant's fixed `user_role`, join timestamp, optional last-read timestamp, mute flag, and metadata object.
 - Enforces one row per `(conversation_id, user_id)`.
+- Phase 25B now uses this table for the actual portal user plus school-admin participants in the school-office MVP flow.
 
 ### `chat_messages`
 
-- Stores internal chat message history for future realtime delivery.
+- Stores internal chat message history for realtime delivery and message-thread persistence.
 - Supports only `text` and `system` message types in this phase.
-- Send, edit, delete, and read-write workflows remain deferred even though the table exists.
+- Phase 25B activates the send flow for school-office messages, while editing, deletion, and attachments remain deferred.
 
 ### `chat_message_reads`
 
-- Stores future per-user read tracking for chat messages.
+- Stores per-user read tracking for chat messages.
 - Enforces one row per `(message_id, user_id)`.
-- The actual mark-as-read flow is intentionally not implemented in Phase 25A.
+- Phase 25B now writes read rows and updates participant `last_read_at` when an authorized user opens the conversation.
 
 ### `ai_conversations`
 

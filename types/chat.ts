@@ -6,6 +6,8 @@ export const CHAT_CONVERSATION_STATUSES = [
   "archived",
 ] as const
 
+export const CHAT_CONVERSATION_TYPES = ["internal", "school_office"] as const
+
 export const AI_CONVERSATION_STATUSES = ["active", "archived"] as const
 
 export const CHAT_MESSAGE_VARIANTS = [
@@ -17,11 +19,13 @@ export const CHAT_MESSAGE_VARIANTS = [
 
 export type ChatConversationStatus =
   (typeof CHAT_CONVERSATION_STATUSES)[number]
+export type ChatConversationType = (typeof CHAT_CONVERSATION_TYPES)[number]
 export type AiConversationStatus = (typeof AI_CONVERSATION_STATUSES)[number]
 export type ChatMessageVariant = (typeof CHAT_MESSAGE_VARIANTS)[number]
 
 export type ChatConversationPreview = {
   id: string
+  href?: string
   title: string
   excerpt: string
   participantLabel: string

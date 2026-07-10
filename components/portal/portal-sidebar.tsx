@@ -37,11 +37,11 @@ export function PortalSidebar() {
               بوابة المتابعة
             </Badge>
             <Badge variant="outline" className="w-fit rounded-full">
-              قراءة فقط
+              وصول مقيد
             </Badge>
           </div>
           <p className="text-sm leading-6 text-muted-foreground">
-            تصفح الحضور والدرجات والجداول والإعلانات المرتبطة بحسابك داخل المدرسة الحالية.
+            تصفح الحضور والدرجات والجداول والإعلانات، مع إتاحة مراسلة المدرسة ضمن حسابك داخل المدرسة الحالية.
           </p>
         </div>
 

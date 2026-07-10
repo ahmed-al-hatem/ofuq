@@ -1085,6 +1085,265 @@ export type Database = {
           },
         ]
       }
+      chat_conversations: {
+        Row: {
+          created_at: string
+          created_by_user_id: string
+          id: string
+          last_message_at: string | null
+          metadata: Json
+          school_id: string
+          status: string
+          subject: string
+          tenant_id: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by_user_id: string
+          id?: string
+          last_message_at?: string | null
+          metadata?: Json
+          school_id: string
+          status?: string
+          subject: string
+          tenant_id: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by_user_id?: string
+          id?: string
+          last_message_at?: string | null
+          metadata?: Json
+          school_id?: string
+          status?: string
+          subject?: string
+          tenant_id?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_conversations_created_by_user_id_fkey"
+            columns: ["created_by_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_conversations_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_conversations_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_message_reads: {
+        Row: {
+          id: string
+          message_id: string
+          read_at: string
+          school_id: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          message_id: string
+          read_at?: string
+          school_id: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          id?: string
+          message_id?: string
+          read_at?: string
+          school_id?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_message_reads_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_message_reads_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_message_reads_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_message_reads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          body: string
+          conversation_id: string
+          created_at: string
+          deleted_at: string | null
+          edited_at: string | null
+          id: string
+          message_type: string
+          metadata: Json
+          school_id: string
+          sender_user_id: string
+          tenant_id: string
+        }
+        Insert: {
+          body: string
+          conversation_id: string
+          created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
+          id?: string
+          message_type?: string
+          metadata?: Json
+          school_id: string
+          sender_user_id: string
+          tenant_id: string
+        }
+        Update: {
+          body?: string
+          conversation_id?: string
+          created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
+          id?: string
+          message_type?: string
+          metadata?: Json
+          school_id?: string
+          sender_user_id?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_sender_user_id_fkey"
+            columns: ["sender_user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_messages_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_participants: {
+        Row: {
+          conversation_id: string
+          id: string
+          is_muted: boolean
+          joined_at: string
+          last_read_at: string | null
+          metadata: Json
+          role: Database["public"]["Enums"]["user_role"]
+          school_id: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          id?: string
+          is_muted?: boolean
+          joined_at?: string
+          last_read_at?: string | null
+          metadata?: Json
+          role: Database["public"]["Enums"]["user_role"]
+          school_id: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          id?: string
+          is_muted?: boolean
+          joined_at?: string
+          last_read_at?: string | null
+          metadata?: Json
+          role?: Database["public"]["Enums"]["user_role"]
+          school_id?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_participants_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_participants_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_participants_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "user_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       clinic_visits: {
         Row: {
           action_taken: string | null
@@ -5249,4 +5508,3 @@ export const Constants = {
     },
   },
 } as const
-

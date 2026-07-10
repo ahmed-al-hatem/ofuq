@@ -55,8 +55,10 @@
 - Settings and integrations reads derive tenant/school scope from authenticated active membership and remain limited to fixed `system_admin` and `school_admin` roles in server-side code.
 - Settings forms do not expose trusted tenant, school, role, or actor identity fields. School context is derived on the server before reading or writing `school_settings`, `integration_settings`, or `message_templates`.
 - Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth handshakes, webhook delivery, provider sync, BI embedding, or real API secret storage.
-- Chat and assistant scaffolds do not trust any client-submitted tenant, school, user, participant, or conversation identifiers. Future chat and AI reads/writes must derive scope from the authenticated active membership only.
-- Phase 25A adds schema and UI foundation only. No realtime subscription, send-message action, mark-as-read action, or Gemini request path is active yet.
+- Internal chat does not trust any client-submitted tenant, school, user, participant, or role values. The only accepted client inputs are the message body and, when needed, a conversation identifier that is revalidated on the server.
+- Phase 25B now enforces school-office chat scope server-side through authenticated membership, tenant, school, fixed role, and conversation access helpers before any chat read, send, or mark-as-read write.
+- `parent` and `student` may access only their own school-office conversation in the current school. `school_admin` may access school-office conversations within the same school. `teacher`, `accountant`, `librarian`, and `system_admin` do not get parent/student school-office chat access in this phase.
+- Supabase Realtime is used only to refresh an already-authorized active conversation thread. It is not treated as an authorization layer or a trusted source of conversation scope.
 - Any future Gemini integration must remain server-side, must never receive unrestricted SQL or raw database execution ability, and must consume role-scoped summaries built by application services.
 - Parent assistant scope must remain limited to linked children, student scope to self data, teacher scope to assigned classes/subjects where implemented, accountant scope to finance context only, librarian scope to library context only, and school-admin scope to the current school only.
 - Ready-made reports derive tenant and school scope server-side and are limited by fixed role checks per report area.
@@ -73,7 +75,7 @@
 - Full complaint management and all survey administration remain limited to `system_admin` and `school_admin` in server-side code.
 - Feedback mutations validate complaint ownership, related student ownership, assignee active membership, survey target relationships, publish/close workflow, response eligibility, and duplicate-response prevention on the server.
 - Feedback forms do not expose tenant, school, role, submitter, assignee, resolver, author, creator, or respondent identity fields. Anonymous/public complaint forms, public survey links, attachments, external notifications, and AI analysis are not implemented.
-- Portal routes are read-only in this phase. They do not allow payment submission, absence excuse submission, complaint creation, survey participation, profile editing, or health/discipline detail access.
+- Portal routes remain read-only for finance, attendance, grades, library, profile, complaints, surveys, and other portal modules. Phase 25B adds one narrow portal mutation only: internal school-office chat messaging.
 
 ## Session handling
 

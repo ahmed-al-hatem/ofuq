@@ -3,6 +3,43 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 25B Internal Realtime Chat MVP Verification
+
+Phase 25B internal realtime chat MVP is implemented with the requested
+server-plus-schema-plus-UI verification budget. The work converts
+`/dashboard/chat` and `/portal/chat` from static scaffolds into real
+school-office messaging surfaces backed by Supabase tables, server-side scope
+checks, unread/read tracking, and active-thread Supabase Realtime refresh,
+while intentionally keeping Gemini, attachments, and RLS out of scope.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Passed | Vitest completed successfully with 15 test files and 53 assertions passing, including the new chat access policy checks. |
+| `npm run lint` | Not run globally | Kept to the targeted chat slice because the workspace already carries unrelated ESLint noise outside the Phase 25B change surface. |
+| Targeted ESLint on touched files | Passed | `npx eslint lib/chat components/chat 'app/(dashboard)/dashboard/chat/page.tsx' 'app/(portal)/portal/chat/page.tsx' tests/unit/chat-access.test.ts types/chat.ts components/portal/portal-sidebar.tsx` completed successfully. |
+| `npm run build` | Passed | Next.js production build completed successfully and includes the live `/dashboard/chat` and `/portal/chat` routes. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| `supabase status` | Passed after elevation | The local Supabase stack was reachable and healthy enough to proceed with replay verification. |
+| `supabase db reset` | Passed after elevation | All migrations and seeds replayed successfully through `20260710130000_internal_realtime_chat_mvp.sql`. |
+| Manual smoke | Not completed in-session | Local browser smoke was attempted, but this environment lacked a ready Playwright browser install and a stable background Next.js process for a full dual-session walkthrough. |
+| Gemini / secret scope review | Passed by scope inspection | No Gemini package install, no Gemini API call path, and no new committed API keys or secret examples were added. |
+
+Phase 25B selected improvements:
+
+- added `supabase/migrations/20260710130000_internal_realtime_chat_mvp.sql` to enable `school_office` conversations, protect portal-user uniqueness, and publish `chat_messages` to local Supabase Realtime
+- added `lib/chat/access.ts`, `lib/chat/policies.ts`, `lib/chat/queries.ts`, and `lib/chat/actions.ts` for server-side actor resolution, conversation scope checks, page data loading, send flow, and mark-as-read flow
+- added `components/chat/realtime-chat-thread.tsx` and upgraded `/dashboard/chat` and `/portal/chat` to real data-backed messaging pages
+- updated `components/chat/chat-sidebar.tsx` so conversation items act as real navigable threads with unread badges
+- updated docs, database notes, security notes, testing notes, and demo-readiness notes to reflect the live internal chat MVP
+
+Phase 25B scope notes:
+
+- No Gemini API call or `@google/genai` installation was added.
+- No attachments, message editing, or message deletion were added.
+- No RLS policies were introduced.
+- No auth redirect logic was changed.
+- Assistant routes remain scaffolds only; only internal school-office chat was activated in this phase.
+
 ## Phase 25A Chat UI & Schema Foundation Verification
 
 Phase 25A chat UI and schema foundation is implemented with the requested

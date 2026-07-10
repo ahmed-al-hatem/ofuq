@@ -28,6 +28,7 @@
 23. Final demo readiness and presentation flow polish
 24. Professional split login UX
 25A. Chat UI and schema foundation
+25B. Internal realtime chat MVP
 
 ## Later-phase items
 
@@ -46,10 +47,18 @@ communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation,
 role-specific dashboard, UI-polish, modal-form UX, the three domain-focused
-module cleanup slices, the split login UX, and the Phase 25A chat/assistant
-foundation in place. New business modules and deeper UX cleanup should continue
-one vertical slice at a time so schema, actions, UI, verification, and test
-coverage stay aligned.
+module cleanup slices, the split login UX, the Phase 25A chat/assistant
+foundation, and the Phase 25B internal realtime chat MVP in place. New business
+modules and deeper UX cleanup should continue one vertical slice at a time so
+schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 25B snapshot
+
+- `/dashboard/chat` and `/portal/chat` now load real Supabase-backed internal chat data instead of static scaffolds.
+- `parent` and `student` now get or create a `school_office` conversation with `إدارة المدرسة`, while `school_admin` can list and reply to these conversations inside the current school only.
+- Message sending, read tracking, unread counts, and conversation access checks are enforced server-side through dedicated chat helpers and server actions.
+- The active conversation thread refreshes through Supabase Realtime on `chat_messages`, but Realtime remains a UX enhancement only and not an authorization layer.
+- Attachments, Gemini, RLS, message editing/deletion, and broader staff chat access remain deferred.
 
 ## Phase 25A snapshot
 

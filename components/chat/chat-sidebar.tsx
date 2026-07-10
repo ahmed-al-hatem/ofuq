@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
@@ -29,18 +31,22 @@ export function ChatSidebar({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 p-4">
+        {conversations.length === 0 ? (
+          <div className="rounded-[1.5rem] border border-dashed border-border/60 bg-muted/10 px-4 py-6 text-sm leading-6 text-muted-foreground">
+            ستظهر المحادثات هنا فور بدء المراسلات داخل المدرسة الحالية.
+          </div>
+        ) : null}
+
         {conversations.map((conversation) => {
           const active = conversation.id === activeConversationId
-
-          return (
+          const content = (
             <div
-              key={conversation.id}
               aria-current={active ? "page" : undefined}
               className={cn(
                 "rounded-[1.5rem] border px-4 py-4 transition-colors",
                 active
                   ? "border-primary/20 bg-primary/5 shadow-sm"
-                  : "border-border/60 bg-background"
+                  : "border-border/60 bg-background hover:border-primary/15 hover:bg-primary/5"
               )}
             >
               <div className="flex items-start justify-between gap-3">
@@ -72,6 +78,16 @@ export function ChatSidebar({
                 {formatChatTimestamp(conversation.lastMessageAt)}
               </p>
             </div>
+          )
+
+          if (!conversation.href) {
+            return <div key={conversation.id}>{content}</div>
+          }
+
+          return (
+            <Link key={conversation.id} href={conversation.href} className="block">
+              {content}
+            </Link>
           )
         })}
       </CardContent>

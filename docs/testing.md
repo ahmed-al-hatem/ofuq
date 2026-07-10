@@ -97,6 +97,27 @@ Recommended manual smoke for Phase 25A:
 - confirm that no realtime behavior or Gemini request is triggered
 - confirm that portal pages do not expose dashboard links
 
+For server-backed realtime chat work such as Phase 25B, use the following
+verification budget:
+
+- `npm run build`
+- `git diff --check`
+- targeted `npx eslint` on touched chat files when global lint is blocked by unrelated workspace files
+- `npm run test`
+- `supabase status`
+- `supabase db reset` when a chat migration changed and the local stack is available
+
+Recommended manual smoke for Phase 25B:
+
+- login as `parent.hassan@ofuq.local` and open `/portal/chat`
+- send a message to school administration
+- login as `school.admin@ofuq.local` and open `/dashboard/chat`
+- confirm the conversation appears with an unread badge
+- reply as the school admin and reopen `/portal/chat`
+- confirm the parent or student only sees their own conversation
+- confirm teacher, accountant, and librarian still see a safe restricted state on `/dashboard/chat`
+- confirm assistant routes remain non-Gemini scaffolds
+
 ## Automated commands
 
 ```bash
@@ -131,6 +152,7 @@ npm run test:quality
 - Small pure helper and validation checks in `types/feedback.ts`,
   `lib/actions/require-tenant.ts`, and `lib/validation/common.ts`
 - Portal access helper checks in `lib/portal/access.ts`
+- Chat access policy checks in `lib/chat/policies.ts`
 
 ## Unit tests
 
