@@ -1,9 +1,11 @@
 "use client"
 
 import { useActionState } from "react"
+import Link from "next/link"
 import { useFormStatus } from "react-dom"
-import { LockKeyhole, Mail } from "lucide-react"
+import { ArrowLeft, GraduationCap, ShieldCheck } from "lucide-react"
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,42 +23,98 @@ import {
   FieldLabel,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { appRoutes } from "@/constants/routes"
 import { signInWithEmail, type AuthActionState } from "@/lib/actions/auth"
+import { cn } from "@/lib/utils"
+import { GoogleLoginButton } from "./_components/google-login-button"
 
 const initialState: AuthActionState = null
 
-function SubmitButton() {
+type LoginFormProps = {
+  alternateHref: string
+  alternateLabel: string
+  audience: "portal" | "staff"
+  description: string
+  googleLabel: string
+  submitLabel: string
+  title: string
+}
+
+const audienceConfig = {
+  portal: {
+    badge: "بوابة متابعة آمنة",
+    badgeClassName: "bg-secondary text-secondary-foreground",
+    cardClassName: "border-secondary/18 shadow-secondary/8",
+    icon: GraduationCap,
+    iconClassName: "bg-secondary/14 text-secondary",
+    note:
+      "هذه البوابة مخصّصة للعرض والمتابعة فقط، وبعد التحقق سيتم توجيهك بحسب دور الحساب الفعلي.",
+  },
+  staff: {
+    badge: "وصول تشغيلي محمي",
+    badgeClassName: "bg-primary text-primary-foreground",
+    cardClassName: "border-primary/18 shadow-primary/8",
+    icon: ShieldCheck,
+    iconClassName: "bg-primary/14 text-primary",
+    note:
+      "المسار الذي اخترته هنا لا يمنح صلاحية بحد ذاته؛ النظام يحدد الوجهة النهائية وفق عضويتك ودورك الحقيقيين.",
+  },
+}
+
+function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus()
 
   return (
     <Button type="submit" size="lg" className="w-full" disabled={pending}>
-      {pending ? "جاري تسجيل الدخول..." : "الدخول إلى لوحة التحكم"}
+      {pending ? "جاري التحقق من بيانات الدخول..." : label}
     </Button>
   )
 }
 
-export function LoginForm() {
+export function LoginForm({
+  alternateHref,
+  alternateLabel,
+  audience,
+  description,
+  googleLabel,
+  submitLabel,
+  title,
+}: LoginFormProps) {
   const [state, formAction] = useActionState(signInWithEmail, initialState)
   const emailErrors = state?.ok === false ? state.fieldErrors?.email ?? [] : []
   const passwordErrors =
     state?.ok === false ? state.fieldErrors?.password ?? [] : []
   const formError = state?.ok === false ? state.error : null
+  const config = audienceConfig[audience]
+  const AudienceIcon = config.icon
 
   return (
-    <Card className="self-center border-border/70 shadow-sm">
-      <CardHeader className="gap-3">
-        <div className="flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-          <Mail />
+    <Card
+      className={cn(
+        "self-center border-border/70 bg-card/95 shadow-xl backdrop-blur",
+        config.cardClassName
+      )}
+    >
+      <CardHeader className="gap-4">
+        <Badge className={cn("w-fit rounded-full px-3 py-1", config.badgeClassName)}>
+          {config.badge}
+        </Badge>
+        <div className={cn("flex size-14 items-center justify-center rounded-3xl", config.iconClassName)}>
+          <AudienceIcon className="size-6" />
         </div>
-        <div className="flex flex-col gap-1">
-          <CardTitle>تسجيل الدخول</CardTitle>
-          <CardDescription>
-            استخدم البريد الإلكتروني وكلمة المرور للدخول إلى لوحة التحكم.
-          </CardDescription>
+        <div className="flex flex-col gap-2">
+          <CardTitle className="text-2xl">{title}</CardTitle>
+          <CardDescription>{description}</CardDescription>
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="space-y-4">
+        <Alert className="border-border/70 bg-muted/60">
+          <ShieldCheck className="size-4" />
+          <AlertTitle>التحقق يبقى على الخادم</AlertTitle>
+          <AlertDescription>{config.note}</AlertDescription>
+        </Alert>
+
         <form action={formAction} className="flex flex-col gap-4" noValidate>
           <FieldGroup>
             <Field data-invalid={emailErrors.length > 0 || undefined}>
@@ -91,27 +149,35 @@ export function LoginForm() {
             </Field>
           </FieldGroup>
 
-          {formError ? (
-            <div
-              role="alert"
-              className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+          <div className="flex justify-start">
+            <Link
+              href={appRoutes.loginResetPassword}
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
-              {formError}
-            </div>
+              نسيت كلمة المرور؟
+            </Link>
+          </div>
+
+          {formError ? (
+            <Alert variant="destructive" className="border-destructive/25 bg-destructive/6">
+              <AlertTitle>تعذر تسجيل الدخول</AlertTitle>
+              <AlertDescription>{formError}</AlertDescription>
+            </Alert>
           ) : null}
 
-          <SubmitButton />
+          <SubmitButton label={submitLabel} />
         </form>
       </CardContent>
 
       <CardFooter className="flex flex-col items-stretch gap-3">
-        <Button type="button" variant="outline" size="lg" disabled className="w-full">
-          <LockKeyhole data-icon="inline-start" />
-          تسجيل Google قريبًا
-        </Button>
-        <Badge variant="outline" className="justify-center rounded-full py-1">
-          الوصول الإداري يبقى على الخادم فقط
-        </Badge>
+        <GoogleLoginButton label={googleLabel} />
+        <Link
+          href={alternateHref}
+          className="inline-flex items-center justify-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+        >
+          {alternateLabel}
+          <ArrowLeft className="size-4" />
+        </Link>
       </CardFooter>
     </Card>
   )

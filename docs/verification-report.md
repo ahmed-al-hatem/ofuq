@@ -3,6 +3,44 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 24 Professional Split Login UX Verification
+
+Phase 24 professional split login UX is implemented with a focused auth-UX
+budget. The work stayed inside the existing auth/security contract, introduced
+new audience-specific login pages and a UI-only reset-password flow, and kept
+all real sign-in and role-aware redirect behavior on the server.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Not run | Skipped because Phase 24 does not change `lib/actions/auth.ts`, `lib/auth/role-redirects.ts`, `lib/auth/session.ts`, or other server-side auth logic. |
+| `npm run lint` | Not run globally | Kept to the requested targeted fallback because the workspace already has known unrelated lint noise outside the Phase 24 auth slice. |
+| Targeted ESLint on touched files | Passed | `npx eslint 'app/(auth)/login/page.tsx' 'app/(auth)/login/login-form.tsx' 'app/(auth)/login/staff/page.tsx' 'app/(auth)/login/portal/page.tsx' 'app/(auth)/login/reset-password/page.tsx' 'app/(auth)/login/_components/*.tsx' 'constants/routes.ts'` completed successfully. |
+| `npm run build` | Passed | Next.js production build completed successfully and now includes `/login`, `/login/staff`, `/login/portal`, and `/login/reset-password`. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Manual smoke | Passed | Local `next start` smoke on port `3005` verified route rendering, the UI-only Google/reset behavior, and role-aware redirects for `school.admin@ofuq.local`, `parent.hassan@ofuq.local`, and `teacher.arabic@ofuq.local`. |
+| Schema / seed / Supabase config review | Passed by scope inspection | No schema files, seed files, or Supabase config files are part of the Phase 24 change surface. |
+
+Phase 24 selected improvements:
+
+- turned `/login` into a dedicated account-type chooser with staff/admin and parent/student entry cards
+- added `/login/staff` and `/login/portal` as tailored Arabic RTL login experiences over the same `signInWithEmail` server action
+- added `/login/reset-password` as a client-side-only placeholder request form with no Supabase API call
+- added UI-only Google continuation buttons that surface inline guidance instead of starting OAuth
+- kept role-based redirect resolution server-side, so the chosen route is guidance only and not an authorization input
+
+Phase 24 scope notes:
+
+- No OAuth implementation was added.
+- No reset-password email implementation was added.
+- No auth redirect logic was changed.
+- No schema changes, seed changes, or Supabase config changes were introduced.
+
+Skills used:
+
+- `shadcn`: used for Card/Button/Input/Badge/Separator/Auth layout patterns
+- `ui-ux-pro-max`: used for modern login UX, audience split, Arabic RTL polish, and auth flow clarity
+- `migrate-radix-to-base`: not needed because no Radix imports were found
+
 ## Phase 23 Final Demo Readiness Verification
 
 Phase 23 final demo readiness is implemented and verified with a focused

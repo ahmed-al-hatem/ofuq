@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 23 Final Demo Readiness & Presentation Flow Polish implemented
-- Last completed implementation phase: Phase 23 Final Demo Readiness & Presentation Flow Polish
-- Last completed quality phase: Phase 23 Final Demo Readiness Verification
-- Next implementation phase: TBD after final demo review
+- Current phase: Phase 24 Professional Split Login UX implemented
+- Last completed implementation phase: Phase 24 Professional Split Login UX
+- Last completed quality phase: Phase 24 Professional Split Login UX Verification
+- Next implementation phase: TBD after login UX review
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -57,6 +57,7 @@
 | Phase 22B Finance / Library / Communication UX Cleanup | Done with minimal verification budget | Selected finance, library, and communication pages now use the shared page hierarchy more consistently, move quick create flows into `Dialog` or `Sheet`, and keep complex detail views as route pages. |
 | Phase 22C Portal UX Cleanup | Done with minimal verification budget | Parent and student portal pages now present calmer read-only guidance, clearer child/student cards, stronger attendance/grades summaries, clearer finance review summaries, and a more explicit school-managed profile experience without adding portal mutations or changing scope. |
 | Phase 23 Final Demo Readiness & Presentation Flow Polish | Done with focused demo-readiness budget | A final demo guide, documented demo users and presentation routes, professional MVP limitations wording, and a small set of presentation-facing copy refinements now support a smoother graduation demo without adding new business scope. |
+| Phase 24 Professional Split Login UX | Done with focused auth-UX budget | `/login` is now an audience chooser, `/login/staff` and `/login/portal` present tailored Arabic RTL login experiences, `/login/reset-password` is a UI-only placeholder, and role-based redirect resolution remains server-side. |
 
 ## Current Implemented Modules
 
@@ -87,6 +88,7 @@
 - Academic, attendance, and grades high-value screens now use quick `Dialog` and `Sheet` actions for selected short or mid-size forms, while complex details such as attendance sessions, exam details, and report-card details remain route pages.
 - Selected finance, library, and communication operational screens now use quick `Dialog` or `Sheet` actions for fee structures, fee items, student discounts, catalog records, loans, internal messages, and school events, while invoice details, message details, and loan details remain full route pages.
 - Final demo readiness documentation now exists in `docs/demo-readiness.md`, including the recommended demo order, local demo users, presentation-ready route map, known limitations wording, and a final smoke checklist.
+- Split login UX now exists for `/login`, `/login/staff`, `/login/portal`, and `/login/reset-password`; Google continuation and reset-password flows remain UI-only placeholders, while the real login path continues to use the existing server-side email/password action.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
 
@@ -95,7 +97,10 @@ AI Query, chatbot, real external integrations, and report builder are not implem
 | Route | Status | Notes |
 | --- | --- | --- |
 | `/` | Active | Public home route. |
-| `/login` | Active | Supabase email/password login. |
+| `/login` | Active | Audience chooser for the staff/admin login path and the parent/student portal login path. |
+| `/login/staff` | Active | Staff/admin login UX for `system_admin`, `school_admin`, `teacher`, `accountant`, and `librarian`; role enforcement still happens server-side after sign-in. |
+| `/login/portal` | Active | Parent/student portal login UX with calmer guidance and explicit read-only positioning; server-side role redirects remain authoritative. |
+| `/login/reset-password` | Active | UI-only reset-password request screen; no Supabase reset email flow is implemented yet. |
 | `/portal` | Active | Read-only parent/student portal overview with calmer guidance, clearer summary hierarchy, and direct quick links. |
 | `/portal/students` | Active | Linked student list for the signed-in parent or student with clearer student identity cards. |
 | `/portal/students/[studentId]` | Active | Read-only linked student details with clearer summary cards and follow-up links. |
@@ -241,6 +246,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Settings reads and writes derive tenant/school/user scope from the active membership and remain limited to `system_admin` and `school_admin`.
 - Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth, webhook delivery, provider sync, or real API secret storage.
 - Login destination is role-aware and is resolved on the server from the active membership only.
+- The selected login route (`/login/staff` or `/login/portal`) is UI guidance only and is never trusted as an authorization source.
 - Dashboard navigation is filtered by fixed role for UX purposes, but sensitive reads and mutations still rely on server-side authorization.
 - Full RBAC is not implemented.
 - Full RLS is not implemented yet.
@@ -279,6 +285,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No full RLS yet.
 - No full RBAC yet.
 - External integrations remain placeholder-only. No provider connection, delivery, sync, or secret storage is implemented.
+- Google sign-in and reset-password email sending remain placeholder-only in the current login UX slice.
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - Automated coverage remains intentionally small: Vitest targets stable pure logic and Playwright targets a small local-only browser smoke slice rather than full regression coverage.
 - Browser smoke is now covered locally through Playwright only. Hosted CI E2E, cross-browser matrices, CRUD flows, and visual regression remain deferred.
@@ -290,6 +297,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: run the final graduation demo, collect review notes, then plan the next focused slice from post-demo feedback rather than expanding scope immediately.
+Recommended next phase: review the split login UX in live demo conditions, then decide whether the next focused slice should deepen auth convenience flows or return to post-demo module feedback.
 
-Go/no-go status: Go for the final demo. Phase 23 documentation and presentation polish are in place, the portal remains read-only, and no schema/seed/Supabase config changes were introduced.
+Go/no-go status: Go. Phase 24 improves the login entry experience without changing schema, seed data, Supabase config, or the server-side role redirect contract.

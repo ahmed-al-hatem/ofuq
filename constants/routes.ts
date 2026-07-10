@@ -1,6 +1,9 @@
 export const appRoutes = {
   home: "/",
   login: "/login",
+  loginStaff: "/login/staff",
+  loginPortal: "/login/portal",
+  loginResetPassword: "/login/reset-password",
   dashboard: "/dashboard",
   portal: "/portal",
   portalStudents: "/portal/students",
