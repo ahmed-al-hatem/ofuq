@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { ArrowLeft, CheckCircle2, Mail, ShieldCheck } from "lucide-react"
+import { ArrowLeft, CheckCircle2, Mail } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -57,16 +57,15 @@ export function ResetPasswordCard() {
   }
 
   return (
-    <Card className="border-border/70 bg-card/95 shadow-xl shadow-primary/5">
-      <CardHeader className="gap-4">
-        <div className="flex size-14 items-center justify-center rounded-3xl bg-accent/15 text-foreground">
-          <Mail className="size-6" />
+    <Card className="mx-auto w-full border-border/70 bg-card/95 shadow-xl shadow-primary/5">
+      <CardHeader className="items-center gap-4 text-center">
+        <div className="flex size-12 items-center justify-center rounded-2xl bg-accent/15 text-foreground">
+          <Mail className="size-5" />
         </div>
         <div className="space-y-2">
           <CardTitle className="text-2xl">إعادة تعيين كلمة المرور</CardTitle>
           <CardDescription>
-            أدخل بريدك الإلكتروني، وسنرسل لك تعليمات إعادة التعيين عند تفعيل
-            خدمة البريد.
+            أدخل بريدك الإلكتروني لطلب إعادة التعيين عند تفعيل خدمة البريد.
           </CardDescription>
         </div>
       </CardHeader>
@@ -106,25 +105,20 @@ export function ResetPasswordCard() {
           </Button>
         </form>
 
+        <p className="text-center text-xs leading-6 text-muted-foreground">
+          هذه واجهة محلية فقط ولا ترسل بريدًا فعليًا في النسخة الحالية.
+        </p>
+
         {submitted ? (
           <Alert className="border-secondary/25 bg-secondary/8">
             <CheckCircle2 className="size-4 text-secondary" />
-            <AlertTitle>تم تجهيز التدفق بصريًا</AlertTitle>
+            <AlertTitle>تم تجهيز الطلب بصريًا</AlertTitle>
             <AlertDescription>{successMessage}</AlertDescription>
           </Alert>
-        ) : (
-          <Alert className="border-border/70 bg-muted/60">
-            <ShieldCheck className="size-4" />
-            <AlertTitle>معلومة مهمة</AlertTitle>
-            <AlertDescription>
-              إرسال البريد غير مفعّل بعد، لذا تبقى هذه الصفحة واجهة جاهزة للربط
-              لاحقًا فقط.
-            </AlertDescription>
-          </Alert>
-        )}
+        ) : null}
       </CardContent>
 
-      <CardFooter className="flex flex-col items-stretch gap-3">
+      <CardFooter className="flex flex-col items-stretch gap-3 border-t border-border/60 pt-4">
         <Link href={appRoutes.loginStaff} className={buttonVariants({ variant: "outline" })}>
           دخول الموظفين والإدارة
         </Link>
