@@ -42,22 +42,18 @@ type LoginFormProps = {
 
 const audienceConfig = {
   portal: {
-    badge: "بوابة متابعة آمنة",
+    badge: "بوابة المتابعة",
     badgeClassName: "bg-secondary text-secondary-foreground",
     cardClassName: "border-secondary/18 shadow-secondary/8",
     icon: GraduationCap,
     iconClassName: "bg-secondary/14 text-secondary",
-    note:
-      "هذه البوابة مخصّصة للعرض والمتابعة فقط، وبعد التحقق سيتم توجيهك بحسب دور الحساب الفعلي.",
   },
   staff: {
-    badge: "وصول تشغيلي محمي",
+    badge: "وصول تشغيلي",
     badgeClassName: "bg-primary text-primary-foreground",
     cardClassName: "border-primary/18 shadow-primary/8",
     icon: ShieldCheck,
     iconClassName: "bg-primary/14 text-primary",
-    note:
-      "المسار الذي اخترته هنا لا يمنح صلاحية بحد ذاته؛ النظام يحدد الوجهة النهائية وفق عضويتك ودورك الحقيقيين.",
   },
 }
 
@@ -91,16 +87,16 @@ export function LoginForm({
   return (
     <Card
       className={cn(
-        "self-center border-border/70 bg-card/95 shadow-xl backdrop-blur",
+        "mx-auto w-full border-border/70 bg-card/95 shadow-xl backdrop-blur",
         config.cardClassName
       )}
     >
-      <CardHeader className="gap-4">
+      <CardHeader className="items-center gap-4 text-center">
         <Badge className={cn("w-fit rounded-full px-3 py-1", config.badgeClassName)}>
           {config.badge}
         </Badge>
-        <div className={cn("flex size-14 items-center justify-center rounded-3xl", config.iconClassName)}>
-          <AudienceIcon className="size-6" />
+        <div className={cn("flex size-12 items-center justify-center rounded-2xl", config.iconClassName)}>
+          <AudienceIcon className="size-5" />
         </div>
         <div className="flex flex-col gap-2">
           <CardTitle className="text-2xl">{title}</CardTitle>
@@ -108,13 +104,7 @@ export function LoginForm({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
-        <Alert className="border-border/70 bg-muted/60">
-          <ShieldCheck className="size-4" />
-          <AlertTitle>التحقق يبقى على الخادم</AlertTitle>
-          <AlertDescription>{config.note}</AlertDescription>
-        </Alert>
-
+      <CardContent>
         <form action={formAction} className="flex flex-col gap-4" noValidate>
           <FieldGroup>
             <Field data-invalid={emailErrors.length > 0 || undefined}>
@@ -169,7 +159,7 @@ export function LoginForm({
         </form>
       </CardContent>
 
-      <CardFooter className="flex flex-col items-stretch gap-3">
+      <CardFooter className="flex flex-col items-stretch gap-3 border-t border-border/60 pt-4">
         <GoogleLoginButton label={googleLabel} />
         <Link
           href={alternateHref}
