@@ -3,6 +3,40 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 25C Gemini AI Assistant MVP Verification
+
+Phase 25C Gemini AI assistant MVP is implemented with the requested
+server-side AI budget. The work converts `/dashboard/assistant` and
+`/portal/assistant` from scaffolds into persisted assistant surfaces backed by
+`ai_conversations` and `ai_messages`, role-scoped server-built summaries, and
+server-only Gemini execution through `@google/genai`, while keeping the
+assistant strictly read-only and safe under missing-key conditions.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Passed | Vitest completed successfully with 17 test files and 59 assertions passing, including the new assistant access and setup-state checks. |
+| `npm run lint` | Not run globally | Kept to targeted files because the workspace still carries unrelated historical lint noise outside the Phase 25C change surface. |
+| Targeted ESLint on touched files | Passed | `npx eslint lib/assistant components/chat 'app/(dashboard)/dashboard/assistant/page.tsx' 'app/(portal)/portal/assistant/page.tsx' tests/unit/assistant-access.test.ts tests/unit/assistant-context.test.ts types/chat.ts` completed successfully. |
+| `npm run build` | Passed | Next.js production build completed successfully and includes the live `/dashboard/assistant` and `/portal/assistant` routes with server-side Gemini wiring. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| `supabase status` | Not run in this session | No schema change was introduced in this phase, and migration replay was not required for closure. |
+| Manual smoke | Not completed in-session | Browser-driven multi-role smoke with a rotated Gemini key was not executed in this environment. The code path includes explicit missing-key, restricted-scope, and persisted-history handling. |
+| Gemini / secret scope review | Passed by scope inspection | `@google/genai` was added, but all Gemini calls remain server-side, no `NEXT_PUBLIC_GEMINI_API_KEY` was introduced, and no API key values were committed. |
+
+Phase 25C selected improvements:
+
+- added `lib/assistant/gemini-client.ts`, `lib/assistant/policies.ts`, `lib/assistant/context.ts`, `lib/assistant/prompts.ts`, `lib/assistant/queries.ts`, and `lib/assistant/actions.ts` for server-only Gemini access, role scope rules, context building, assistant persistence, and Server Action handling
+- added `components/chat/assistant-composer.tsx` and upgraded `components/chat/assistant-thread.tsx` so both assistant routes now submit real questions and refresh persisted history
+- upgraded `/dashboard/assistant` and `/portal/assistant` to load real history, suggested prompts by role, setup-state badges, and safe restricted states
+- updated `types/database.ts` and supporting tests/docs so assistant persistence and verification reflect the live Phase 25C behavior
+
+Phase 25C scope notes:
+
+- No tool calling, function calling, Google Search grounding, streaming, file upload, or multimodal input was added.
+- No Gemini call is exposed to Client Components.
+- No raw SQL generation or execution path was added.
+- No RLS changes were introduced.
+
 ## Phase 25B Internal Realtime Chat MVP Verification
 
 Phase 25B internal realtime chat MVP is implemented with the requested

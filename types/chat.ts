@@ -9,6 +9,10 @@ export const CHAT_CONVERSATION_STATUSES = [
 export const CHAT_CONVERSATION_TYPES = ["internal", "school_office"] as const
 
 export const AI_CONVERSATION_STATUSES = ["active", "archived"] as const
+export const ASSISTANT_RUNTIME_STATUSES = [
+  "configured",
+  "setup_required",
+] as const
 
 export const CHAT_MESSAGE_VARIANTS = [
   "current-user",
@@ -21,6 +25,8 @@ export type ChatConversationStatus =
   (typeof CHAT_CONVERSATION_STATUSES)[number]
 export type ChatConversationType = (typeof CHAT_CONVERSATION_TYPES)[number]
 export type AiConversationStatus = (typeof AI_CONVERSATION_STATUSES)[number]
+export type AssistantRuntimeStatus =
+  (typeof ASSISTANT_RUNTIME_STATUSES)[number]
 export type ChatMessageVariant = (typeof CHAT_MESSAGE_VARIANTS)[number]
 
 export type ChatConversationPreview = {

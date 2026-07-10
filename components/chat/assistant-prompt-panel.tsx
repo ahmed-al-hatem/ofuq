@@ -19,7 +19,7 @@ export function AssistantPromptPanel({ prompts }: AssistantPromptPanelProps) {
           <div className="flex flex-col gap-1">
             <CardTitle>اقتراحات جاهزة</CardTitle>
             <CardDescription>
-              بطاقات مقترحة لشكل الأسئلة المتوقع دعمها بعد ربط Gemini في Phase 25C.
+              بطاقات مقترحة تساعدك على صياغة أسئلة واضحة ضمن البيانات المصرح بها فقط.
             </CardDescription>
           </div>
         </div>

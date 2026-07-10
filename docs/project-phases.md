@@ -29,6 +29,7 @@
 24. Professional split login UX
 25A. Chat UI and schema foundation
 25B. Internal realtime chat MVP
+25C. Gemini AI assistant MVP
 
 ## Later-phase items
 
@@ -48,9 +49,18 @@ seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation,
 role-specific dashboard, UI-polish, modal-form UX, the three domain-focused
 module cleanup slices, the split login UX, the Phase 25A chat/assistant
-foundation, and the Phase 25B internal realtime chat MVP in place. New business
+foundation, the Phase 25B internal realtime chat MVP, and the Phase 25C Gemini
+assistant MVP in place. New business
 modules and deeper UX cleanup should continue one vertical slice at a time so
 schema, actions, UI, verification, and test coverage stay aligned.
+
+## Phase 25C snapshot
+
+- `/dashboard/assistant` and `/portal/assistant` now load real `ai_conversations` and `ai_messages` history instead of static scaffolds.
+- Gemini is called from server-side helpers only through `@google/genai`; no client component receives the API key and no `NEXT_PUBLIC_GEMINI_API_KEY` was introduced.
+- Assistant context is built from role-scoped server summaries only: parent is limited to linked children, student to self, teacher to assigned teaching scope, accountant to finance, librarian to library, and school/system admin to the active school only.
+- The assistant remains strictly read-only: no tools, no SQL generation/execution, no data mutation, and no cross-school leakage path.
+- Missing `GEMINI_API_KEY` now surfaces a friendly Arabic setup state instead of crashing the assistant routes.
 
 ## Phase 25B snapshot
 

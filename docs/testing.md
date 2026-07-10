@@ -118,6 +118,24 @@ Recommended manual smoke for Phase 25B:
 - confirm teacher, accountant, and librarian still see a safe restricted state on `/dashboard/chat`
 - confirm assistant routes remain non-Gemini scaffolds
 
+For server-side assistant work such as Phase 25C, use the following
+verification budget:
+
+- `npm run build`
+- `git diff --check`
+- targeted `npx eslint` on touched assistant files when global lint is blocked by unrelated workspace files
+- `npm run test`
+- `supabase status`
+
+Recommended manual smoke for Phase 25C:
+
+- open `/dashboard/assistant` without `GEMINI_API_KEY` and confirm the route stays stable with a friendly setup message
+- ask `كم عدد الطلاب؟` as `school.admin@ofuq.local` after configuring a rotated local key
+- ask `ما آخر درجات ابني؟` as `parent.hassan@ofuq.local`
+- ask `ما آخر درجاتي؟` as `student.youssef@ofuq.local`
+- ask a finance question as `teacher.arabic@ofuq.local` and confirm the assistant refuses outside its scope
+- refresh both assistant routes and confirm conversation history still loads from `ai_messages`
+
 ## Automated commands
 
 ```bash
@@ -153,6 +171,7 @@ npm run test:quality
   `lib/actions/require-tenant.ts`, and `lib/validation/common.ts`
 - Portal access helper checks in `lib/portal/access.ts`
 - Chat access policy checks in `lib/chat/policies.ts`
+- Assistant access policy and scoped helper checks in `lib/assistant/policies.ts` and `lib/assistant/gemini-client.ts`
 
 ## Unit tests
 

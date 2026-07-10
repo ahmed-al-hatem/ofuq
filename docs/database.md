@@ -319,15 +319,15 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 
 ### `ai_conversations`
 
-- Stores future assistant chat sessions per user, tenant, and school.
-- Uses the current fixed `user_role` plus a simple `role_scoped` scope marker to reinforce future server-built context boundaries.
-- `updated_at` is trigger-managed so future assistant history can sort by latest activity cleanly.
+- Stores persisted assistant chat sessions per user, tenant, and school.
+- Uses the current fixed `user_role` plus a simple `role_scoped` scope marker to reinforce server-built context boundaries.
+- `updated_at` is refreshed when assistant or user messages are added so session ordering reflects the latest interaction cleanly.
 
 ### `ai_messages`
 
 - Stores AI conversation history rows with `user`, `assistant`, or `system` roles.
-- Includes optional `model` and `token_estimate` columns for future Gemini auditing without requiring Gemini integration now.
-- No SQL execution, raw provider payload storage, or unrestricted context storage is introduced in this phase.
+- Includes optional `model` and `token_estimate` columns for Gemini auditing and safe usage metadata capture.
+- No SQL execution, raw provider payload storage, raw secrets, or unrestricted context storage is introduced in this phase.
 
 ## Phase 10 ready-made reports
 

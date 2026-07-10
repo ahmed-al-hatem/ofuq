@@ -11,6 +11,7 @@ type ChatSidebarProps = {
   description: string
   conversations: ChatConversationPreview[]
   activeConversationId: string | null
+  emptyDescription?: string
 }
 
 export function ChatSidebar({
@@ -18,6 +19,7 @@ export function ChatSidebar({
   description,
   conversations,
   activeConversationId,
+  emptyDescription = "ستظهر المحادثات هنا فور بدء المراسلات داخل المدرسة الحالية.",
 }: ChatSidebarProps) {
   return (
     <Card className="border-border/70 shadow-sm">
@@ -33,7 +35,7 @@ export function ChatSidebar({
       <CardContent className="flex flex-col gap-3 p-4">
         {conversations.length === 0 ? (
           <div className="rounded-[1.5rem] border border-dashed border-border/60 bg-muted/10 px-4 py-6 text-sm leading-6 text-muted-foreground">
-            ستظهر المحادثات هنا فور بدء المراسلات داخل المدرسة الحالية.
+            {emptyDescription}
           </div>
         ) : null}
 

@@ -1,8 +1,10 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import type { ChatComposerState, ChatMessageRecord } from "@/types/chat"
 
-import { ChatComposer } from "@/components/chat/chat-composer"
+import { AssistantComposer } from "@/components/chat/assistant-composer"
 import { ChatMessageList } from "@/components/chat/chat-message-list"
 
 type AssistantThreadProps = {
@@ -15,6 +17,8 @@ type AssistantThreadProps = {
   emptyTitle: string
   emptyDescription: string
   ariaLabel: string
+  conversationId: string | null
+  setupMessage?: string | null
 }
 
 export function AssistantThread({
@@ -27,6 +31,8 @@ export function AssistantThread({
   emptyTitle,
   emptyDescription,
   ariaLabel,
+  conversationId,
+  setupMessage,
 }: AssistantThreadProps) {
   return (
     <Card className="flex min-h-[36rem] flex-col overflow-hidden border-border/70 shadow-sm">
@@ -48,7 +54,12 @@ export function AssistantThread({
           ariaLabel={ariaLabel}
         />
         <div className="border-t border-border/60 bg-background/95 p-4 sm:p-5">
-          <ChatComposer composer={composer} ariaLabel={`${ariaLabel}-composer`} />
+          <AssistantComposer
+            conversationId={conversationId}
+            composer={composer}
+            ariaLabel={`${ariaLabel}-composer`}
+            setupMessage={setupMessage}
+          />
         </div>
       </CardContent>
     </Card>

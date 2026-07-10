@@ -8,13 +8,33 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
 import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buildDashboardAssistantScaffold } from "@/lib/chat/presenters"
-import { getAuthenticatedUser } from "@/lib/auth/session"
+import {
+  getDashboardAssistantContext,
+} from "@/lib/assistant/policies"
+import { getDashboardAssistantPageData } from "@/lib/assistant/queries"
 
-export default async function DashboardAssistantPage() {
-  const user = await getAuthenticatedUser()
+type DashboardAssistantPageProps = {
+  searchParams?: Promise<{
+    conversation?: string | string[]
+  }>
+}
 
-  if (!user || !user.role) {
+function getRequestedConversationId(
+  conversation: string | string[] | undefined
+): string | null {
+  if (Array.isArray(conversation)) {
+    return conversation[0] ?? null
+  }
+
+  return conversation ?? null
+}
+
+export default async function DashboardAssistantPage({
+  searchParams,
+}: DashboardAssistantPageProps) {
+  const contextResult = await getDashboardAssistantContext()
+
+  if (!contextResult.ok) {
     return (
       <div className="flex flex-col gap-6">
         <PageHeader
@@ -24,44 +44,80 @@ export default async function DashboardAssistantPage() {
         <EmptyState
           icon={ShieldAlert}
           title="لا يمكن تحميل واجهة المساعد"
-          description="تعذر تحديد العضوية الحالية اللازمة لعرض مساعد أُفُق."
+          description={contextResult.error}
         />
       </div>
     )
   }
 
-  const scaffold = buildDashboardAssistantScaffold(user)
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  const pageData = await getDashboardAssistantPageData({
+    context: contextResult.data,
+    activeConversationId: getRequestedConversationId(
+      resolvedSearchParams?.conversation
+    ),
+  })
+
+  if (pageData.status === "restricted") {
+    return (
+      <PageShell>
+        <PageHeader
+          title="مساعد أُفُق"
+          description="مساعد ذكي لقراءة ملخصات المدرسة حسب الصلاحيات."
+          actions={<StatusBadge status="warning">وصول مقيد</StatusBadge>}
+        />
+        <EmptyState
+          icon={ShieldAlert}
+          title={pageData.title}
+          description={pageData.description}
+        />
+      </PageShell>
+    )
+  }
 
   return (
     <PageShell>
       <PageHeader
         title="مساعد أُفُق"
         description="مساعد ذكي لقراءة ملخصات المدرسة حسب الصلاحيات."
-        actions={<StatusBadge status="info">Gemini لاحقًا</StatusBadge>}
+        actions={
+          <StatusBadge
+            status={
+              pageData.runtimeStatus === "configured" ? "success" : "warning"
+            }
+          >
+            {pageData.runtimeStatus === "configured"
+              ? "Gemini MVP"
+              : "تهيئة Gemini مطلوبة"}
+          </StatusBadge>
+        }
       />
 
       <ChatLayout
         sidebar={
           <ChatSidebar
-            title={scaffold.sidebarTitle}
-            description={scaffold.sidebarDescription}
-            conversations={scaffold.conversations}
-            activeConversationId={scaffold.activeConversationId}
+            title={pageData.sidebarTitle}
+            description={pageData.sidebarDescription}
+            conversations={pageData.conversations}
+            activeConversationId={pageData.activeConversationId}
+            emptyDescription={pageData.sidebarEmptyDescription}
           />
         }
         main={
           <div className="flex flex-col gap-4">
-            <AssistantPromptPanel prompts={scaffold.prompts} />
+            <AssistantPromptPanel prompts={pageData.prompts} />
             <AssistantThread
-              title={scaffold.threadTitle}
-              description={scaffold.threadDescription}
-              phaseLabel={scaffold.phaseLabel}
-              note={scaffold.note}
-              messages={scaffold.messages}
-              composer={scaffold.composer}
-              emptyTitle={scaffold.emptyStateTitle}
-              emptyDescription={scaffold.emptyStateDescription}
+              title={pageData.threadTitle}
+              description={pageData.threadDescription}
+              phaseLabel={pageData.phaseLabel}
+              note={pageData.note}
+              messages={pageData.messages}
+              composer={pageData.composer}
+              emptyTitle={pageData.emptyStateTitle}
+              emptyDescription={pageData.emptyStateDescription}
               ariaLabel="محادثة المساعد للوحة التحكم"
+              conversationId={pageData.activeConversationId}
+              setupMessage={pageData.setupMessage}
             />
           </div>
         }

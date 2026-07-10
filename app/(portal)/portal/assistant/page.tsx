@@ -8,11 +8,29 @@ import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
 import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
-import { buildPortalAssistantScaffold } from "@/lib/chat/presenters"
-import { requirePortalContext } from "@/lib/portal/context"
+import { getPortalAssistantContext } from "@/lib/assistant/policies"
+import { getPortalAssistantPageData } from "@/lib/assistant/queries"
 
-export default async function PortalAssistantPage() {
-  const contextResult = await requirePortalContext()
+type PortalAssistantPageProps = {
+  searchParams?: Promise<{
+    conversation?: string | string[]
+  }>
+}
+
+function getRequestedConversationId(
+  conversation: string | string[] | undefined
+): string | null {
+  if (Array.isArray(conversation)) {
+    return conversation[0] ?? null
+  }
+
+  return conversation ?? null
+}
+
+export default async function PortalAssistantPage({
+  searchParams,
+}: PortalAssistantPageProps) {
+  const contextResult = await getPortalAssistantContext()
 
   if (!contextResult.ok) {
     return (
@@ -30,38 +48,74 @@ export default async function PortalAssistantPage() {
     )
   }
 
-  const scaffold = buildPortalAssistantScaffold(contextResult.data)
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  const pageData = await getPortalAssistantPageData({
+    context: contextResult.data,
+    activeConversationId: getRequestedConversationId(
+      resolvedSearchParams?.conversation
+    ),
+  })
+
+  if (pageData.status === "restricted") {
+    return (
+      <PageShell>
+        <PageHeader
+          title="مساعد أُفُق"
+          description="اسأل عن الحضور والدرجات والمالية ضمن بياناتك المسموح بها."
+          actions={<StatusBadge status="warning">وصول مقيد</StatusBadge>}
+        />
+        <EmptyState
+          icon={ShieldAlert}
+          title={pageData.title}
+          description={pageData.description}
+        />
+      </PageShell>
+    )
+  }
 
   return (
     <PageShell>
       <PageHeader
         title="مساعد أُفُق"
         description="اسأل عن الحضور والدرجات والمالية ضمن بياناتك المسموح بها."
-        actions={<StatusBadge status="info">Gemini لاحقًا</StatusBadge>}
+        actions={
+          <StatusBadge
+            status={
+              pageData.runtimeStatus === "configured" ? "success" : "warning"
+            }
+          >
+            {pageData.runtimeStatus === "configured"
+              ? "Gemini MVP"
+              : "تهيئة Gemini مطلوبة"}
+          </StatusBadge>
+        }
       />
 
       <ChatLayout
         sidebar={
           <ChatSidebar
-            title={scaffold.sidebarTitle}
-            description={scaffold.sidebarDescription}
-            conversations={scaffold.conversations}
-            activeConversationId={scaffold.activeConversationId}
+            title={pageData.sidebarTitle}
+            description={pageData.sidebarDescription}
+            conversations={pageData.conversations}
+            activeConversationId={pageData.activeConversationId}
+            emptyDescription={pageData.sidebarEmptyDescription}
           />
         }
         main={
           <div className="flex flex-col gap-4">
-            <AssistantPromptPanel prompts={scaffold.prompts} />
+            <AssistantPromptPanel prompts={pageData.prompts} />
             <AssistantThread
-              title={scaffold.threadTitle}
-              description={scaffold.threadDescription}
-              phaseLabel={scaffold.phaseLabel}
-              note={scaffold.note}
-              messages={scaffold.messages}
-              composer={scaffold.composer}
-              emptyTitle={scaffold.emptyStateTitle}
-              emptyDescription={scaffold.emptyStateDescription}
+              title={pageData.threadTitle}
+              description={pageData.threadDescription}
+              phaseLabel={pageData.phaseLabel}
+              note={pageData.note}
+              messages={pageData.messages}
+              composer={pageData.composer}
+              emptyTitle={pageData.emptyStateTitle}
+              emptyDescription={pageData.emptyStateDescription}
               ariaLabel="محادثة المساعد للبوابة"
+              conversationId={pageData.activeConversationId}
+              setupMessage={pageData.setupMessage}
             />
           </div>
         }

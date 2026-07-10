@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 25B Internal Realtime Chat MVP implemented
-- Last completed implementation phase: Phase 25B Internal Realtime Chat MVP
-- Last completed quality phase: Phase 25B Internal Realtime Chat MVP Verification
-- Next implementation phase: Phase 25C Gemini Assistant Integration
+- Current phase: Phase 25C Gemini AI Assistant MVP implemented
+- Last completed implementation phase: Phase 25C Gemini AI Assistant MVP
+- Last completed quality phase: Phase 25C Gemini AI Assistant MVP Verification
+- Next implementation phase: AI Query placeholder or a focused post-assistant hardening slice
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -60,6 +60,7 @@
 | Phase 24 Professional Split Login UX | Done with focused auth-UX budget | `/login` is now an audience chooser, `/login/staff` and `/login/portal` present tailored Arabic RTL login experiences, `/login/reset-password` is a UI-only placeholder, and role-based redirect resolution remains server-side. |
 | Phase 25A Chat UI & Schema Foundation | Done with schema + UI foundation budget | `/dashboard/chat`, `/portal/chat`, `/dashboard/assistant`, and `/portal/assistant` now exist as Arabic RTL scaffolds over new chat/assistant schema tables, while realtime chat, send flows, and Gemini calls remain deferred. |
 | Phase 25B Internal Realtime Chat MVP | Done with realtime chat MVP budget | `/dashboard/chat` and `/portal/chat` now load real Supabase-backed school-office conversations, send messages through server actions, track read state, and refresh active threads through Supabase Realtime while keeping Gemini deferred. |
+| Phase 25C Gemini AI Assistant MVP | Done with server-side AI budget | `/dashboard/assistant` and `/portal/assistant` now load real `ai_conversations` history, build role-scoped server summaries, call Gemini only on the server, and keep the assistant strictly read-only with safe missing-key handling. |
 
 ## Current Implemented Modules
 
@@ -92,7 +93,7 @@
 - Final demo readiness documentation now exists in `docs/demo-readiness.md`, including the recommended demo order, local demo users, presentation-ready route map, known limitations wording, and a final smoke checklist.
 - Split login UX now exists for `/login`, `/login/staff`, `/login/portal`, and `/login/reset-password`; Google continuation and reset-password flows remain UI-only placeholders, while the real login path continues to use the existing server-side email/password action.
 - Internal realtime chat MVP now exists for `school_admin`, `parent`, and `student`, including school-office conversation creation, server-scoped message send/read flows, unread counts, and active-thread Supabase Realtime refresh.
-- Assistant schema and UI foundation still exist separately, but Gemini execution remains intentionally deferred to a later phase.
+- Gemini assistant MVP now exists for staff and portal roles through role-scoped server summaries, persisted assistant history, server-only Gemini calls, and friendly setup fallback when `GEMINI_API_KEY` is missing.
 
 AI Query, chatbot behavior, real external integrations, and report builder are not implemented yet.
 
@@ -115,11 +116,11 @@ AI Query, chatbot behavior, real external integrations, and report builder are n
 | `/portal/library` | Active | Read-only active and historical book-loan view for linked students. |
 | `/portal/announcements` | Active | Read-only published announcements and school events relevant to linked students. |
 | `/portal/chat` | Active | Parent/student school-office chat now loads real Supabase conversation data, supports sending messages to school administration, marks reads server-side, and refreshes the active thread through Supabase Realtime. |
-| `/portal/assistant` | Active | Arabic RTL assistant scaffold for parent/student prompts with no real Gemini call yet. |
+| `/portal/assistant` | Active | Parent/student assistant with persisted history, Arabic Gemini replies, linked-student scoping, and safe setup fallback when `GEMINI_API_KEY` is missing. |
 | `/portal/profile` | Active | Read-only membership/profile summary with explicit school-managed profile messaging and linked-student scope cues. |
 | `/dashboard` | Active | Protected staff landing route that renders role-specific content for `system_admin`, `school_admin`, `teacher`, `accountant`, and `librarian`. `parent` and `student` memberships are redirected to `/portal` before the shell renders. |
 | `/dashboard/chat` | Active | School-admin internal chat now lists real school-office conversations, shows unread counts, supports replies, and refreshes the open thread through Supabase Realtime. Other staff roles see a safe restricted state in this phase. |
-| `/dashboard/assistant` | Active | Staff-only assistant scaffold with suggested prompts and no real Gemini call yet. |
+| `/dashboard/assistant` | Active | Staff assistant with persisted history, server-built school/role summaries, Arabic Gemini replies, and restricted safe states for unsupported roles or missing school context. |
 | `/dashboard/admissions` | Active | Admissions list and management actions. |
 | `/dashboard/admissions/new` | Active | Admission creation form. |
 | `/dashboard/students` | Active | Official student records. |
@@ -255,7 +256,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Settings reads and writes derive tenant/school/user scope from the active membership and remain limited to `system_admin` and `school_admin`.
 - Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth, webhook delivery, provider sync, or real API secret storage.
 - Internal chat reads and writes now derive tenant, school, role, and allowed conversation scope on the server. Supabase Realtime is used only to refresh an already-authorized active thread.
-- Any future Gemini integration must remain server-side, role-scoped, and must never receive unrestricted SQL or raw database execution ability.
+- Gemini assistant execution is server-side only, role-scoped, and receives only prepared summaries rather than raw SQL or unrestricted database access.
 - Login destination is role-aware and is resolved on the server from the active membership only.
 - The selected login route (`/login/staff` or `/login/portal`) is UI guidance only and is never trusted as an authorization source.
 - Dashboard navigation is filtered by fixed role for UX purposes, but sensitive reads and mutations still rely on server-side authorization.
@@ -284,7 +285,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 ## Current Known Limitations
 
 - Communication is internal/in-app only; browser push, email, SMS, WhatsApp, and other external notification providers are not implemented.
-- Internal realtime chat MVP is present for school-office conversations only. Attachments, message editing/deletion, group chat UX, and Gemini integration remain deferred.
+- Internal realtime chat MVP is present for school-office conversations only. Attachments, message editing/deletion, and group chat UX remain deferred.
 - Library is an operational foundation only; no fine billing, finance integration, barcode hardware, ISBN lookup, reservations, public portal, e-book storage, or advanced analytics are implemented.
 - Student care is an operational foundation only; no diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, or behavior-risk scoring are implemented.
 - Feedback is an operational foundation only; no anonymous/public complaint forms, public survey links, attachments, external notifications, AI analysis, advanced branching, or escalation automation are implemented.
@@ -309,6 +310,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: proceed to Phase 25C Gemini Assistant Integration, reusing the existing assistant schema and keeping all AI context role-scoped and server-built.
+Recommended next phase: harden assistant smoke coverage, then proceed to an AI Query placeholder or another focused operational slice without widening assistant write permissions.
 
-Go/no-go status: Go. Phase 25B closes the internal chat MVP with schema replay, server-side scoping, unread/read flows, and realtime thread refresh while keeping Gemini, attachments, and RLS out of scope.
+Go/no-go status: Go. Phase 25C closes the first real assistant MVP with persisted history, server-only Gemini execution, role-scoped summaries, and safe degraded behavior when configuration is missing.

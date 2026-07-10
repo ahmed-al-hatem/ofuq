@@ -59,8 +59,11 @@
 - Phase 25B now enforces school-office chat scope server-side through authenticated membership, tenant, school, fixed role, and conversation access helpers before any chat read, send, or mark-as-read write.
 - `parent` and `student` may access only their own school-office conversation in the current school. `school_admin` may access school-office conversations within the same school. `teacher`, `accountant`, `librarian`, and `system_admin` do not get parent/student school-office chat access in this phase.
 - Supabase Realtime is used only to refresh an already-authorized active conversation thread. It is not treated as an authorization layer or a trusted source of conversation scope.
-- Any future Gemini integration must remain server-side, must never receive unrestricted SQL or raw database execution ability, and must consume role-scoped summaries built by application services.
+- Gemini assistant execution is server-side only through dedicated assistant helpers. Client components submit only the conversation ID and user message; tenant, school, role, user, and model selection remain resolved on the server.
+- Gemini must never receive unrestricted SQL or raw database execution ability, and the assistant continues to consume only role-scoped summaries built by application services.
 - Parent assistant scope must remain limited to linked children, student scope to self data, teacher scope to assigned classes/subjects where implemented, accountant scope to finance context only, librarian scope to library context only, and school-admin scope to the current school only.
+- `GEMINI_API_KEY` must exist only in environment configuration. No `NEXT_PUBLIC_GEMINI_API_KEY` or browser-side Gemini call path is permitted.
+- Assistant persistence in `ai_conversations` and `ai_messages` stores only sanitized metadata such as model name and token counts. Secrets, raw provider payloads, and internal identifiers are not exposed in UI responses.
 - Ready-made reports derive tenant and school scope server-side and are limited by fixed role checks per report area.
 - Portal reads derive tenant/school scope from authenticated membership, then resolve linked students server-side only. Parent access uses `student_guardians.guardian_user_id = current user profile id`; student self-access uses `students.student_user_id = current user profile id`.
 - Portal student detail pages must validate that the requested student ID belongs to the current linked-student set before returning data.
