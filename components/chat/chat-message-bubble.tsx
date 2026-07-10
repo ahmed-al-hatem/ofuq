@@ -8,9 +8,9 @@ import {
   MessageFooter,
   MessageHeader,
 } from "@/components/ui/message"
+import { formatChatTimestamp } from "@/lib/chat/time"
 import { cn } from "@/lib/utils"
 import type { ChatMessageRecord } from "@/types/chat"
-import { formatChatTimestamp } from "@/lib/chat/presenters"
 
 type ChatMessageBubbleProps = {
   message: ChatMessageRecord
