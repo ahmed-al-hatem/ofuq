@@ -3,10 +3,9 @@
 import { useActionState } from "react"
 import Link from "next/link"
 import { useFormStatus } from "react-dom"
-import { ArrowLeft, GraduationCap, ShieldCheck } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -42,18 +41,10 @@ type LoginFormProps = {
 
 const audienceConfig = {
   portal: {
-    badge: "بوابة المتابعة",
-    badgeClassName: "bg-secondary text-secondary-foreground",
     cardClassName: "border-secondary/18 shadow-secondary/8",
-    icon: GraduationCap,
-    iconClassName: "bg-secondary/14 text-secondary",
   },
   staff: {
-    badge: "وصول تشغيلي",
-    badgeClassName: "bg-primary text-primary-foreground",
     cardClassName: "border-primary/18 shadow-primary/8",
-    icon: ShieldCheck,
-    iconClassName: "bg-primary/14 text-primary",
   },
 }
 
@@ -82,7 +73,6 @@ export function LoginForm({
     state?.ok === false ? state.fieldErrors?.password ?? [] : []
   const formError = state?.ok === false ? state.error : null
   const config = audienceConfig[audience]
-  const AudienceIcon = config.icon
 
   return (
     <Card
@@ -91,17 +81,9 @@ export function LoginForm({
         config.cardClassName
       )}
     >
-      <CardHeader className="items-center gap-4 text-center">
-        <Badge className={cn("w-fit rounded-full px-3 py-1", config.badgeClassName)}>
-          {config.badge}
-        </Badge>
-        <div className={cn("flex size-12 items-center justify-center rounded-2xl", config.iconClassName)}>
-          <AudienceIcon className="size-5" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <CardTitle className="text-2xl">{title}</CardTitle>
-          <CardDescription>{description}</CardDescription>
-        </div>
+      <CardHeader className="items-center gap-2 text-center">
+        <CardTitle className="text-2xl">{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
 
       <CardContent>
