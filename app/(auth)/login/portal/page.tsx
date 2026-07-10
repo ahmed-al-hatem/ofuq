@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation"
-import { BookOpenText, GraduationCap, ShieldCheck } from "lucide-react"
 
 import { appRoutes } from "@/constants/routes"
 import { getDefaultRouteForRole } from "@/lib/auth/role-redirects"
@@ -20,28 +19,11 @@ export default async function PortalLoginPage() {
       badge="بوابة الطالب وولي الأمر"
       title="دخول الطالب وولي الأمر"
       description="تابع البيانات المدرسية المرتبطة بك ضمن بوابة عرض آمنة ومبسطة."
-      highlights={[
-        {
-          icon: GraduationCap,
-          title: "وصول أوضح للمتابعة اليومية",
-          description: "ادخل إلى حضور الطالب، الدرجات، الجداول، الإعلانات، والملخصات المالية من واجهة أبسط وأكثر هدوءًا.",
-        },
-        {
-          icon: BookOpenText,
-          title: "بوابة قراءة ومتابعة",
-          description: "المحتوى هنا مخصّص للعرض والمتابعة فقط ضمن النطاق الحالي للبوابة.",
-        },
-        {
-          icon: ShieldCheck,
-          title: "التحقق لا يعتمد على المسار",
-          description: "حتى لو دخل المستخدم من هذه الصفحة أو من صفحة الموظفين، تبقى الوجهة النهائية مرتبطة بالدور الحقيقي للحساب.",
-        },
-      ]}
     >
       <LoginForm
         audience="portal"
         title="دخول الطالب وولي الأمر"
-        description="تابع البيانات المدرسية المرتبطة بك ضمن بوابة عرض آمنة ومبسطة."
+        description="استخدم بريدك وكلمة المرور للوصول إلى بوابة المتابعة."
         submitLabel="الدخول إلى البوابة"
         googleLabel="المتابعة باستخدام Google"
         alternateHref={appRoutes.loginStaff}
