@@ -1,14 +1,18 @@
 import Link from "next/link"
 import { ShieldAlert, Users2 } from "lucide-react"
 
+import { PortalReadOnlyNotice } from "@/components/portal/portal-read-only-notice"
 import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -48,11 +52,24 @@ export default async function PortalStudentsPage() {
   const students = await listPortalStudents(context)
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title={context.role === "parent" ? "الأبناء" : "بياناتي"}
-        description="تظهر هنا البيانات الأساسية المسموح بعرضها فقط للطلاب المرتبطين بهذا الحساب."
+        description="تظهر هنا البطاقات الأساسية للطلاب المرتبطين بهذا الحساب مع ملخص سريع للصف الحالي وحالة الارتباط."
         actions={<StatusBadge status="info">عرض فقط</StatusBadge>}
+      />
+
+      <PortalReadOnlyNotice
+        title={
+          context.role === "parent"
+            ? "متابعة الأبناء من شاشة واحدة"
+            : "هذه بياناتك الأساسية داخل البوابة"
+        }
+        description={
+          context.role === "parent"
+            ? "اختر بطاقة الطالب لعرض تفاصيله، ثم انتقل إلى الحضور أو الدرجات أو الجدول من الروابط المخصصة لذلك."
+            : "تعرض هذه البطاقات أحدث البيانات المتاحة لك من المدرسة دون أي إجراءات تعديل أو إدخال."
+        }
       />
 
       {students.length === 0 ? (
@@ -68,8 +85,17 @@ export default async function PortalStudentsPage() {
               <CardHeader className="gap-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex flex-col gap-1">
-                    <CardTitle>{student.full_name}</CardTitle>
-                    <CardDescription>{student.student_number}</CardDescription>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <CardTitle>{student.full_name}</CardTitle>
+                      <Badge variant="outline" className="rounded-full">
+                        {student.student_number}
+                      </Badge>
+                    </div>
+                    <CardDescription>
+                      {student.active_enrollment
+                        ? `${student.active_enrollment.grade_level_name} - ${student.active_enrollment.class_name}`
+                        : "لا يوجد تسجيل صفي نشط"}
+                    </CardDescription>
                   </div>
                   <StatusBadge status={STUDENT_STATUS_TONES[student.status]}>
                     {STUDENT_STATUS_LABELS_AR[student.status]}
@@ -77,7 +103,29 @@ export default async function PortalStudentsPage() {
                 </div>
               </CardHeader>
 
-              <CardContent className="flex flex-col gap-3">
+              <CardContent className="flex flex-col gap-4">
+                <div className="flex flex-wrap gap-2">
+                  {student.active_enrollment ? (
+                    <>
+                      <Badge variant="secondary" className="rounded-full">
+                        {student.active_enrollment.grade_level_name}
+                      </Badge>
+                      <Badge variant="outline" className="rounded-full">
+                        {student.active_enrollment.academic_year_name}
+                      </Badge>
+                    </>
+                  ) : (
+                    <Badge variant="outline" className="rounded-full">
+                      بدون تسجيل صفي نشط
+                    </Badge>
+                  )}
+                  {student.guardians.length > 0 ? (
+                    <Badge variant="outline" className="rounded-full">
+                      أولياء الأمور {student.guardians.length}
+                    </Badge>
+                  ) : null}
+                </div>
+
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
                     <p className="text-xs font-medium text-muted-foreground">
@@ -105,7 +153,7 @@ export default async function PortalStudentsPage() {
                   </p>
                   <p className="mt-1 text-sm leading-6">
                     {student.active_enrollment
-                      ? `${student.active_enrollment.grade_level_name} - ${student.active_enrollment.class_name}`
+                      ? `${student.active_enrollment.class_name}${student.active_enrollment.class_section ? ` - ${student.active_enrollment.class_section}` : ""}`
                       : "لا يوجد تسجيل صفي نشط"}
                   </p>
                 </div>
@@ -115,28 +163,40 @@ export default async function PortalStudentsPage() {
                     <p className="text-xs font-medium text-muted-foreground">
                       بيانات ولي الأمر
                     </p>
-                    <div className="mt-2 flex flex-col gap-1 text-sm leading-6">
+                    <div className="mt-2 flex flex-col gap-2 text-sm leading-6">
                       {student.guardians.map((guardian) => (
-                        <p key={guardian.id}>
-                          {guardian.guardian_name} -{" "}
-                          {GUARDIAN_RELATION_LABELS_AR[guardian.relation]}
-                        </p>
+                        <div
+                          key={guardian.id}
+                          className="flex flex-wrap items-center justify-between gap-2"
+                        >
+                          <p>
+                            {guardian.guardian_name} -{" "}
+                            {GUARDIAN_RELATION_LABELS_AR[guardian.relation]}
+                          </p>
+                          {guardian.is_primary ? (
+                            <Badge variant="secondary" className="rounded-full">
+                              جهة التواصل الأساسية
+                            </Badge>
+                          ) : null}
+                        </div>
                       ))}
                     </div>
                   </div>
                 ) : null}
+              </CardContent>
 
+              <CardFooter className="pt-0">
                 <Link
                   href={appRoutes.portalStudentDetails(student.id)}
-                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                  className={`${buttonVariants({ variant: "outline", size: "sm" })} rounded-full`}
                 >
-                  عرض التفاصيل
+                  متابعة السجل الكامل
                 </Link>
-              </CardContent>
+              </CardFooter>
             </Card>
           ))}
         </section>
       )}
-    </div>
+    </PageShell>
   )
 }

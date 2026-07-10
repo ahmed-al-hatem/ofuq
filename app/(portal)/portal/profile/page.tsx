@@ -1,8 +1,11 @@
 import { ShieldAlert, UserRound } from "lucide-react"
 
+import { PortalReadOnlyNotice } from "@/components/portal/portal-read-only-notice"
 import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -34,11 +37,16 @@ export default async function PortalProfilePage() {
   const students = await listPortalStudents(context)
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الملف الشخصي"
         description="ملخص الحساب الحالي ونطاق الوصول المسموح داخل البوابة."
         actions={<StatusBadge status="info">عرض فقط</StatusBadge>}
+      />
+
+      <PortalReadOnlyNotice
+        title="الملف الشخصي مُدار من قبل المدرسة"
+        description="تظهر هنا بيانات الحساب الحالية ونطاق الطلاب المرتبطين به. إذا احتجت إلى تعديل الاسم أو بيانات التواصل أو الارتباطات، تتم المتابعة من خلال المدرسة."
       />
 
       <section className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
@@ -98,17 +106,26 @@ export default async function PortalProfilePage() {
               <p className="mt-1 text-sm leading-6">{students.length}</p>
             </div>
             {students.length > 0 ? (
-              students.map((student) => (
-                <div
-                  key={student.id}
-                  className="rounded-2xl border border-border/60 bg-muted/20 p-4"
-                >
-                  <p className="font-medium">{student.full_name}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {student.student_number}
-                  </p>
+              <>
+                <div className="flex flex-wrap gap-2">
+                  {students.map((student) => (
+                    <Badge key={student.id} variant="secondary" className="rounded-full">
+                      {student.full_name}
+                    </Badge>
+                  ))}
                 </div>
-              ))
+                {students.map((student) => (
+                  <div
+                    key={student.id}
+                    className="rounded-2xl border border-border/60 bg-muted/20 p-4"
+                  >
+                    <p className="font-medium">{student.full_name}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {student.student_number}
+                    </p>
+                  </div>
+                ))}
+              </>
             ) : (
               <EmptyState
                 icon={UserRound}
@@ -119,6 +136,6 @@ export default async function PortalProfilePage() {
           </CardContent>
         </Card>
       </section>
-    </div>
+    </PageShell>
   )
 }

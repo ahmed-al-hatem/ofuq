@@ -4,12 +4,12 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
-## Status Update After Phase 22B
+## Status Update After Phase 22C
 
-- Phase 19, Phase 20, Phase 21, Phase 21.5, Phase 22A, and Phase 22B are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, selected quick forms use reusable `Dialog`/`Sheet` patterns, and high-value academic, attendance, grades, finance, library, and communication pages now follow that pattern more consistently.
-- `/portal` overview is now more useful for `parent` and `student` without adding mutations or widening authorization scope.
-- These phases did not add RBAC, RLS, schema changes, or workflow redesign.
-- The next recommended UI/UX slice is Phase 22C Portal UX Polish.
+- Phase 19, Phase 20, Phase 21, Phase 21.5, Phase 22A, Phase 22B, and Phase 22C are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, selected quick forms use reusable `Dialog`/`Sheet` patterns, and the targeted domain cleanup slices now cover staff pages plus the parent/student portal.
+- `/portal` overview, students, student details, attendance, grades, finance, and profile pages now read more clearly on mobile and desktop while remaining read-only.
+- These phases did not add RBAC, RLS, schema changes, portal mutations, or workflow redesign.
+- The current roadmap through Phase 22C is now complete; the next UX slice should be planned separately based on demo priorities.
 
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 
@@ -17,9 +17,9 @@ The current project already has a strong technical foundation: authentication, f
 
 The remaining UI work is now narrower and more domain-specific:
 
-1. Portal read-only pages still have room for better information density and section consistency.
-2. A few deeper staff detail surfaces can still benefit from the newer shared polish patterns, but the largest remaining consistency gap is now portal-specific.
-3. The shell, dashboards, and staff module slices are now stronger than the portal's day-to-day reading experience, so the next work should stay focused rather than adding a new product surface.
+1. Portal read-only pages now have a stronger baseline, but any future work should stay careful about preserving the no-mutation rule.
+2. A few deeper staff detail surfaces can still benefit from the newer shared polish patterns, but they are no longer blocked by a major portal consistency gap.
+3. The next UI/UX work should be chosen by presentation priority rather than broad consistency debt alone.
 
 These are no longer product-foundation blockers. They are quality and consistency opportunities for the next UX slice.
 
@@ -633,15 +633,9 @@ This plan is useful after Phase 19, not before it.
 
 # Recommended Immediate Next Step
 
-Proceed with:
-
-```text
-Phase 22C portal UX polish prompt
-```
-
-The next phase should not add a new business module. It should continue
-applying the shared polish rules to the remaining parent/student portal
-surfaces with the same controlled scope used in Phase 22A and Phase 22B.
+Phase 22C portal UX cleanup is now complete. Any next UI/UX step should be
+planned as a fresh, focused slice rather than extending the portal work
+indefinitely.
 
 ## Phase 19 Done Criteria
 
@@ -683,10 +677,7 @@ Then rerun DB smoke and E2E checks.
 
 # Final Recommendation
 
-Proceed with:
-
-```text
-22C - Portal polish
-```
-
-This sequence gives Ofuq the best path from the new role-aware foundation into a polished, role-specific SaaS product suitable for a final presentation.
+The roadmap through Phase 22C gives Ofuq a strong path from role-aware
+foundation into a polished, role-specific SaaS product suitable for a final
+presentation. The next phase can now be selected separately based on the
+highest-value remaining demo or product priority.

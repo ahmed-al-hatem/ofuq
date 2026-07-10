@@ -1,7 +1,10 @@
 import { CircleDollarSign, ShieldAlert } from "lucide-react"
 
+import { PortalReadOnlyNotice } from "@/components/portal/portal-read-only-notice"
 import { EmptyState } from "@/components/shared/empty-state"
+import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
 import {
   Card,
@@ -69,9 +72,16 @@ export default async function PortalFinancePage() {
     (sum, invoice) => sum + invoice.balance_amount,
     0
   )
+  const totalPaidAmount = finance.payments.reduce(
+    (sum, payment) => sum + payment.amount,
+    0
+  )
+  const activeDiscountsCount = finance.discounts.filter(
+    (discount) => discount.status === "active"
+  ).length
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="المالية"
         description="عرض قراءة فقط للفواتير والمدفوعات والخصومات ضمن النطاق المسموح."
@@ -86,26 +96,47 @@ export default async function PortalFinancePage() {
         />
       ) : (
         <>
-          <section className="grid gap-4 md:grid-cols-3">
-            <Card className="border-border/70 shadow-sm">
-              <CardHeader>
-                <CardDescription>عدد الفواتير</CardDescription>
-                <CardTitle>{finance.invoices.length}</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card className="border-border/70 shadow-sm">
-              <CardHeader>
-                <CardDescription>إجمالي الرصيد المتبقي</CardDescription>
-                <CardTitle>{formatMoney(outstandingBalance)}</CardTitle>
-              </CardHeader>
-            </Card>
-            <Card className="border-border/70 shadow-sm">
-              <CardHeader>
-                <CardDescription>المدفوعات المسجلة</CardDescription>
-                <CardTitle>{finance.payments.length}</CardTitle>
-              </CardHeader>
-            </Card>
-          </section>
+          <PortalReadOnlyNotice
+            title="ملخص مالي للمتابعة"
+            description="تُعرض هنا الفواتير والمدفوعات كما اعتمدتها المدرسة. لا تتضمن هذه الصفحة أي دفع إلكتروني أو تسجيل دفعة جديدة."
+            notes={[
+              "يمكنك استخدام هذه الصفحة لمراجعة الرصيد الحالي وسجلات السداد السابقة فقط.",
+              "إذا ظهر نقص أو اختلاف في أي مبلغ، تتم مراجعته من خلال الإدارة المالية في المدرسة.",
+            ]}
+          />
+
+          <KpiGrid
+            items={[
+              {
+                title: "عدد الفواتير",
+                value: finance.invoices.length,
+                description: "إجمالي الفواتير المرتبطة بالطلاب الظاهرين لك.",
+                icon: CircleDollarSign,
+                tone: "info",
+              },
+              {
+                title: "الرصيد المتبقي",
+                value: formatMoney(outstandingBalance),
+                description: "المبلغ القائم غير المسدد حتى الآن.",
+                icon: CircleDollarSign,
+                tone: outstandingBalance > 0 ? "warning" : "success",
+              },
+              {
+                title: "إجمالي المدفوع",
+                value: formatMoney(totalPaidAmount),
+                description: "مجموع المبالغ المسجلة كمدفوعات ضمن هذا النطاق.",
+                icon: CircleDollarSign,
+                tone: "success",
+              },
+              {
+                title: "الخصومات النشطة",
+                value: activeDiscountsCount,
+                description: "عدد الخصومات الفعالة حاليًا ضمن السجلات المعروضة.",
+                icon: CircleDollarSign,
+                tone: "default",
+              },
+            ]}
+          />
 
           <Card className="border-border/70 shadow-sm">
             <CardHeader>
@@ -286,6 +317,6 @@ export default async function PortalFinancePage() {
           </section>
         </>
       )}
-    </div>
+    </PageShell>
   )
 }

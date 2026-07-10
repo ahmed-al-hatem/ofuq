@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 22B Finance / Library / Communication UX Cleanup implemented
-- Last completed implementation phase: Phase 22B Finance / Library / Communication UX Cleanup
-- Last completed quality phase: Phase 22B Finance / Library / Communication UX Cleanup Verification
-- Next implementation phase: Phase 22C Portal UX Polish
+- Current phase: Phase 22C Portal UX Cleanup implemented
+- Last completed implementation phase: Phase 22C Portal UX Cleanup
+- Last completed quality phase: Phase 22C Portal UX Cleanup Verification
+- Next implementation phase: TBD after Phase 22C review
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -55,6 +55,7 @@
 | Phase 21.5 Modal Form UX Foundation | Done with minimal verification budget | Reusable `Dialog` and `Sheet` composition wrappers now support quick create/edit flows, and selected low-risk forms were converted without schema, seed, or Supabase config changes. |
 | Phase 22A Academic / Attendance / Grades UX Cleanup | Done with minimal verification budget | Selected academic, attendance, and grades pages now apply the Phase 21 shared page polish and the Phase 21.5 modal-form pattern for quick create/review flows while keeping complex detail routes intact. |
 | Phase 22B Finance / Library / Communication UX Cleanup | Done with minimal verification budget | Selected finance, library, and communication pages now use the shared page hierarchy more consistently, move quick create flows into `Dialog` or `Sheet`, and keep complex detail views as route pages. |
+| Phase 22C Portal UX Cleanup | Done with minimal verification budget | Parent and student portal pages now present calmer read-only guidance, clearer child/student cards, stronger attendance/grades summaries, clearer finance review summaries, and a more explicit school-managed profile experience without adding portal mutations or changing scope. |
 
 ## Current Implemented Modules
 
@@ -74,6 +75,7 @@
 - Feedback foundation, including complaints, complaint updates, surveys, survey questions, and survey responses.
 - Deterministic local Syrian demo dataset, including fixed-role demo Auth users and fictional cross-module school data for local smoke workflows.
 - Parent/student read-only portal foundation, including server-rendered `/portal` pages scoped to linked students for `parent` and `student` roles.
+- Portal UX cleanup for `/portal` overview, linked students, student details, attendance, grades, finance, and profile pages with stronger Arabic hierarchy and mobile readability while keeping the portal read-only.
 - Local Playwright browser smoke foundation for authenticated login, dashboard access, and read-only portal route coverage.
 - Settings foundation, including school display settings, branding placeholders, localization settings, module flags, and editable local message templates.
 - Integration placeholders foundation, including admin-only overview and provider pages for WhatsApp, webhooks, MoE, calendar, BI, and automation without real external API calls or secret storage.
@@ -92,16 +94,16 @@ AI Query, chatbot, real external integrations, and report builder are not implem
 | --- | --- | --- |
 | `/` | Active | Public home route. |
 | `/login` | Active | Supabase email/password login. |
-| `/portal` | Active | Read-only parent/student portal overview with richer role-specific summary cards and sections. |
-| `/portal/students` | Active | Linked student list for the signed-in parent or student. |
-| `/portal/students/[studentId]` | Active | Read-only linked student details. |
-| `/portal/attendance` | Active | Read-only attendance view for linked students. |
-| `/portal/grades` | Active | Read-only grades, exam results, and report-card snapshots for linked students. |
+| `/portal` | Active | Read-only parent/student portal overview with calmer guidance, clearer summary hierarchy, and direct quick links. |
+| `/portal/students` | Active | Linked student list for the signed-in parent or student with clearer student identity cards. |
+| `/portal/students/[studentId]` | Active | Read-only linked student details with clearer summary cards and follow-up links. |
+| `/portal/attendance` | Active | Read-only attendance view for linked students with stronger status summary and clearer notes. |
+| `/portal/grades` | Active | Read-only grades, exam results, and report-card snapshots for linked students with summary KPIs and easier score scanning. |
 | `/portal/timetable` | Active | Read-only timetable view for linked students' active classes. |
-| `/portal/finance` | Active | Parent-facing linked-student finance visibility; student role sees a restricted read-only note. |
+| `/portal/finance` | Active | Parent-facing linked-student finance visibility with clearer read-only summary cards; student role sees a restricted read-only note. |
 | `/portal/library` | Active | Read-only active and historical book-loan view for linked students. |
 | `/portal/announcements` | Active | Read-only published announcements and school events relevant to linked students. |
-| `/portal/profile` | Active | Read-only membership/profile summary for the signed-in portal user. |
+| `/portal/profile` | Active | Read-only membership/profile summary with explicit school-managed profile messaging and linked-student scope cues. |
 | `/dashboard` | Active | Protected staff landing route that renders role-specific content for `system_admin`, `school_admin`, `teacher`, `accountant`, and `librarian`. `parent` and `student` memberships are redirected to `/portal` before the shell renders. |
 | `/dashboard/admissions` | Active | Admissions list and management actions. |
 | `/dashboard/admissions/new` | Active | Admission creation form. |
@@ -277,7 +279,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - No AI Query, chatbot, drag-and-drop report builder, report PDFs, or automated notification campaigns yet.
 - Automated coverage remains intentionally small: Vitest targets stable pure logic and Playwright targets a small local-only browser smoke slice rather than full regression coverage.
 - Browser smoke is now covered locally through Playwright only. Hosted CI E2E, cross-browser matrices, CRUD flows, and visual regression remain deferred.
-- Phase 22B intentionally cleaned only a narrow finance/library/communication slice. Portal-focused polish and any broader cross-module cleanup remain deferred to later Phase 22 work.
+- Phase 22C intentionally cleaned only a narrow portal-readability slice. Portal mutations, online payments, message sending, complaint submission, broader portal module additions, and cross-module redesign remain deferred.
 - Phase 06.5 verification exists in `docs/verification-phase-06.md`; authenticated attendance workflow smoke was blocked by missing seeded users and attendance precondition data.
 - Phase 07.5 verification exists in `docs/verification-phase-07.md`; repeatable local smoke data now exists, and authenticated browser workflow smoke is now covered separately in the Phase 17 Playwright foundation.
 - A local Auth smoke-login issue caused by `NULL` GoTrue token fields was fixed and documented in `docs/local-auth-smoke-troubleshooting.md`.
@@ -285,6 +287,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: Phase 22C Portal UX Polish.
+Recommended next phase: plan the next focused slice separately after reviewing Phase 22C outcomes.
 
-Go/no-go status: Go for Phase 22C planning. Phase 22B is implemented with passing `npm run build`, passing `git diff --check` with Windows line-ending warnings only, passing targeted ESLint on touched files, honest documentation of unrelated global lint blockers, and no schema/seed/Supabase config changes.
+Go/no-go status: Go for next-phase planning. Phase 22C is implemented with minimal/high-value verification, the portal remains read-only, and no schema/seed/Supabase config changes were introduced.

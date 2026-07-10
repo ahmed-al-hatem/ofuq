@@ -24,7 +24,7 @@
 21.5. Modal form UX foundation
 22A. Academic / attendance / grades UX cleanup
 22B. Finance / library / communication UX cleanup
-22C. Portal UX polish
+22C. Portal UX cleanup
 
 ## Later-phase items
 
@@ -42,10 +42,17 @@ attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation,
-role-specific dashboard, UI-polish, modal-form UX, and the first
-domain-focused module cleanup slice in place. New business modules and deeper
+role-specific dashboard, UI-polish, modal-form UX, and the three
+domain-focused module cleanup slices in place. New business modules and deeper
 UX cleanup should continue one vertical slice at a time so schema, actions, UI,
 verification, and test coverage stay aligned.
+
+## Phase 22C snapshot
+
+- `/portal` overview now uses calmer read-only guidance, clearer summary hierarchy, and direct quick links that stay inside the portal.
+- Portal student list and student details now present more readable identity, class, and guardian information with stronger mobile stacking.
+- Portal attendance, grades, finance, and profile pages now surface clearer read-only summaries without adding any create/edit/delete flows or widening portal scope.
+- No schema changes, seed changes, Supabase config changes, business-logic changes, or authorization changes were introduced in this phase.
 
 ## Phase 22A snapshot
 

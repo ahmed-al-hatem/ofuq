@@ -35,6 +35,18 @@ If global ESLint still fails because of unrelated pre-existing workspace files,
 run targeted ESLint on the changed TypeScript/TSX files and document both the
 global blocker and the targeted pass honestly.
 
+For portal-only cleanup work such as Phase 22C, keep the same minimal budget and
+preserve the portal's read-only contract:
+
+- `npm run build`
+- `git diff --check`
+- `npm run lint` when several TS/TSX files were touched
+
+Run `npm run test` only if portal access helpers, linked-student scoping,
+routing, or other non-presentational server-side behavior changes. For
+readability-only portal work, targeted ESLint plus build is the default safety
+net when global lint is blocked by unrelated files.
+
 ## Automated commands
 
 ```bash

@@ -1,9 +1,12 @@
 import Link from "next/link"
 import { ShieldAlert, UserRound } from "lucide-react"
 
+import { PortalReadOnlyNotice } from "@/components/portal/portal-read-only-notice"
 import { EmptyState } from "@/components/shared/empty-state"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import {
   Card,
@@ -73,10 +76,10 @@ export default async function PortalStudentDetailsPage({
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title={student.full_name}
-        description="عرض تفصيلي للبيانات الأساسية المسموح بها فقط."
+        description="عرض تفصيلي للبيانات الأساسية المسموح بها فقط ضمن ارتباط هذا الحساب بالطالب."
         actions={
           <div className="flex flex-wrap items-center gap-2">
             <StatusBadge status={STUDENT_STATUS_TONES[student.status]}>
@@ -87,11 +90,58 @@ export default async function PortalStudentDetailsPage({
         }
       />
 
+      <PortalReadOnlyNotice
+        title="ملف الطالب للمتابعة فقط"
+        description="يمكنك من هذه الصفحة مراجعة الهوية الدراسية والروابط الأساسية، بينما تبقى أي تحديثات أو تصحيحات ضمن متابعة المدرسة."
+        notes={[
+          "تعرض صفحة الطالب التسجيل الصفي النشط فقط حتى تبقى المعلومات واضحة وسهلة القراءة.",
+          "روابط الحضور والدرجات والجدول أدناه تنقلك مباشرة إلى نفس نطاق الطالب داخل البوابة.",
+        ]}
+      />
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <Card className="border-border/70 shadow-sm">
+          <CardHeader className="gap-2">
+            <CardDescription>الرقم الطلابي</CardDescription>
+            <CardTitle className="text-xl">{student.student_number}</CardTitle>
+          </CardHeader>
+        </Card>
+        <Card className="border-border/70 shadow-sm">
+          <CardHeader className="gap-2">
+            <CardDescription>الصف الحالي</CardDescription>
+            <CardTitle className="text-xl">
+              {student.active_enrollment?.grade_level_name ?? "غير متوفر"}
+            </CardTitle>
+          </CardHeader>
+        </Card>
+        <Card className="border-border/70 shadow-sm">
+          <CardHeader className="gap-2">
+            <CardDescription>العام الدراسي</CardDescription>
+            <CardTitle className="text-xl">
+              {student.active_enrollment?.academic_year_name ?? "غير متوفر"}
+            </CardTitle>
+          </CardHeader>
+        </Card>
+        <Card className="border-border/70 shadow-sm">
+          <CardHeader className="gap-2">
+            <CardDescription>جهات التواصل</CardDescription>
+            <CardTitle className="text-xl">{student.guardians.length}</CardTitle>
+          </CardHeader>
+        </Card>
+      </section>
+
       <section className="grid gap-4 xl:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Card className="border-border/70 shadow-sm">
           <CardHeader>
             <CardTitle>البيانات الأساسية</CardTitle>
-            <CardDescription>{student.student_number}</CardDescription>
+            <CardDescription>
+              <span className="inline-flex flex-wrap items-center gap-2">
+                <Badge variant="outline" className="rounded-full">
+                  {student.student_number}
+                </Badge>
+                <span>آخر البيانات المتاحة من المدرسة</span>
+              </span>
+            </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
@@ -153,6 +203,9 @@ export default async function PortalStudentDetailsPage({
                   </p>
                   <p className="mt-1 text-sm leading-6">
                     {student.active_enrollment.class_name}
+                    {student.active_enrollment.class_section
+                      ? ` - ${student.active_enrollment.class_section}`
+                      : ""}
                   </p>
                 </div>
                 <div className="rounded-2xl border border-border/60 bg-muted/20 p-4">
@@ -205,23 +258,23 @@ export default async function PortalStudentDetailsPage({
       <div className="flex flex-wrap gap-2">
         <Link
           href={appRoutes.portalAttendance}
-          className={buttonVariants({ variant: "outline", size: "sm" })}
+          className={`${buttonVariants({ variant: "outline", size: "sm" })} rounded-full`}
         >
-          الحضور
+          متابعة الحضور
         </Link>
         <Link
           href={appRoutes.portalGrades}
-          className={buttonVariants({ variant: "outline", size: "sm" })}
+          className={`${buttonVariants({ variant: "outline", size: "sm" })} rounded-full`}
         >
-          الدرجات
+          متابعة الدرجات
         </Link>
         <Link
           href={appRoutes.portalTimetable}
-          className={buttonVariants({ variant: "outline", size: "sm" })}
+          className={`${buttonVariants({ variant: "outline", size: "sm" })} rounded-full`}
         >
-          الجدول
+          متابعة الجدول
         </Link>
       </div>
-    </div>
+    </PageShell>
   )
 }

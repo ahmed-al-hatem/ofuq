@@ -1,8 +1,11 @@
-import { BookOpenCheck, ShieldAlert } from "lucide-react"
+import { BookOpenCheck, FileText, NotebookText, ShieldAlert } from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -57,9 +60,12 @@ export default async function PortalGradesPage() {
     grades.examResults.length > 0 ||
     grades.gradeEntries.length > 0 ||
     grades.reportCards.length > 0
+  const publishedReportCards = grades.reportCards.filter(
+    (reportCard) => reportCard.status === "published"
+  ).length
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الدرجات"
         description="عرض قراءة فقط لنتائج الاختبارات، مدخلات الدرجات، وبطاقات التقييم المنشأة."
@@ -71,6 +77,35 @@ export default async function PortalGradesPage() {
           icon={BookOpenCheck}
           title="لا توجد بيانات درجات متاحة"
           description="لم تُسجل بعد نتائج أو بطاقات تقييم للطلاب المسموح بعرضهم."
+        />
+      ) : null}
+
+      {hasAnyData ? (
+        <KpiGrid
+          items={[
+            {
+              title: "نتائج الاختبارات",
+              value: grades.examResults.length,
+              description: "آخر نتائج الاختبارات المسموح بعرضها.",
+              icon: BookOpenCheck,
+              tone: "info",
+            },
+            {
+              title: "مدخلات الدرجات",
+              value: grades.gradeEntries.length,
+              description: "واجبات وأنشطة ومشاركات مضافة من المدرسة.",
+              icon: NotebookText,
+              tone: "warning",
+            },
+            {
+              title: "بطاقات التقييم المنشورة",
+              value: publishedReportCards,
+              description: "عدد البطاقات المنشورة الجاهزة للمراجعة.",
+              icon: FileText,
+              tone: "success",
+            },
+          ]}
+          className="xl:grid-cols-3"
         />
       ) : null}
 
@@ -103,9 +138,11 @@ export default async function PortalGradesPage() {
                       {EXAM_RESULT_STATUS_LABELS_AR[item.status]}
                     </StatusBadge>
                   </div>
-                  <p className="mt-3 text-sm leading-6">
-                    {formatNumber(item.score)} / {formatNumber(item.max_score)}
-                  </p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <Badge variant="secondary" className="rounded-full text-sm">
+                      {formatNumber(item.score)} / {formatNumber(item.max_score)}
+                    </Badge>
+                  </div>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {item.exam_date ? formatDate(item.exam_date) : "بدون تاريخ"}
                   </p>
@@ -145,10 +182,14 @@ export default async function PortalGradesPage() {
                       {GRADE_ENTRY_STATUS_LABELS_AR[item.status]}
                     </StatusBadge>
                   </div>
-                  <p className="mt-3 text-sm leading-6">
-                    {GRADE_ENTRY_CATEGORY_LABELS_AR[item.category]} -{" "}
-                    {formatNumber(item.score)} / {formatNumber(item.max_score)}
-                  </p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <Badge variant="outline" className="rounded-full">
+                      {GRADE_ENTRY_CATEGORY_LABELS_AR[item.category]}
+                    </Badge>
+                    <Badge variant="secondary" className="rounded-full text-sm">
+                      {formatNumber(item.score)} / {formatNumber(item.max_score)}
+                    </Badge>
+                  </div>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {formatDate(item.recorded_on)}
                   </p>
@@ -189,10 +230,12 @@ export default async function PortalGradesPage() {
                       {REPORT_CARD_STATUS_LABELS_AR[item.status]}
                     </StatusBadge>
                   </div>
-                  <p className="mt-3 text-sm leading-6">
-                    النسبة الإجمالية:{" "}
-                    {formatNumber(item.summary.overall?.percentage ?? null)}
-                  </p>
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <Badge variant="secondary" className="rounded-full text-sm">
+                      النسبة الإجمالية:{" "}
+                      {formatNumber(item.summary.overall?.percentage ?? null)}
+                    </Badge>
+                  </div>
                   {item.teacher_remarks ? (
                     <p className="mt-1 text-sm text-muted-foreground">
                       {item.teacher_remarks}
@@ -204,6 +247,6 @@ export default async function PortalGradesPage() {
           </CardContent>
         </Card>
       </section>
-    </div>
+    </PageShell>
   )
 }

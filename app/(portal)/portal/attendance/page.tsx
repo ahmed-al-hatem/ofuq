@@ -1,7 +1,15 @@
-import { CalendarCheck2, ShieldAlert } from "lucide-react"
+import {
+  CalendarCheck2,
+  CircleCheckBig,
+  CircleX,
+  Clock3,
+  ShieldAlert,
+} from "lucide-react"
 
 import { EmptyState } from "@/components/shared/empty-state"
+import { KpiGrid } from "@/components/shared/kpi-grid"
 import { PageHeader } from "@/components/shared/page-header"
+import { PageShell } from "@/components/shared/page-shell"
 import { StatusBadge } from "@/components/shared/status-badge"
 import {
   Card,
@@ -54,14 +62,53 @@ export default async function PortalAttendancePage() {
   }
 
   const records = await listPortalAttendanceRecords(contextResult.data)
+  const presentCount = records.filter((record) => record.status === "present").length
+  const absentCount = records.filter((record) => record.status === "absent").length
+  const lateCount = records.filter((record) => record.status === "late").length
+  const excusedCount = records.filter((record) => record.status === "excused").length
 
   return (
-    <div className="flex flex-col gap-6">
+    <PageShell>
       <PageHeader
         title="الحضور"
         description="عرض قراءة فقط لسجلات الحضور المرتبطة بالطلاب المسموح بهم."
         actions={<StatusBadge status="info">عرض فقط</StatusBadge>}
       />
+
+      {records.length > 0 ? (
+        <KpiGrid
+          items={[
+            {
+              title: "حاضر",
+              value: presentCount,
+              description: "عدد السجلات التي أُثبت فيها حضور الطالب.",
+              icon: CircleCheckBig,
+              tone: "success",
+            },
+            {
+              title: "متأخر",
+              value: lateCount,
+              description: "حالات تأخر مسجلة ضمن نفس النطاق.",
+              icon: Clock3,
+              tone: "warning",
+            },
+            {
+              title: "غائب",
+              value: absentCount,
+              description: "سجلات الغياب غير المعذور المعروضة لك.",
+              icon: CircleX,
+              tone: "danger",
+            },
+            {
+              title: "بعذر",
+              value: excusedCount,
+              description: "حالات الغياب المعذور أو المرتبطة بعذر.",
+              icon: CalendarCheck2,
+              tone: "info",
+            },
+          ]}
+        />
+      ) : null}
 
       <Card className="border-border/70 shadow-sm">
         <CardHeader>
@@ -140,15 +187,20 @@ export default async function PortalAttendancePage() {
                 ) : null}
 
                 {record.notes ? (
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {record.notes}
-                  </p>
+                  <div className="rounded-2xl border border-border/60 bg-background p-4">
+                    <p className="text-xs font-medium text-muted-foreground">
+                      ملاحظات المدرسة
+                    </p>
+                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                      {record.notes}
+                    </p>
+                  </div>
                 ) : null}
               </div>
             ))
           )}
         </CardContent>
       </Card>
-    </div>
+    </PageShell>
   )
 }

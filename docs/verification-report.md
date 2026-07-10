@@ -3,6 +3,48 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 22C Portal UX Cleanup Verification
+
+Phase 22C portal UX cleanup is implemented and verified with the requested
+minimal/high-value budget. The work stayed inside the existing read-only portal
+contract, reused existing shared/UI primitives, and focused on selected
+parent/student-facing readability and mobile-usability improvements without
+adding mutations or changing portal scoping.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Not run | Skipped because this phase does not change linked-student access helpers, portal routing rules, business logic, or server-side mutation behavior. |
+| `npm run lint` | Failed for unrelated workspace files | Global ESLint still reports pre-existing `@typescript-eslint/no-require-imports` errors in `.codex/skills/brand/scripts/*.cjs` and `.codex/skills/design-system/scripts/*.cjs`, plus pre-existing React hook issues in `components/ui/carousel.tsx` and `hooks/use-mobile.ts`. These files are outside the Phase 22C change surface. |
+| Targeted ESLint on touched files | Passed | `npx eslint` succeeded for the changed portal TSX files and the new `components/portal/portal-read-only-notice.tsx` component. |
+| `npm run build` | Passed | Next.js production build completed successfully after the portal overview, student, attendance, grades, finance, profile, and docs updates. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Targeted browser smoke | Not run | Skipped because the phase budget is intentionally minimal and this slice does not change auth flow or require local browser verification by default. |
+| Schema / seed / Supabase config review | Passed by scope inspection | No schema files, seed files, or Supabase config files were changed in this phase. |
+
+Phase 22C selected improvements:
+
+- portal overview now includes a calmer read-only guidance panel and a direct quick-links section that stays inside `/portal`
+- portal student cards now show clearer identity, class, academic-year, and guardian context with better mobile stacking
+- portal student details now surface a clearer summary strip and more explicit follow-up links while remaining read-only
+- portal attendance now includes status summary cards and clearer school-note presentation
+- portal grades now include summary KPIs and easier score/category scanning
+- portal finance and profile now present clearer read-only school-managed summaries for family review
+
+Phase 22C scope notes:
+
+- Portal remained read-only throughout this phase.
+- No create/edit/delete actions were added to portal pages.
+- No new mutation Server Actions or client-side write logic were added.
+- No dashboard/admin links were added to the portal; quick links stay within existing portal routes only.
+- Linked-student scoping and server-side access checks were preserved.
+- No schema changes, seed changes, Supabase config changes, business-logic changes, or authorization changes were introduced.
+
+Skills used:
+
+- `shadcn`: used for Card/Badge/Table/Button/Tabs/Accordion patterns
+- `ui-ux-pro-max`: used for portal readability, mobile layout, read-only cues, density, and Arabic RTL polish
+- `migrate-radix-to-base`: not needed because no Radix imports were found
+
 ## Phase 22B Finance / Library / Communication UX Cleanup Verification
 
 Phase 22B finance / library / communication UX cleanup is implemented and
