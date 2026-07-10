@@ -55,6 +55,10 @@
 - Settings and integrations reads derive tenant/school scope from authenticated active membership and remain limited to fixed `system_admin` and `school_admin` roles in server-side code.
 - Settings forms do not expose trusted tenant, school, role, or actor identity fields. School context is derived on the server before reading or writing `school_settings`, `integration_settings`, or `message_templates`.
 - Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth handshakes, webhook delivery, provider sync, BI embedding, or real API secret storage.
+- Chat and assistant scaffolds do not trust any client-submitted tenant, school, user, participant, or conversation identifiers. Future chat and AI reads/writes must derive scope from the authenticated active membership only.
+- Phase 25A adds schema and UI foundation only. No realtime subscription, send-message action, mark-as-read action, or Gemini request path is active yet.
+- Any future Gemini integration must remain server-side, must never receive unrestricted SQL or raw database execution ability, and must consume role-scoped summaries built by application services.
+- Parent assistant scope must remain limited to linked children, student scope to self data, teacher scope to assigned classes/subjects where implemented, accountant scope to finance context only, librarian scope to library context only, and school-admin scope to the current school only.
 - Ready-made reports derive tenant and school scope server-side and are limited by fixed role checks per report area.
 - Portal reads derive tenant/school scope from authenticated membership, then resolve linked students server-side only. Parent access uses `student_guardians.guardian_user_id = current user profile id`; student self-access uses `students.student_user_id = current user profile id`.
 - Portal student detail pages must validate that the requested student ID belongs to the current linked-student set before returning data.
@@ -98,6 +102,7 @@ Full production RLS is postponed until the auth and membership flows are stable.
 - Student-care audit metadata should use IDs and status only. Health notes, medications, chronic-condition text, and symptoms must not be written into audit logs.
 - Feedback audit metadata should use IDs and status transitions only. Complaint descriptions, internal-note text, resolution text, survey answers, and other large feedback payloads must not be written into audit logs.
 - Settings audit metadata should use IDs, provider keys, template keys, status values, and small counters only. Branding payloads, template bodies, secrets, and other large free-text values should not be copied into audit logs.
+- Future chat and assistant audit metadata should use conversation, participant, message, and scope IDs only. Raw prompts, full assistant outputs, secrets, and large free-text payloads should not be duplicated into audit logs.
 
 ## Student document handling
 

@@ -10,6 +10,8 @@ describe("appRoutes", () => {
     expect(appRoutes.timetable).toBe("/dashboard/timetable")
     expect(appRoutes.finance).toBe("/dashboard/finance")
     expect(appRoutes.communication).toBe("/dashboard/communication")
+    expect(appRoutes.dashboardChat).toBe("/dashboard/chat")
+    expect(appRoutes.dashboardAssistant).toBe("/dashboard/assistant")
     expect(appRoutes.reports).toBe("/dashboard/reports")
     expect(appRoutes.library).toBe("/dashboard/library")
     expect(appRoutes.studentCare).toBe("/dashboard/student-care")
@@ -28,6 +30,8 @@ describe("appRoutes", () => {
       appRoutes.timetable,
       appRoutes.finance,
       appRoutes.communication,
+      appRoutes.dashboardChat,
+      appRoutes.dashboardAssistant,
       appRoutes.reports,
       appRoutes.library,
       appRoutes.studentCare,

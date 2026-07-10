@@ -26,6 +26,8 @@
 22B. Finance / library / communication UX cleanup
 22C. Portal UX cleanup
 23. Final demo readiness and presentation flow polish
+24. Professional split login UX
+25A. Chat UI and schema foundation
 
 ## Later-phase items
 
@@ -43,11 +45,25 @@ attendance, grades/report-card, manual timetable, finance basics,
 communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation,
-role-specific dashboard, UI-polish, modal-form UX, and the three
-domain-focused module cleanup slices in place, followed by a Phase 23 final
-demo-readiness pass. New business modules and deeper UX cleanup should
-continue one vertical slice at a time so schema, actions, UI, verification, and
-test coverage stay aligned.
+role-specific dashboard, UI-polish, modal-form UX, the three domain-focused
+module cleanup slices, the split login UX, and the Phase 25A chat/assistant
+foundation in place. New business modules and deeper UX cleanup should continue
+one vertical slice at a time so schema, actions, UI, verification, and test
+coverage stay aligned.
+
+## Phase 25A snapshot
+
+- `/dashboard/chat`, `/portal/chat`, `/dashboard/assistant`, and `/portal/assistant` now exist as Arabic RTL scaffolds built on the existing message and message-scroller primitives.
+- A new migration adds `chat_conversations`, `chat_participants`, `chat_messages`, `chat_message_reads`, `ai_conversations`, and `ai_messages` with `tenant_id` and `school_id` on every table.
+- Realtime subscriptions, send-message writes, mark-as-read writes, attachments, and Gemini API calls remain deferred to later phases.
+- Gemini planning is documentation-only in this phase, and any future AI context must remain role-scoped and server-built.
+
+## Phase 24 snapshot
+
+- `/login` now acts as an account-type chooser for staff/admin versus parent/student.
+- `/login/staff` and `/login/portal` present tailored Arabic RTL login experiences while keeping real sign-in and redirect logic on the server.
+- `/login/reset-password` is a UI-only placeholder route with no email reset implementation yet.
+- No schema changes, seed changes, or Supabase config changes were introduced in that phase.
 
 ## Phase 23 snapshot
 

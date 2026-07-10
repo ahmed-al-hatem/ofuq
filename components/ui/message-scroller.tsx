@@ -110,7 +110,7 @@ function MessageScrollerButton({
         <>
           <HugeiconsIcon icon={ArrowDown02Icon} strokeWidth={2} />
           <span className="sr-only">
-            {direction === "end" ? "Scroll to end" : "Scroll to start"}
+            {direction === "end" ? "الانتقال إلى أحدث الرسائل" : "الانتقال إلى أول الرسائل"}
           </span>
         </>
       )}

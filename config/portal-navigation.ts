@@ -1,11 +1,13 @@
 import {
   Bell,
+  Bot,
   CalendarCheck2,
   CalendarDays,
   CircleDollarSign,
   GraduationCap,
   LayoutDashboard,
   LibraryBig,
+  MessageSquareMore,
   UserRound,
   Users2,
 } from "lucide-react"
@@ -67,6 +69,16 @@ export const portalNavigation: PortalNavigationGroup[] = [
         label: "الإعلانات",
         href: appRoutes.portalAnnouncements,
         icon: Bell,
+      },
+      {
+        label: "المراسلة",
+        href: appRoutes.portalChat,
+        icon: MessageSquareMore,
+      },
+      {
+        label: "مساعد أُفُق",
+        href: appRoutes.portalAssistant,
+        icon: Bot,
       },
       {
         label: "الملف الشخصي",

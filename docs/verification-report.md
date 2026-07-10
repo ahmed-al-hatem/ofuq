@@ -3,6 +3,48 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 25A Chat UI & Schema Foundation Verification
+
+Phase 25A chat UI and schema foundation is implemented with the requested
+schema-plus-UI verification budget. The work added a new migration, four new
+Arabic RTL scaffold routes, shared chat/assistant UI primitives, route and
+navigation updates, and concise documentation updates while intentionally
+keeping realtime chat, message sending, and Gemini execution out of scope.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Passed | Vitest completed successfully with 14 test files and 48 assertions passing after the route and navigation updates. |
+| `npm run lint` | Failed for unrelated workspace files | Global ESLint still reports pre-existing `@typescript-eslint/no-require-imports` issues under `.codex/skills/**/*.cjs` plus pre-existing React hook issues in `components/ui/carousel.tsx` and `hooks/use-mobile.ts`. These files are outside the Phase 25A change surface. |
+| Targeted ESLint on touched files | Passed | `npx eslint` succeeded for the changed chat pages, shared chat components, routes/navigation files, helper/types files, and affected unit tests. |
+| `npm run build` | Passed | Next.js production build completed successfully and now includes `/dashboard/chat`, `/portal/chat`, `/dashboard/assistant`, and `/portal/assistant`. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| `supabase status` | Passed after elevation | Local Supabase services were reachable and healthy enough to proceed with migration replay verification. |
+| `supabase db reset` | Passed after elevation | All migrations replayed successfully through `20260710120000_chat_ui_schema_foundation.sql`, and the existing seed chain reapplied cleanly. |
+| Manual smoke | Not run | Browser-driven route smoke for the new chat/assistant screens was not executed in this session. Build output confirms all four routes are registered. |
+| Gemini / secret scope review | Passed by scope inspection | No Gemini package install, no Gemini API call path, and no API keys or raw environment values were added to the repository. |
+
+Phase 25A selected improvements:
+
+- added `supabase/migrations/20260710120000_chat_ui_schema_foundation.sql` with tenant/school-scoped internal chat and AI history tables
+- added reusable Arabic RTL chat primitives under `components/chat/`
+- added `/dashboard/chat`, `/portal/chat`, `/dashboard/assistant`, and `/portal/assistant` as scaffold routes with disabled composers and phase-specific guidance
+- updated dashboard and portal navigation plus unit tests for the new routes
+- updated project, database, security, testing, demo-readiness, and phase docs with concise Phase 25A notes
+
+Phase 25A scope notes:
+
+- No realtime subscription was added.
+- No send-message Server Action or mark-as-read write flow was added.
+- No Gemini API call or `@google/genai` installation was added.
+- No seed order or auth smoke seed files were changed.
+- RLS remains deferred; tenant and school enforcement remain server-side by design.
+
+Skills used:
+
+- `shadcn`: used for the existing `message` and `message-scroller` primitives plus the new chat/assistant composition
+- `ui-ux-pro-max`: used for professional Arabic RTL chat and assistant layouts, density, and role-appropriate empty-state/composer messaging
+- `migrate-radix-to-base`: not needed because no Radix imports were found
+
 ## Phase 24 Professional Split Login UX Verification
 
 Phase 24 professional split login UX is implemented with a focused auth-UX

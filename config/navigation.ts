@@ -16,6 +16,7 @@ import {
   Users2,
   PlugZap,
   BookMarked,
+  Bot,
 } from "lucide-react"
 import type { LucideIcon } from "lucide-react"
 
@@ -81,6 +82,16 @@ export const dashboardNavigation: NavigationGroup[] = [
         label: "التواصل",
         icon: MessageSquareMore,
         href: appRoutes.communication,
+      },
+      {
+        label: "المحادثات",
+        icon: MessageSquareMore,
+        href: appRoutes.dashboardChat,
+      },
+      {
+        label: "مساعد أُفُق",
+        icon: Bot,
+        href: appRoutes.dashboardAssistant,
       },
       {
         label: "الشكاوى والاستبيانات",

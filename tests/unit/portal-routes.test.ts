@@ -10,6 +10,8 @@ describe("portal routes", () => {
     expect(appRoutes.portalFinance).toBe("/portal/finance")
     expect(appRoutes.portalLibrary).toBe("/portal/library")
     expect(appRoutes.portalAnnouncements).toBe("/portal/announcements")
+    expect(appRoutes.portalChat).toBe("/portal/chat")
+    expect(appRoutes.portalAssistant).toBe("/portal/assistant")
     expect(appRoutes.portalProfile).toBe("/portal/profile")
   })
 
@@ -23,6 +25,8 @@ describe("portal routes", () => {
       appRoutes.portalFinance,
       appRoutes.portalLibrary,
       appRoutes.portalAnnouncements,
+      appRoutes.portalChat,
+      appRoutes.portalAssistant,
       appRoutes.portalProfile,
     ]
 

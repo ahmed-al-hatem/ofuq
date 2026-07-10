@@ -36,6 +36,8 @@ Phase 16 adds the parent/student read-only portal foundation by introducing a di
 
 Phase 18 adds the settings and integrations placeholders foundation with school-scoped settings persistence, placeholder integration records, and local message templates.
 
+Phase 25A adds the chat UI and assistant schema foundation with internal chat history tables plus separate AI conversation history tables, while keeping realtime delivery and Gemini execution deferred.
+
 ## Core tables
 
 ### `tenants`
@@ -284,6 +286,44 @@ Beacon attendance, parent notifications, timetable integration, camera-based sca
 
 - Stores simple school events with start/end times, optional location, target audience, and scheduled/cancelled/completed/archived status.
 - Recurrence and external calendar sync are deferred.
+
+## Phase 25A tables
+
+### `chat_conversations`
+
+- Stores internal conversation containers scoped by `tenant_id` and `school_id`.
+- Uses a simple `internal` conversation type for now, plus `open`, `closed`, and `archived` states.
+- `created_by_user_id` references `public.user_profiles.id`, matching the rest of the application schema.
+
+### `chat_participants`
+
+- Stores one participant row per internal conversation membership.
+- Keeps the participant's fixed `user_role`, join timestamp, optional last-read timestamp, mute flag, and metadata object.
+- Enforces one row per `(conversation_id, user_id)`.
+
+### `chat_messages`
+
+- Stores internal chat message history for future realtime delivery.
+- Supports only `text` and `system` message types in this phase.
+- Send, edit, delete, and read-write workflows remain deferred even though the table exists.
+
+### `chat_message_reads`
+
+- Stores future per-user read tracking for chat messages.
+- Enforces one row per `(message_id, user_id)`.
+- The actual mark-as-read flow is intentionally not implemented in Phase 25A.
+
+### `ai_conversations`
+
+- Stores future assistant chat sessions per user, tenant, and school.
+- Uses the current fixed `user_role` plus a simple `role_scoped` scope marker to reinforce future server-built context boundaries.
+- `updated_at` is trigger-managed so future assistant history can sort by latest activity cleanly.
+
+### `ai_messages`
+
+- Stores AI conversation history rows with `user`, `assistant`, or `system` roles.
+- Includes optional `model` and `token_estimate` columns for future Gemini auditing without requiring Gemini integration now.
+- No SQL execution, raw provider payload storage, or unrestricted context storage is introduced in this phase.
 
 ## Phase 10 ready-made reports
 

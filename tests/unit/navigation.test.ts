@@ -34,6 +34,8 @@ describe("dashboardNavigation", () => {
         appRoutes.timetable,
         appRoutes.finance,
         appRoutes.communication,
+        appRoutes.dashboardChat,
+        appRoutes.dashboardAssistant,
         appRoutes.feedback,
         appRoutes.reports,
         appRoutes.library,

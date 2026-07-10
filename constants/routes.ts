@@ -14,6 +14,8 @@ export const appRoutes = {
   portalFinance: "/portal/finance",
   portalLibrary: "/portal/library",
   portalAnnouncements: "/portal/announcements",
+  portalChat: "/portal/chat",
+  portalAssistant: "/portal/assistant",
   portalProfile: "/portal/profile",
   admissions: "/dashboard/admissions",
   newAdmission: "/dashboard/admissions/new",
@@ -118,4 +120,6 @@ export const appRoutes = {
   newLibraryLoan: "/dashboard/library/loans/new",
   libraryLoanDetails: (loanId: string) => `/dashboard/library/loans/${loanId}`,
   libraryOverdue: "/dashboard/library/overdue",
+  dashboardChat: "/dashboard/chat",
+  dashboardAssistant: "/dashboard/assistant",
 } as const

@@ -28,6 +28,8 @@ describe("portalNavigation", () => {
         appRoutes.portalFinance,
         appRoutes.portalLibrary,
         appRoutes.portalAnnouncements,
+        appRoutes.portalChat,
+        appRoutes.portalAssistant,
         appRoutes.portalProfile,
       ])
     )

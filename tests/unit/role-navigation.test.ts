@@ -39,6 +39,8 @@ describe("role dashboard navigation", () => {
         appRoutes.grades,
         appRoutes.timetable,
         appRoutes.communication,
+        appRoutes.dashboardChat,
+        appRoutes.dashboardAssistant,
         appRoutes.reports,
       ])
     )
@@ -58,6 +60,8 @@ describe("role dashboard navigation", () => {
         appRoutes.dashboard,
         appRoutes.finance,
         appRoutes.communication,
+        appRoutes.dashboardChat,
+        appRoutes.dashboardAssistant,
         appRoutes.reports,
       ])
     )
@@ -79,6 +83,8 @@ describe("role dashboard navigation", () => {
         appRoutes.dashboard,
         appRoutes.library,
         appRoutes.communication,
+        appRoutes.dashboardChat,
+        appRoutes.dashboardAssistant,
         appRoutes.reports,
       ])
     )

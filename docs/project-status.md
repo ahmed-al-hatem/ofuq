@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 24 Professional Split Login UX implemented
-- Last completed implementation phase: Phase 24 Professional Split Login UX
-- Last completed quality phase: Phase 24 Professional Split Login UX Verification
-- Next implementation phase: TBD after login UX review
+- Current phase: Phase 25A Chat UI & Schema Foundation implemented
+- Last completed implementation phase: Phase 25A Chat UI & Schema Foundation
+- Last completed quality phase: Phase 25A Chat UI & Schema Foundation Verification
+- Next implementation phase: Phase 25B Internal Realtime Chat MVP
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -58,6 +58,7 @@
 | Phase 22C Portal UX Cleanup | Done with minimal verification budget | Parent and student portal pages now present calmer read-only guidance, clearer child/student cards, stronger attendance/grades summaries, clearer finance review summaries, and a more explicit school-managed profile experience without adding portal mutations or changing scope. |
 | Phase 23 Final Demo Readiness & Presentation Flow Polish | Done with focused demo-readiness budget | A final demo guide, documented demo users and presentation routes, professional MVP limitations wording, and a small set of presentation-facing copy refinements now support a smoother graduation demo without adding new business scope. |
 | Phase 24 Professional Split Login UX | Done with focused auth-UX budget | `/login` is now an audience chooser, `/login/staff` and `/login/portal` present tailored Arabic RTL login experiences, `/login/reset-password` is a UI-only placeholder, and role-based redirect resolution remains server-side. |
+| Phase 25A Chat UI & Schema Foundation | Done with schema + UI foundation budget | `/dashboard/chat`, `/portal/chat`, `/dashboard/assistant`, and `/portal/assistant` now exist as Arabic RTL scaffolds over new chat/assistant schema tables, while realtime chat, send flows, and Gemini calls remain deferred. |
 
 ## Current Implemented Modules
 
@@ -89,8 +90,9 @@
 - Selected finance, library, and communication operational screens now use quick `Dialog` or `Sheet` actions for fee structures, fee items, student discounts, catalog records, loans, internal messages, and school events, while invoice details, message details, and loan details remain full route pages.
 - Final demo readiness documentation now exists in `docs/demo-readiness.md`, including the recommended demo order, local demo users, presentation-ready route map, known limitations wording, and a final smoke checklist.
 - Split login UX now exists for `/login`, `/login/staff`, `/login/portal`, and `/login/reset-password`; Google continuation and reset-password flows remain UI-only placeholders, while the real login path continues to use the existing server-side email/password action.
+- Chat UI and assistant schema foundation now exist for staff dashboard and parent/student portal surfaces, but realtime chat, message sending, read tracking, and Gemini execution remain intentionally disabled in this phase.
 
-AI Query, chatbot, real external integrations, and report builder are not implemented yet.
+AI Query, chatbot behavior, real external integrations, and report builder are not implemented yet.
 
 ## Current Routes
 
@@ -110,8 +112,12 @@ AI Query, chatbot, real external integrations, and report builder are not implem
 | `/portal/finance` | Active | Parent-facing linked-student finance visibility with clearer read-only summary cards; student role sees a restricted read-only note. |
 | `/portal/library` | Active | Read-only active and historical book-loan view for linked students. |
 | `/portal/announcements` | Active | Read-only published announcements and school events relevant to linked students. |
+| `/portal/chat` | Active | Arabic RTL chat scaffold for parent/student messaging with a disabled composer and no realtime send flow yet. |
+| `/portal/assistant` | Active | Arabic RTL assistant scaffold for parent/student prompts with no real Gemini call yet. |
 | `/portal/profile` | Active | Read-only membership/profile summary with explicit school-managed profile messaging and linked-student scope cues. |
 | `/dashboard` | Active | Protected staff landing route that renders role-specific content for `system_admin`, `school_admin`, `teacher`, `accountant`, and `librarian`. `parent` and `student` memberships are redirected to `/portal` before the shell renders. |
+| `/dashboard/chat` | Active | Staff-only internal chat scaffold with conversation list, thread surface, disabled composer, and no realtime send flow yet. |
+| `/dashboard/assistant` | Active | Staff-only assistant scaffold with suggested prompts and no real Gemini call yet. |
 | `/dashboard/admissions` | Active | Admissions list and management actions. |
 | `/dashboard/admissions/new` | Active | Admission creation form. |
 | `/dashboard/students` | Active | Official student records. |
@@ -220,6 +226,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Student-care tables: `health_records`, `vaccinations`, `clinic_visits`, `discipline_records`, `achievements`.
 - Feedback tables: `complaints`, `complaint_updates`, `surveys`, `survey_questions`, `survey_responses`.
 - Settings tables: `school_settings`, `integration_settings`, `message_templates`.
+- Chat and assistant foundation tables: `chat_conversations`, `chat_participants`, `chat_messages`, `chat_message_reads`, `ai_conversations`, `ai_messages`.
 - Storage foundation: private `student-documents` bucket is created by the student/admissions migration.
 - Portal identity link: `students.student_user_id` now supports direct student-to-user linking for the read-only portal.
 - Local Supabase replay for the Phase 16 schema slice was revalidated with `supabase start`, local type generation, and manual DB smoke SQL. Direct `supabase db reset` exit is still intermittently unstable on this Windows Docker setup.
@@ -245,6 +252,8 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - Feedback mutations derive tenant/school/user scope from active membership, validate complaint relationships, survey targets, and duplicate response prevention server-side, and write minimal audit logs without complaint text or survey answers.
 - Settings reads and writes derive tenant/school/user scope from the active membership and remain limited to `system_admin` and `school_admin`.
 - Integration pages are placeholder-only in this phase. They do not perform external API calls, OAuth, webhook delivery, provider sync, or real API secret storage.
+- Chat and assistant surfaces are scaffolds only in this phase. No realtime subscription, send-message write, mark-as-read write, or Gemini request path is active yet.
+- Any future Gemini integration must remain server-side, role-scoped, and must never receive unrestricted SQL or raw database execution ability.
 - Login destination is role-aware and is resolved on the server from the active membership only.
 - The selected login route (`/login/staff` or `/login/portal`) is UI guidance only and is never trusted as an authorization source.
 - Dashboard navigation is filtered by fixed role for UX purposes, but sensitive reads and mutations still rely on server-side authorization.
@@ -273,12 +282,13 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 ## Current Known Limitations
 
 - Communication is internal/in-app only; no real-time chat or external notification providers are implemented.
+- Chat and assistant foundation pages are present, but internal chat send/realtime behavior is deferred to Phase 25B and Gemini integration is deferred to Phase 25C.
 - Library is an operational foundation only; no fine billing, finance integration, barcode hardware, ISBN lookup, reservations, public portal, e-book storage, or advanced analytics are implemented.
 - Student care is an operational foundation only; no diagnosis, prescriptions, medical uploads, parent notifications, PDF certificates, AI analysis, or behavior-risk scoring are implemented.
 - Feedback is an operational foundation only; no anonymous/public complaint forms, public survey links, attachments, external notifications, AI analysis, advanced branching, or escalation automation are implemented.
 - Finance basics foundation is implemented: fee structures, fee items, discounts, invoices, invoice items, payments, and basic receipt/payment detail views.
 - Parent/student portal is currently read-only. It does not support payment submission, absence excuse submission, complaint/survey participation, profile editing, health/discipline visibility, or other self-service mutations.
-- Staff users still share the same dashboard route tree. Phase 19 filters navigation by role, but dedicated role-specific dashboard summaries remain deferred to Phase 20.
+- Staff users still share the same dashboard route tree even after role-specific summaries were introduced. Dedicated per-role route trees or deeper role-specific workflow splits are not implemented.
 - Attendance camera scanning, Beacon, timetable integration, and advanced reports are deferred.
 - Automatic timetable generation, drag-and-drop scheduling, optimization, and room resource calendars are deferred.
 - Advanced grading policies, GPA/ranking, PDF generation, certificate/report template designer, parent notifications, and advanced analytics are deferred.
@@ -297,6 +307,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: review the split login UX in live demo conditions, then decide whether the next focused slice should deepen auth convenience flows or return to post-demo module feedback.
+Recommended next phase: proceed to Phase 25B Internal Realtime Chat MVP, using the new schema and route scaffolds without widening tenant/school trust boundaries.
 
-Go/no-go status: Go. Phase 24 improves the login entry experience without changing schema, seed data, Supabase config, or the server-side role redirect contract.
+Go/no-go status: Go. Phase 25A adds the required schema/UI foundation cleanly while keeping send flows, realtime, and Gemini safely out of scope.

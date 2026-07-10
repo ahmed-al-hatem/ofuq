@@ -71,6 +71,32 @@ role redirects, portal scoping, server helpers, or business logic. For
 documentation and copy-only polish, build plus diff-check and lint remain the
 default closure path.
 
+For schema + UI foundation work such as Phase 25A, use a slightly higher
+verification budget because routes, navigation, and a new migration all change
+at once:
+
+- `npm run build`
+- `git diff --check`
+- `npm run lint` when TS or TSX files were touched
+- `npm run test` when route constants, navigation config, or existing pure helpers changed
+- `supabase db reset` when the local Docker/Supabase stack is available and healthy
+
+If global ESLint is blocked by unrelated workspace files, run targeted ESLint
+on the touched TS and TSX files and document the blocker honestly. If
+`supabase db reset` is too expensive or the local stack is unavailable,
+document that clearly and at minimum inspect the migration for syntax, foreign
+keys, and index consistency.
+
+Recommended manual smoke for Phase 25A:
+
+- `/dashboard/chat`
+- `/portal/chat`
+- `/dashboard/assistant`
+- `/portal/assistant`
+- confirm that composers stay disabled
+- confirm that no realtime behavior or Gemini request is triggered
+- confirm that portal pages do not expose dashboard links
+
 ## Automated commands
 
 ```bash

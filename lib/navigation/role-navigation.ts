@@ -9,6 +9,8 @@ const TEACHER_NAVIGATION_PATHS = new Set<string>([
   appRoutes.grades,
   appRoutes.timetable,
   appRoutes.communication,
+  appRoutes.dashboardChat,
+  appRoutes.dashboardAssistant,
   appRoutes.reports,
 ])
 
@@ -16,6 +18,8 @@ const ACCOUNTANT_NAVIGATION_PATHS = new Set<string>([
   appRoutes.dashboard,
   appRoutes.finance,
   appRoutes.communication,
+  appRoutes.dashboardChat,
+  appRoutes.dashboardAssistant,
   appRoutes.reports,
 ])
 
@@ -23,6 +27,8 @@ const LIBRARIAN_NAVIGATION_PATHS = new Set<string>([
   appRoutes.dashboard,
   appRoutes.library,
   appRoutes.communication,
+  appRoutes.dashboardChat,
+  appRoutes.dashboardAssistant,
   appRoutes.reports,
 ])
 
