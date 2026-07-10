@@ -11,7 +11,7 @@ import { LoginForm } from "./login-form"
 
 const authPlans = [
   "تسجيل الدخول عبر البريد الإلكتروني وكلمة المرور",
-  "دعم Google SSO عندما تصبح المصادقة جاهزة",
+  "توجيه المستخدم تلقائيًا إلى لوحة التحكم أو البوابة بحسب الدور",
   "إدارة الجلسات عبر Supabase Auth من جهة الخادم",
 ]
 
@@ -27,16 +27,17 @@ export default async function LoginPage() {
       <div className="grid w-full max-w-5xl gap-6 lg:grid-cols-[1.05fr_0.95fr]">
         <section className="flex flex-col justify-center gap-5">
           <Badge className="w-fit bg-secondary text-secondary-foreground">
-            صفحة تمهيدية
+            تسجيل دخول آمن
           </Badge>
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
               تسجيل الدخول إلى {""}
               <span className="text-primary">{`أُفُق`}</span>
             </h1>
             <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-              هذه الصفحة مهيأة لاحقًا لـ Supabase Auth. في المرحلة الحالية
-              نستعرض مسار المصادقة فقط حتى تبقى البنية واضحة وواقعية.
+              استخدم أحد حسابات العرض المحلية للوصول إلى لوحة الإدارة أو بوابة
+              المتابعة. بعد تسجيل الدخول يتم توجيه كل مستخدم إلى المسار المناسب
+              لدوره داخل المدرسة.
             </p>
           </div>
 
@@ -58,7 +59,7 @@ export default async function LoginPage() {
             </Link>
             <Link href={appRoutes.dashboard} className={buttonVariants()}>
               <Settings2 data-icon="inline-start" />
-              فتح لوحة التحكم
+              متابعة العرض بعد الدخول
             </Link>
           </div>
         </section>

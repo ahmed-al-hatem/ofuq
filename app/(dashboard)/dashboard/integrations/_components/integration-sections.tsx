@@ -87,7 +87,7 @@ export function IntegrationOverviewGrid({
                 </StatusBadge>
               </div>
               <p className="text-sm leading-6 text-muted-foreground">
-                لا يوجد اتصال خارجي في هذه المرحلة.
+                لا يوجد اتصال خارجي فعلي في النسخة المحلية.
               </p>
               <Link
                 href={definition.href}
@@ -147,7 +147,7 @@ export function IntegrationProviderCards({
                 <p className="text-sm font-medium">ملخص الإعدادات</p>
                 {settingsSummary.length === 0 ? (
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    لا توجد إعدادات محفوظة بعد. ستبقى هذه الصفحة للعرض المحلي فقط.
+                    لا توجد إعدادات محفوظة بعد. يمكن استخدام هذه الصفحة لشرح نطاق التكاملات ضمن النسخة الحالية.
                   </p>
                 ) : (
                   <div className="mt-3 flex flex-col gap-2 text-sm text-muted-foreground">
@@ -166,7 +166,7 @@ export function IntegrationProviderCards({
                 </div>
                 <div className="flex flex-col gap-2">
                   <p className="text-sm font-medium">حقل مرجعي لعنوان الربط</p>
-                  <Input value="placeholder-only" disabled dir="ltr" />
+                  <Input value="مرجع محلي غير متصل" disabled dir="ltr" />
                 </div>
               </div>
               <p className="text-sm leading-6 text-muted-foreground">

@@ -17,7 +17,7 @@ const highlights = [
   {
     icon: Users2,
     title: "أدوار ثابتة قابلة للتوسعة",
-    description: "system_admin و school_admin وبقية الأدوار الجاهزة للمرحلة التالية.",
+    description: "system_admin و school_admin وبقية الأدوار ضمن بنية واضحة قابلة للتوسع.",
   },
   {
     icon: BookOpen,
@@ -36,51 +36,51 @@ export default function HomePage() {
             <div className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
               <Sparkles className="size-5" />
             </div>
-            <div className="space-y-1">
+            <div className="flex flex-col gap-1">
               <p className="text-sm font-medium text-muted-foreground">Ofuq</p>
               <h1 className="text-lg font-semibold tracking-tight">{appConfig.arabicName}</h1>
             </div>
           </div>
           <Badge variant="outline" className="rounded-full px-3 py-1">
-            Arabic-first · RTL-first · Multi-tenant
+            عربي أولًا · RTL أصيل · متعدد المدارس
           </Badge>
         </header>
 
         <section className="grid items-start gap-6 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="flex flex-col gap-6">
             <Badge className="w-fit bg-secondary text-secondary-foreground">
-              Foundation phase
+              جاهز لمسار العرض
             </Badge>
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4">
               <h2 className="max-w-3xl text-4xl font-semibold leading-[1.15] tracking-tight text-balance sm:text-5xl">
-                نظام إدارة مدارس عربي من البداية، مع بنية حقيقية قابلة للتوسع.
+                منصة إدارة مدرسية عربية جاهزة لعرض رحلة العمل اليومية بوضوح وثقة.
               </h2>
               <p className="max-w-2xl text-base leading-7 text-muted-foreground sm:text-lg">
-                {appConfig.description}. هذه الصفحة التأسيسية تمهّد للوحة تحكم عملية،
-                مصادقة Supabase، وصياغة واضحة للأدوار والمستأجرين قبل بناء الوحدات
-                التشغيلية.
+                {appConfig.description} تعرض مسارًا واضحًا يبدأ من تسجيل الدخول، ثم
+                ينتقل إلى لوحة التحكم، الوحدات التشغيلية، وبوابة ولي الأمر والطالب
+                ضمن تجربة عربية RTL مناسبة للعرض النهائي.
               </p>
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Link href={appRoutes.dashboard} className={buttonVariants({ size: "lg" })}>
-                الانتقال إلى لوحة التحكم
+              <Link href={appRoutes.login} className={buttonVariants({ size: "lg" })}>
+                بدء العرض
                 <ArrowLeft data-icon="inline-start" />
               </Link>
               <Link
-                href={appRoutes.login}
+                href={appRoutes.dashboard}
                 className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
               >
-                صفحة تسجيل الدخول
+                استعراض لوحة التحكم
               </Link>
             </div>
           </div>
 
           <Card className="border-border/70 bg-card/95 shadow-sm backdrop-blur">
-            <CardHeader className="space-y-2">
-              <CardTitle>ماذا تمهّد هذه المرحلة؟</CardTitle>
+            <CardHeader className="flex flex-col gap-2">
+              <CardTitle>ماذا يبرز العرض؟</CardTitle>
               <CardDescription>
-                بنية نظيفة قبل إضافة الطلاب والحضور والمالية والتقارير.
+                صفحات عملية متصلة بالهوية المدرسية، الأدوار، والبيانات المحلية الجاهزة للديمو.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
@@ -94,7 +94,7 @@ export default function HomePage() {
                     <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-background text-primary">
                       <Icon className="size-4" />
                     </div>
-                    <div className="space-y-1">
+                    <div className="flex flex-col gap-1">
                       <h3 className="font-medium">{item.title}</h3>
                       <p className="text-sm leading-6 text-muted-foreground">
                         {item.description}

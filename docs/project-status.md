@@ -3,10 +3,10 @@
 ## Snapshot
 
 - Project name: Ofuq | أُفُق
-- Current phase: Phase 22C Portal UX Cleanup implemented
-- Last completed implementation phase: Phase 22C Portal UX Cleanup
-- Last completed quality phase: Phase 22C Portal UX Cleanup Verification
-- Next implementation phase: TBD after Phase 22C review
+- Current phase: Phase 23 Final Demo Readiness & Presentation Flow Polish implemented
+- Last completed implementation phase: Phase 23 Final Demo Readiness & Presentation Flow Polish
+- Last completed quality phase: Phase 23 Final Demo Readiness Verification
+- Next implementation phase: TBD after final demo review
 - Architecture summary: full-stack Next.js App Router application backed by Supabase Auth and Supabase PostgreSQL, using fixed roles from `user_memberships` and multi-tenant tenant/school context from the authenticated active membership.
 
 ## Tech Stack
@@ -56,6 +56,7 @@
 | Phase 22A Academic / Attendance / Grades UX Cleanup | Done with minimal verification budget | Selected academic, attendance, and grades pages now apply the Phase 21 shared page polish and the Phase 21.5 modal-form pattern for quick create/review flows while keeping complex detail routes intact. |
 | Phase 22B Finance / Library / Communication UX Cleanup | Done with minimal verification budget | Selected finance, library, and communication pages now use the shared page hierarchy more consistently, move quick create flows into `Dialog` or `Sheet`, and keep complex detail views as route pages. |
 | Phase 22C Portal UX Cleanup | Done with minimal verification budget | Parent and student portal pages now present calmer read-only guidance, clearer child/student cards, stronger attendance/grades summaries, clearer finance review summaries, and a more explicit school-managed profile experience without adding portal mutations or changing scope. |
+| Phase 23 Final Demo Readiness & Presentation Flow Polish | Done with focused demo-readiness budget | A final demo guide, documented demo users and presentation routes, professional MVP limitations wording, and a small set of presentation-facing copy refinements now support a smoother graduation demo without adding new business scope. |
 
 ## Current Implemented Modules
 
@@ -85,6 +86,7 @@
 - Reusable modal-form UX foundation for selected quick forms using existing `components/ui` `Dialog` and `Sheet` primitives with dimmed overlays and Arabic-first action copy.
 - Academic, attendance, and grades high-value screens now use quick `Dialog` and `Sheet` actions for selected short or mid-size forms, while complex details such as attendance sessions, exam details, and report-card details remain route pages.
 - Selected finance, library, and communication operational screens now use quick `Dialog` or `Sheet` actions for fee structures, fee items, student discounts, catalog records, loans, internal messages, and school events, while invoice details, message details, and loan details remain full route pages.
+- Final demo readiness documentation now exists in `docs/demo-readiness.md`, including the recommended demo order, local demo users, presentation-ready route map, known limitations wording, and a final smoke checklist.
 
 AI Query, chatbot, real external integrations, and report builder are not implemented yet.
 
@@ -257,6 +259,7 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 - `docs/testing.md`
 - `docs/verification-report.md`
 - `docs/ui-ux-role-roadmap.md`
+- `docs/demo-readiness.md`
 - `docs/verification-phase-06.md`
 - `docs/verification-phase-07.md`
 - `docs/requirements-roadmap.md`
@@ -287,6 +290,6 @@ Configured dynamic helpers also exist for admission and student detail URLs, but
 
 ## Recommended Next Phase
 
-Recommended next phase: plan the next focused slice separately after reviewing Phase 22C outcomes.
+Recommended next phase: run the final graduation demo, collect review notes, then plan the next focused slice from post-demo feedback rather than expanding scope immediately.
 
-Go/no-go status: Go for next-phase planning. Phase 22C is implemented with minimal/high-value verification, the portal remains read-only, and no schema/seed/Supabase config changes were introduced.
+Go/no-go status: Go for the final demo. Phase 23 documentation and presentation polish are in place, the portal remains read-only, and no schema/seed/Supabase config changes were introduced.

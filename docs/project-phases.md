@@ -25,6 +25,7 @@
 22A. Academic / attendance / grades UX cleanup
 22B. Finance / library / communication UX cleanup
 22C. Portal UX cleanup
+23. Final demo readiness and presentation flow polish
 
 ## Later-phase items
 
@@ -43,9 +44,17 @@ communication, ready-made reports, library, student-care, feedback, local demo
 seed, automated unit-test, parent/student read-only portal, local browser
 smoke, settings/integrations placeholders, role-aware routing/navigation,
 role-specific dashboard, UI-polish, modal-form UX, and the three
-domain-focused module cleanup slices in place. New business modules and deeper
-UX cleanup should continue one vertical slice at a time so schema, actions, UI,
-verification, and test coverage stay aligned.
+domain-focused module cleanup slices in place, followed by a Phase 23 final
+demo-readiness pass. New business modules and deeper UX cleanup should
+continue one vertical slice at a time so schema, actions, UI, verification, and
+test coverage stay aligned.
+
+## Phase 23 snapshot
+
+- `docs/demo-readiness.md` now documents the final presentation flow, local demo users, route map, known limitations, and the final smoke checklist.
+- Public entry and login copy now support a clearer presentation path without changing auth or route behavior.
+- Selected demo-facing dashboard/settings/integrations copy was refined to sound more product-ready and less implementation-oriented.
+- No schema changes, seed changes, Supabase config changes, new business features, or portal mutations were introduced in this phase.
 
 ## Phase 22C snapshot
 

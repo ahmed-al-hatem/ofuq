@@ -47,6 +47,30 @@ routing, or other non-presentational server-side behavior changes. For
 readability-only portal work, targeted ESLint plus build is the default safety
 net when global lint is blocked by unrelated files.
 
+For final demo-readiness work such as Phase 23, keep a focused but slightly
+stricter budget centered on presentation confidence rather than broad
+regression coverage:
+
+- `npm run build`
+- `git diff --check`
+- `npm run lint` when any TS or TSX files were touched
+
+If global ESLint is blocked by unrelated historical files, run targeted ESLint
+on the changed TS/TSX files and document the blocker plus the targeted result
+honestly. A small targeted browser smoke is recommended when the local
+environment is available, especially for:
+
+- admin login to `/dashboard`
+- one student or academic route
+- one attendance or grades route
+- parent or student login to `/portal`
+- confirmation that the portal stays read-only and does not expose dashboard navigation
+
+Run `npm run test` only if final-demo work changes auth behavior, routing,
+role redirects, portal scoping, server helpers, or business logic. For
+documentation and copy-only polish, build plus diff-check and lint remain the
+default closure path.
+
 ## Automated commands
 
 ```bash

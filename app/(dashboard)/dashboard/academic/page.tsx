@@ -106,7 +106,7 @@ export default async function AcademicOverviewPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="الأكاديمي"
-        description="تأسيس الهيكل الدراسي المطلوب للحضور والدرجات والجداول لاحقًا، مع ربط كل سجل بالمدرسة الحالية."
+        description="نظرة تشغيلية على السنوات والفصول والصفوف والشعب والمواد والتسجيلات داخل المدرسة الحالية."
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -142,14 +142,14 @@ export default async function AcademicOverviewPage() {
 
       <Card className="border-dashed">
         <CardHeader>
-          <CardTitle>حدود هذه المرحلة</CardTitle>
+          <CardTitle>نقطة عرض أكاديمية مباشرة</CardTitle>
           <CardDescription>
-            هذه المرحلة تؤسس الهيكل فقط. الحضور والدرجات والجداول والتقارير تبقى مراحل لاحقة.
+            ابدأ من هذا الملخص ثم انتقل إلى السنوات أو الشعب أو المواد أو التسجيلات بحسب سيناريو العرض.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <StatusBadge status="info">
-            السياق مستمد من العضوية النشطة، وليس من نماذج الواجهة.
+            يتم تحميل البيانات من سياق العضوية النشطة والمدرسة الحالية.
           </StatusBadge>
         </CardContent>
       </Card>

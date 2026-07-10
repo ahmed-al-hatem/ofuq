@@ -202,7 +202,7 @@ export function BrandingSettingsForm({
                 aria-invalid={Boolean(fieldErrors.logo_hint?.length)}
               />
               <FieldDescription>
-                مثال: `placeholder-only` أو `pending-asset`.
+                مثال: `قيد المراجعة` أو `بانتظار اعتماد الأصل`.
               </FieldDescription>
               <FieldError>{fieldErrors.logo_hint?.[0]}</FieldError>
             </Field>

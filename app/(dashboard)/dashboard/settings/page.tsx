@@ -63,7 +63,7 @@ export default async function SettingsOverviewPage() {
     },
     {
       title: "الهوية البصرية",
-      description: "إعدادات White-label أولية دون رفع شعار أو أصول حقيقية.",
+      description: "مراجعة الهوية والألوان والنصوص المرجعية ضمن النسخة الحالية.",
       href: appRoutes.settingsBranding,
       icon: Palette,
     },
@@ -91,7 +91,7 @@ export default async function SettingsOverviewPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="الإعدادات"
-        description="أساس إعدادات مدرسي محلي لإدارة المدرسة، الهوية البصرية، اللغة، الوحدات، والقوالب دون مزودات خارجية."
+        description="مركز إعدادات المدرسة المحلية لعرض الهوية واللغة والوحدات والقوالب ضمن نطاق النسخة الحالية."
       />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">

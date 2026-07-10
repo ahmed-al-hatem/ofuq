@@ -4,12 +4,12 @@
 
 This document captures the recommended UI/UX correction roadmap after Phase 18. The goal is to move Ofuq from a feature-complete foundation into a role-aware, polished, demo-ready product experience.
 
-## Status Update After Phase 22C
+## Status Update After Phase 23
 
-- Phase 19, Phase 20, Phase 21, Phase 21.5, Phase 22A, Phase 22B, and Phase 22C are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, selected quick forms use reusable `Dialog`/`Sheet` patterns, and the targeted domain cleanup slices now cover staff pages plus the parent/student portal.
+- Phase 19, Phase 20, Phase 21, Phase 21.5, Phase 22A, Phase 22B, Phase 22C, and Phase 23 are now implemented: login routing is role-aware, `parent` and `student` are routed to `/portal`, the dashboard shell redirects portal roles away, staff dashboard navigation is filtered by fixed role, `/dashboard` renders role-specific home content for staff users, the shared dashboard/portal presentation now has a more professional Arabic-first polish pass, selected quick forms use reusable `Dialog`/`Sheet` patterns, the targeted domain cleanup slices now cover staff pages plus the parent/student portal, and a dedicated final demo-readiness guide now documents the recommended presentation flow and routes.
 - `/portal` overview, students, student details, attendance, grades, finance, and profile pages now read more clearly on mobile and desktop while remaining read-only.
 - These phases did not add RBAC, RLS, schema changes, portal mutations, or workflow redesign.
-- The current roadmap through Phase 22C is now complete; the next UX slice should be planned separately based on demo priorities.
+- The current roadmap through Phase 23 is now complete for demo purposes; the next UX slice should be planned separately based on post-demo priorities rather than broader polish debt alone.
 
 The current project already has a strong technical foundation: authentication, fixed roles, tenant/school membership context, domain modules, local Syrian demo data, unit tests, DB smoke checks, and Playwright browser smoke. The next priority is not to add another business module. The next priority is to correct the end-user experience so every signed-in user sees a professional interface that matches their role.
 
@@ -633,9 +633,10 @@ This plan is useful after Phase 19, not before it.
 
 # Recommended Immediate Next Step
 
-Phase 22C portal UX cleanup is now complete. Any next UI/UX step should be
-planned as a fresh, focused slice rather than extending the portal work
-indefinitely.
+Phase 23 final demo readiness is now complete. The immediate next step is to
+run the planned presentation flow from `docs/demo-readiness.md`, gather review
+feedback from the final demo, and then choose the next focused UI/UX slice from
+that feedback instead of expanding scope before the presentation.
 
 ## Phase 19 Done Criteria
 
@@ -677,7 +678,7 @@ Then rerun DB smoke and E2E checks.
 
 # Final Recommendation
 
-The roadmap through Phase 22C gives Ofuq a strong path from role-aware
-foundation into a polished, role-specific SaaS product suitable for a final
-presentation. The next phase can now be selected separately based on the
-highest-value remaining demo or product priority.
+The roadmap through Phase 23 gives Ofuq a strong path from role-aware
+foundation into a polished, role-specific SaaS product with a documented final
+demo flow. The next phase can now be selected separately based on post-demo
+feedback and the highest-value remaining product priority.

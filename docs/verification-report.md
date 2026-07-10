@@ -3,6 +3,43 @@
 > Phase 06 attendance verification is documented separately in [verification-phase-06.md](./verification-phase-06.md).
 > Phase 07.5 smoke-seed and grades/attendance workflow verification is documented separately in [verification-phase-07.md](./verification-phase-07.md).
 
+## Phase 23 Final Demo Readiness Verification
+
+Phase 23 final demo readiness is implemented and verified with a focused
+presentation-readiness budget. The work stayed within documentation and light
+copy polish, preserved the read-only portal contract, and did not add new
+business features, schema changes, or authorization changes.
+
+| Check | Result | Notes |
+| --- | --- | --- |
+| `npm run test` | Not run | Skipped because Phase 23 does not change auth logic, role redirects, portal scoping, server helpers, or business logic. |
+| `npm run lint` | Failed for unrelated workspace files | Global ESLint still reports pre-existing `@typescript-eslint/no-require-imports` errors in `.codex/skills/brand/scripts/*.cjs` and `.codex/skills/design-system/scripts/*.cjs`, plus pre-existing React hook issues in `components/ui/carousel.tsx` and `hooks/use-mobile.ts`. These files are outside the Phase 23 change surface. |
+| Targeted ESLint on touched files | Passed | `npx eslint` succeeded for the changed Phase 23 TypeScript and TSX files under `app/` and `config/`. |
+| `npm run build` | Passed | Next.js production build completed successfully after the demo-readiness docs and presentation-facing copy refinements. |
+| `git diff --check` | Passed with line-ending warnings | `git -c safe.directory=D:/ofuq/ofuq diff --check` returned exit code `0`; Git reported Windows `LF` to `CRLF` normalization warnings only. |
+| Targeted browser smoke | Passed | `node scripts/run-playwright-e2e.mjs tests/e2e/role-routing-smoke.spec.ts --grep "school admin keeps full dashboard navigation and clean shell copy|parent login lands on portal and dashboard redirects back to portal"` passed 2/2 and confirmed the main admin and portal demo entry paths. |
+| Schema / seed / Supabase config review | Passed by scope inspection | No schema files, seed files, or Supabase config files were changed in this phase. |
+
+Phase 23 selected improvements:
+
+- added `docs/demo-readiness.md` with the final demo order, local demo users, route map, known limitations, and final smoke checklist
+- updated `docs/project-status.md`, `docs/project-phases.md`, `docs/testing.md`, and `docs/ui-ux-role-roadmap.md` with concise Phase 23 status entries
+- refined public entry, login, academic overview, settings overview, and integrations copy to sound more presentation-ready
+- removed the visible `placeholder-only` example from the settings/integrations demo path
+
+Phase 23 scope notes:
+
+- No schema changes, seed changes, or Supabase config changes were introduced.
+- No new business features, portal mutations, or authorization/scoping changes were introduced.
+- The portal remains read-only for `parent` and `student`.
+- The documented demo users are sourced from the existing local seed and Playwright helper files only.
+
+Skills used:
+
+- `shadcn`: used for final Card/Button/Badge/Table/Page layout polish where touched
+- `ui-ux-pro-max`: used for demo flow clarity, presentation readiness, copy polish, and Arabic RTL consistency
+- `migrate-radix-to-base`: not needed because no Radix imports were found
+
 ## Phase 22C Portal UX Cleanup Verification
 
 Phase 22C portal UX cleanup is implemented and verified with the requested
