@@ -2,9 +2,9 @@ import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatChatTimestamp } from "@/lib/chat/time"
 import { cn } from "@/lib/utils"
 import type { ChatConversationPreview } from "@/types/chat"
-import { formatChatTimestamp } from "@/lib/chat/presenters"
 
 type ChatSidebarProps = {
   title: string
