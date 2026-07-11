@@ -2,6 +2,7 @@ import { LogOut } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { appConfig } from "@/config/app"
 import { signOutFromForm } from "@/lib/actions/auth"
 import { getRoleLabel } from "@/lib/auth/session"
 import type { SessionUser } from "@/types/auth"
@@ -14,7 +15,19 @@ export function AppHeader({ user }: Readonly<{ user: SessionUser }>) {
   return (
     <header className="sticky top-0 z-30 w-full border-b border-border/70 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="flex min-h-[4.5rem] w-full items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-        <p className="text-sm font-medium text-muted-foreground">مساحة التشغيل</p>
+        <div className="flex items-center gap-3">
+          <div className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
+            <span className="text-sm font-semibold">أ</span>
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="text-sm font-medium text-muted-foreground">
+              {appConfig.name}
+            </span>
+            <span className="text-base font-semibold text-foreground">
+              {appConfig.arabicName}
+            </span>
+          </div>
+        </div>
         <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
           <div className="flex min-w-0 items-center gap-2 rounded-full border border-border/70 bg-muted/40 px-3 py-1.5">
             <Badge variant="secondary" className="h-5 rounded-full px-2 text-[11px]">

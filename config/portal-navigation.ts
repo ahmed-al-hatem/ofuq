@@ -22,13 +22,12 @@ export type PortalNavigationItem = {
 }
 
 export type PortalNavigationGroup = {
-  label: string
+  label?: string
   items: PortalNavigationItem[]
 }
 
 export const portalNavigation: PortalNavigationGroup[] = [
   {
-    label: "بوابة المتابعة",
     items: [
       {
         label: "الرئيسية",

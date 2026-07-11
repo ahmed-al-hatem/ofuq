@@ -4,8 +4,6 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { buttonVariants } from "@/components/ui/button"
-import { appConfig } from "@/config/app"
-import { appRoutes } from "@/constants/routes"
 import { getDashboardNavigationForRole } from "@/lib/navigation/role-navigation"
 import { cn } from "@/lib/utils"
 import type { SessionUser } from "@/types/auth"
@@ -16,24 +14,7 @@ export function AppSidebar({ user }: Readonly<{ user: SessionUser }>) {
 
   return (
     <aside className="border-b border-sidebar-border bg-sidebar/95 text-sidebar-foreground lg:border-b-0 lg:border-r">
-      <div className="flex h-full flex-col gap-4 px-4 py-4 sm:px-6 lg:px-5 lg:py-5">
-        <Link
-          href={appRoutes.home}
-          className="flex h-16 items-center gap-3 rounded-2xl px-2 transition-colors hover:bg-sidebar-accent/40"
-        >
-          <div className="flex size-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm">
-            <span className="text-base font-semibold">أ</span>
-          </div>
-          <div className="flex flex-col leading-tight">
-            <span className="text-sm font-medium text-muted-foreground">
-              {appConfig.name}
-            </span>
-            <span className="text-base font-semibold text-sidebar-foreground">
-              {appConfig.arabicName}
-            </span>
-          </div>
-        </Link>
-
+      <div className="flex h-full flex-col gap-3 px-4 py-4 sm:px-6 lg:px-5 lg:py-5">
         <nav className="flex flex-col gap-3">
           {navigation.map((group) => (
             <div key={group.label || "root"} className="flex flex-col gap-1.5">

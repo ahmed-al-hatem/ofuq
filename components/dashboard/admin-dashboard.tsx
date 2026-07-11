@@ -1,7 +1,6 @@
 import { Bell, CalendarCheck2, CircleDollarSign, ClipboardList, FileText, Users2 } from "lucide-react"
 
 import { KpiGrid } from "@/components/shared/kpi-grid"
-import { PageHeader } from "@/components/shared/page-header"
 import { PageSection } from "@/components/shared/page-section"
 import { PageShell } from "@/components/shared/page-shell"
 import { QuickActionCard } from "@/components/shared/quick-action-card"
@@ -18,12 +17,6 @@ const quickActionIcons = [Users2, FileText, CalendarCheck2, CircleDollarSign]
 export function AdminDashboard({ summary }: AdminDashboardProps) {
   return (
     <PageShell>
-      <PageHeader
-        eyebrow="لوحة الإدارة"
-        title="لوحة تشغيل المدرسة"
-        description="تعرض هذه الصفحة ملخصًا لأهم بيانات المدرسة والمهام التي تستحق المتابعة خلال اليوم."
-      />
-
       <KpiGrid
         items={[
           {

@@ -4,12 +4,8 @@ import Link from "next/link"
 import { Eye } from "lucide-react"
 import { usePathname } from "next/navigation"
 
-import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { appConfig } from "@/config/app"
 import { portalNavigation } from "@/config/portal-navigation"
-import { appRoutes } from "@/constants/routes"
 import { cn } from "@/lib/utils"
 
 export function PortalSidebar() {
@@ -17,42 +13,15 @@ export function PortalSidebar() {
 
   return (
     <aside className="border-b bg-sidebar text-sidebar-foreground lg:min-h-screen lg:border-b-0 lg:border-r">
-      <div className="flex h-full flex-col gap-6 px-4 py-5 sm:px-6 lg:px-5">
-        <div className="flex flex-col gap-3 rounded-[1.75rem] border border-sidebar-border bg-background/60 p-4 shadow-sm">
-          <Link href={appRoutes.home} className="block">
-            <div className="flex items-center gap-3">
-              <div className="flex size-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-                <span className="text-base font-semibold">أ</span>
-              </div>
-              <div className="flex flex-col gap-1">
-                <p className="text-sm font-medium text-muted-foreground">
-                  {appConfig.name}
-                </p>
-                <h2 className="text-lg font-semibold">{appConfig.arabicName}</h2>
-              </div>
-            </div>
-          </Link>
-          <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="secondary" className="w-fit rounded-full">
-              بوابة المتابعة
-            </Badge>
-            <Badge variant="outline" className="w-fit rounded-full">
-              وصول مقيد
-            </Badge>
-          </div>
-          <p className="text-sm leading-6 text-muted-foreground">
-            تصفح الحضور والدرجات والجداول والإعلانات، مع إتاحة مراسلة المدرسة ضمن حسابك داخل المدرسة الحالية.
-          </p>
-        </div>
-
-        <Separator />
-
-        <nav className="flex flex-col gap-6">
+      <div className="flex h-full flex-col gap-4 px-4 py-4 sm:px-6 lg:px-5 lg:py-5">
+        <nav className="flex flex-col gap-4">
           {portalNavigation.map((group) => (
-            <div key={group.label} className="flex flex-col gap-2">
-              <p className="px-3 text-xs font-semibold tracking-[0.12em] text-muted-foreground">
-                {group.label}
-              </p>
+            <div key={group.label ?? "root"} className="flex flex-col gap-1.5">
+              {group.label ? (
+                <p className="px-3 pt-2 text-xs font-semibold tracking-[0.12em] text-muted-foreground">
+                  {group.label}
+                </p>
+              ) : null}
               <div className="flex flex-col gap-1">
                 {group.items.map((item) => {
                   const Icon = item.icon
@@ -65,7 +34,7 @@ export function PortalSidebar() {
                       href={item.href}
                       className={cn(
                         buttonVariants({ variant: "ghost", size: "sm" }),
-                        "h-11 justify-start rounded-2xl px-3 text-sm transition-colors",
+                        "h-10 justify-start rounded-xl px-3 text-sm transition-colors",
                         active
                           ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm hover:bg-sidebar-primary/95 hover:text-sidebar-primary-foreground"
                           : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"

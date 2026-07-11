@@ -14,10 +14,8 @@ import {
 import { PortalReadOnlyNotice } from "@/components/portal/portal-read-only-notice"
 import { EmptyState } from "@/components/shared/empty-state"
 import { KpiGrid } from "@/components/shared/kpi-grid"
-import { PageHeader } from "@/components/shared/page-header"
 import { PageSection } from "@/components/shared/page-section"
 import { PageShell } from "@/components/shared/page-shell"
-import { StatusBadge } from "@/components/shared/status-badge"
 import { SummarySectionCard } from "@/components/shared/summary-section-card"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -100,13 +98,6 @@ export function PortalOverview({ summary }: PortalOverviewProps) {
 
   return (
     <PageShell>
-      <PageHeader
-        eyebrow="بوابة المتابعة"
-        title={summary.title}
-        description={summary.description}
-        actions={<StatusBadge status="info">عرض فقط</StatusBadge>}
-      />
-
       <section className="grid gap-4 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
         <PortalReadOnlyNotice notes={readOnlyNotes} />
 
