@@ -36,7 +36,7 @@ export type NavigationGroup = {
 
 export const dashboardNavigation: NavigationGroup[] = [
   {
-    label: "التشغيل اليومي",
+    label: "",
     items: [
       {
         label: "لوحة التحكم",
